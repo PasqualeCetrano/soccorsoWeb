@@ -2,6 +2,7 @@ package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface RichiestaSoccorso extends DataItem<Integer> {
 
@@ -29,7 +30,6 @@ public interface RichiestaSoccorso extends DataItem<Integer> {
 
     void setTokenConvalida(String tokenConvalida);
 
-    // Mappiamo l'attributo "ip" dello schema logico
     String getIp();
 
     void setIp(String ip);
@@ -38,8 +38,15 @@ public interface RichiestaSoccorso extends DataItem<Integer> {
 
     void setFoto(byte[] foto);
 
-    // FK verso l'utente (fk_id_utente)
     Utente getUtente();
 
     void setUtente(Utente utente);
+
+    // Lista di segnalanti esterni associati a questa richiesta (tabella Invia)
+    List<Segnalante> getSegnalanti();
+
+    void setSegnalanti(List<Segnalante> segnalanti);
+
+    void addSegnalante(Segnalante segnalante);
+
 }

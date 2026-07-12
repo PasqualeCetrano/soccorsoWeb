@@ -2,65 +2,68 @@ package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 public interface Missione extends DataItem<Integer> {
+
+    String getPosizione();
+
+    void setPosizione(String posizione);
 
     String getObiettivo();
 
     void setObiettivo(String obiettivo);
 
-    Double getLatitudine();
+    Integer getLivelloSuccesso();
 
-    void setLatitudine(Double latitudine);
+    void setLivelloSuccesso(Integer livelloSuccesso);
 
-    Double getLongitudine();
+    String getCommenti();
 
-    void setLongitudine(Double longitudine);
+    void setCommenti(String commenti);
 
-    LocalDateTime getDataOraInizio();
+    LocalDateTime getInizio();
 
-    void setDataOraInizio(LocalDateTime dataOraInizio);
+    void setInizio(LocalDateTime inizio);
 
-    LocalDateTime getDataOraFine();
+    LocalDateTime getFine();
 
-    void setDataOraFine(LocalDateTime dataOraFine);
+    void setFine(LocalDateTime fine);
 
-    String getLivelloSuccesso();
-
-    void setLivelloSuccesso(String livelloSuccesso);
-
-    String getCommentiConclusivi();
-
-    void setCommentiConclusivi(String commentiConclusivi);
-
-    // --- METODI PER LE CHIAVI ESTERNE FISICHE (FK) ---
-
-    // Corrisponde a fk_id_utente (l'admin/operatore che ha pianificato la missione)
-    Utente getAmministratoreCreatore();
-
-    void setAmministratoreCreatore(Utente utente);
-
-    // Corrisponde a fk_id_richiesta_soccorso (la richiesta che ha fatto scattare
-    // questa missione)
+    // Richiesta di soccorso associata
     RichiestaSoccorso getRichiestaSoccorso();
 
-    void setRichiestaSoccorso(RichiestaSoccorso richiesta);
+    void setRichiestaSoccorso(RichiestaSoccorso richiestaSoccorso);
 
+    // Amministratore che ha chiuso la missione 
+    Utente getAmministratore();
+
+    void setAmministratore(Utente amministratore);
+
+    // Squadra di operatori assegnata (aggiunta in più non presente nel DB)
+    Squadra getSquadra();
+
+    void setSquadra(Squadra squadra);
+
+    // Lista dei mezzi impiegati (tabella Impiega_Mezzo)
     List<Mezzo> getMezzi();
 
     void setMezzi(List<Mezzo> mezzi);
 
     void addMezzo(Mezzo mezzo);
 
+    // Lista dei materiali impiegati (tabella Impiega_Materiale)
     List<Materiale> getMateriali();
 
     void setMateriali(List<Materiale> materiali);
 
-    void addMateriale(Materiale materiale); // --- METODI PER LE RELAZIONI MOLTI-A-MOLTI TRAMITE TABELLA DI JOIN ---
+    void addMateriale(Materiale materiale);
 
-    java.util.List<Utente> getMezziImpiegati();
+    // Storico degli aggiornamenti inseriti durante la missione
+    List<Aggiornamento> getAggiornamenti();
 
-    void setMezziImpiegati(java.util.List<Utente> mezzi);
+    void setAggiornamenti(List<Aggiornamento> aggiornamenti);
+
+    void addAggiornamento(Aggiornamento aggiornamento);
 
 }

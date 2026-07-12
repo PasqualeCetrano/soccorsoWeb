@@ -1,11 +1,9 @@
 package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
+import java.util.List;
 
-/**
- * Interfaccia dell'entità Mezzo.
- * Rispecchia fedelmente lo schema logico (id_mezzo, nome, descrizione).
- */
+
 public interface Mezzo extends DataItem<Integer> {
 
     String getNome();
@@ -15,4 +13,12 @@ public interface Mezzo extends DataItem<Integer> {
     String getDescrizione();
 
     void setDescrizione(String descrizione);
+
+    // Storico delle missioni a cui questo mezzo ha preso parte
+    List<Missione> getMissioni();
+
+    void setMissioni(List<Missione> missioni);
+
+    void addMissione(Missione missione);
+
 }
