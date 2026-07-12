@@ -1,18 +1,13 @@
 package it.univaq.soccorsoweb.data.model.impl.proxy;
 
-import it.univaq.f4i.iw.ex.soccorso.data.dao.UtenteDAO;
-import it.univaq.f4i.iw.ex.soccorso.data.model.Utente;
-import it.univaq.f4i.iw.ex.soccorso.data.model.impl.TelefonoImpl;
-import it.univaq.f4i.iw.framework.data.DataException;
-import it.univaq.f4i.iw.framework.data.DataItemProxy;
-import it.univaq.f4i.iw.framework.data.DataLayer;
+import it.univaq.soccorsoweb.data.model.impl.TelefonoImpl;
+import it.univaq.soccorsoweb.data.model.Utente;
+import it.univaq.framework.data.DataLayer;
+import it.univaq.framework.data.DataItemProxy;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Antigravity
- */
 public class TelefonoProxy extends TelefonoImpl implements DataItemProxy {
 
     protected boolean modified;
@@ -50,17 +45,18 @@ public class TelefonoProxy extends TelefonoImpl implements DataItemProxy {
         return super.getUtente();
     }
 
-    /* 
-    @Override
-    public void setUtente(Utente utente) {
-        super.setUtente(utente);
-        if (utente != null) {
-            this.utente_key = utente.getKey();
-        } else {
-            this.utente_key = 0;
-        }
-        this.modified = true;
-    }*/
+    /*
+     * @Override
+     * public void setUtente(Utente utente) {
+     * super.setUtente(utente);
+     * if (utente != null) {
+     * this.utente_key = utente.getKey();
+     * } else {
+     * this.utente_key = 0;
+     * }
+     * this.modified = true;
+     * }
+     */
 
     @Override
     public void setModified(boolean dirty) {
@@ -78,4 +74,3 @@ public class TelefonoProxy extends TelefonoImpl implements DataItemProxy {
     }
 
 }
-

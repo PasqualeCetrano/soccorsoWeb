@@ -4,10 +4,6 @@ import it.univaq.soccorsoweb.data.model.impl.PatenteImpl;
 import it.univaq.framework.data.DataItemProxy;
 import it.univaq.framework.data.DataLayer;
 
-/**
- *
- * @author Antigravity
- */
 public class PatenteProxy extends PatenteImpl implements DataItemProxy {
 
     protected boolean modified;
