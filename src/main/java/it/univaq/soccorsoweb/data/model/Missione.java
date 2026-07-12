@@ -2,7 +2,7 @@ package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 public interface Missione extends DataItem<Integer> {
 
@@ -35,7 +35,7 @@ public interface Missione extends DataItem<Integer> {
 
     void setRichiestaSoccorso(RichiestaSoccorso richiestaSoccorso);
 
-    // Amministratore che ha chiuso la missione 
+    // Amministratore che ha chiuso la missione
     Utente getAmministratore();
 
     void setAmministratore(Utente amministratore);

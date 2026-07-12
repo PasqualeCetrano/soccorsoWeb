@@ -1,10 +1,9 @@
 package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
-import java.util.List;
 
 //ho creato questa interfaccia per la relazione partecipa, poichè essa contiene l'attributo ruolo 
-//che permette di verificare se un Utente è operatore o caposquadra 
+//che permette di verificare se un Utente è operatore o caposquadra all'interno di una squadra
 
 public interface Partecipa extends DataItem<Integer> {
 
