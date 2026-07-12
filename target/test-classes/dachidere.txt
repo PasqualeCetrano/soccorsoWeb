@@ -1,0 +1,1 @@
+-chiedere se va bene avere i metodi in missione getsquadra e in squadra getmissione.
