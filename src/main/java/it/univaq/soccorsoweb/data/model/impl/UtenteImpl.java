@@ -32,6 +32,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private List<Missione> missioniPartecipate;
 
     public UtenteImpl() {
+        super();
         this.nome = "";
         this.cognome = "";
         this.email = "";
@@ -41,13 +42,14 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.dataNascita = null;
         this.tipo = "";
         this.amministratoreCreatore = null;
-        this.telefoni = new ArrayList<>();
-        this.patenti = new ArrayList<>();
-        this.abilita = new ArrayList<>();
-        this.aggiornamenti = new ArrayList<>();
-        this.richiesteSoccorso = new ArrayList<>();
-        this.missioniChiuse = new ArrayList<>();
-        this.missioniPartecipate = new ArrayList<>();
+        // Inizializzati a null per supportare il lazy loading del Proxy
+        this.telefoni = null;
+        this.patenti = null;
+        this.abilita = null;
+        this.aggiornamenti = null;
+        this.richiesteSoccorso = null;
+        this.missioniChiuse = null;
+        this.missioniPartecipate = null;
     }
 
     @Override

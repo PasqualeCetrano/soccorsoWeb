@@ -4,6 +4,7 @@ import it.univaq.soccorsoweb.data.model.impl.TelefonoImpl;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.framework.data.DataLayer;
 import it.univaq.framework.data.DataItemProxy;
+import it.univaq.framework.data.DataException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,18 +46,18 @@ public class TelefonoProxy extends TelefonoImpl implements DataItemProxy {
         return super.getUtente();
     }
 
-    /*
-     * @Override
-     * public void setUtente(Utente utente) {
-     * super.setUtente(utente);
-     * if (utente != null) {
-     * this.utente_key = utente.getKey();
-     * } else {
-     * this.utente_key = 0;
-     * }
-     * this.modified = true;
-     * }
-     */
+    
+    @Override
+     public void setUtente(Utente utente) {
+     super.setUtente(utente);
+      if (utente != null) {
+      this.utente_key = utente.getKey();
+      } else {
+      this.utente_key = 0;
+      }
+      this.modified = true;
+    }
+     
 
     @Override
     public void setModified(boolean dirty) {

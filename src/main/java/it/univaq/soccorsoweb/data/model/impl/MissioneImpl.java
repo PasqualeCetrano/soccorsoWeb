@@ -37,9 +37,9 @@ public class MissioneImpl extends DataItemImpl<Integer> implements Missione {
         this.richiestaSoccorso = null;
         this.amministratore = null;
         this.squadra = null;
-        this.mezzi = new ArrayList<>();
-        this.materiali = new ArrayList<>();
-        this.aggiornamenti = new ArrayList<>();
+        this.mezzi = null;
+        this.materiali = null;
+        this.aggiornamenti = null;
     }
 
     @Override
