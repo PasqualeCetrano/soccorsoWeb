@@ -38,15 +38,12 @@ public interface RichiestaSoccorso extends DataItem<Integer> {
 
     void setFoto(byte[] foto);
 
-    Utente getUtente();
+    String getSegnalante();
 
-    void setUtente(Utente utente);
+    void setSegnalante(String segnalante);
 
-    // Lista di segnalanti esterni associati a questa richiesta (tabella Invia)
-    List<Segnalante> getSegnalanti();
+    String getEmail_segnalante();
 
-    void setSegnalanti(List<Segnalante> segnalanti);
-
-    void addSegnalante(Segnalante segnalante);
+    void setEmail_segnalante(String email_segnalante);
 
 }

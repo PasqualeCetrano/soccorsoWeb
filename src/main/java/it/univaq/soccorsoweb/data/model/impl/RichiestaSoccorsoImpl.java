@@ -2,7 +2,7 @@ package it.univaq.soccorsoweb.data.model.impl;
 
 import it.univaq.framework.data.DataItemImpl;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
-import it.univaq.soccorsoweb.data.model.Segnalante;
+
 import it.univaq.soccorsoweb.data.model.Utente;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements Rich
     private String tokenConvalida;
     private String ip;
     private byte[] foto;
-    private Utente utente;
-    private List<Segnalante> segnalanti;
+    private String segnalante;
+    private String email_segnalante;
 
     public RichiestaSoccorsoImpl() {
         this.descrizione = "";
@@ -30,8 +30,8 @@ public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements Rich
         this.tokenConvalida = "";
         this.ip = "";
         this.foto = null;
-        this.utente = null;
-        this.segnalanti = new ArrayList<>();
+        this.segnalante = "";
+        this.email_segnalante = "";
     }
 
     @Override
@@ -115,30 +115,23 @@ public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements Rich
     }
 
     @Override
-    public Utente getUtente() {
-        return utente;
+    public String getSegnalante() {
+        return segnalante;
     }
 
     @Override
-    public void setUtente(Utente utente) {
-        this.utente = utente;
+    public void setSegnalante(String segnalante) {
+        this.segnalante = segnalante;
     }
 
     @Override
-    public List<Segnalante> getSegnalanti() {
-        return segnalanti;
+    public String getEmail_segnalante() {
+        return email_segnalante;
     }
 
     @Override
-    public void setSegnalanti(List<Segnalante> segnalanti) {
-        this.segnalanti = segnalanti;
+    public void setEmail_segnalante(String email_segnalante) {
+        this.email_segnalante = email_segnalante;
     }
 
-    @Override
-    public void addSegnalante(Segnalante segnalante) {
-        if (this.segnalanti == null) {
-            this.segnalanti = new ArrayList<>();
-        }
-        this.segnalanti.add(segnalante);
-    }
 }
