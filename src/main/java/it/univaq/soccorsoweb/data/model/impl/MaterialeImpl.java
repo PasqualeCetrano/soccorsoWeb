@@ -10,7 +10,7 @@ public class MaterialeImpl extends DataItemImpl<Integer> implements Materiale {
 
     private String nome;
     private String descrizione;
-    private List<Missione> missioni;
+    private List<Missione> missioni; // serve per tenere traccia dello storico delle missioni di un materiale
 
     public MaterialeImpl() {
         this.nome = "";

@@ -11,12 +11,14 @@ public class SquadraImpl extends DataItemImpl<Integer> implements Squadra {
 
     private String codice;
     private Missione missione;
-    private List<Partecipa> partecipazioni;
+    private List<Partecipa> partecipazioni; // serve per tenera traccia del ruolo degli utenti che fanno parte di questa
+                                            // squadra
 
     public SquadraImpl() {
         this.codice = "";
         this.missione = null;
-        this.partecipazioni = new ArrayList<>();
+        // Inizializzato a null per supportare il lazy loading del Proxy
+        this.partecipazioni = null;
     }
 
     @Override

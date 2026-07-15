@@ -99,7 +99,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public Utente getAmministratoreCreatore() {
         if (super.getAmministratoreCreatore() == null && amministratore_key > 0) {
             try {
-                super.setAmministratoreCreatore(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(amministratore_key));
+                super.setAmministratoreCreatore(
+                        ((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(amministratore_key));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -127,8 +128,9 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //caso in cui l'utente non è ancora stato inserito nel DB, quindi non ha una key, 
-        //evita di fare una query inutile
+        // caso in cui l'utente non è ancora stato inserito nel DB, quindi non ha una
+        // key,
+        // evita di fare una query inutile
         if (super.getTelefoni() == null) {
             super.setTelefoni(new ArrayList<>());
         }
@@ -177,7 +179,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         this.modified = true;
     }
 
-    @Override
+    @Override // recupero le abilità dell utente se non le ho caricate e se l utente ha una
+              // key maggiore di 0 quindi è un utente nel database
     public List<Abilita> getAbilita() {
         if (super.getAbilita() == null && getKey() != null && getKey() > 0) {
             try {
@@ -209,7 +212,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public List<Aggiornamento> getAggiornamenti() {
         if (super.getAggiornamenti() == null && getKey() != null && getKey() > 0) {
             try {
-                super.setAggiornamenti(((AggiornamentoDAO) dataLayer.getDAO(Aggiornamento.class)).getAggiornamentiByUtente(this));
+                super.setAggiornamenti(
+                        ((AggiornamentoDAO) dataLayer.getDAO(Aggiornamento.class)).getAggiornamentiByUtente(this));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -238,7 +242,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public List<RichiestaSoccorso> getRichiesteSoccorso() {
         if (super.getRichiesteSoccorso() == null && getKey() != null && getKey() > 0) {
             try {
-                super.setRichiesteSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class)).getRichiesteSoccorsoByUtente(this));
+                super.setRichiesteSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class))
+                        .getRichiesteSoccorsoByUtente(this));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -267,7 +272,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public List<Missione> getMissioniChiuse() {
         if (super.getMissioniChiuse() == null && getKey() != null && getKey() > 0) {
             try {
-                super.setMissioniChiuse(((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniChiuseByUtente(this));
+                super.setMissioniChiuse(
+                        ((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniChiuseByUtente(this));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -296,12 +302,14 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public List<Missione> getMissioniPartecipate() {
         if (super.getMissioniPartecipate() == null && getKey() != null && getKey() > 0) {
             try {
-                super.setMissioniPartecipate(((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniPartecipateByUtente(this));
+                super.setMissioniPartecipate(
+                        ((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniPartecipateByUtente(this));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        ////caso in cui l'utente non è ancora stato inserito nel DB, quindi non ha una key
+        //// caso in cui l'utente non è ancora stato inserito nel DB, quindi non ha una
+        //// key
         if (super.getMissioniPartecipate() == null) {
             super.setMissioniPartecipate(new ArrayList<>());
         }
@@ -336,4 +344,3 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         super.setAmministratoreCreatore(null);
     }
 }
-

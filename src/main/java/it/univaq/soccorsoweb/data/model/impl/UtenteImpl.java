@@ -29,7 +29,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private List<Aggiornamento> aggiornamenti;
     private List<RichiestaSoccorso> richiesteSoccorso;
     private List<Missione> missioniChiuse;
-    private List<Missione> missioniPartecipate;
+    private List<Missione> missioniPartecipate; // storico missioni
 
     public UtenteImpl() {
         super();
