@@ -1,10 +1,8 @@
 package it.univaq.soccorsoweb.data.model.impl.proxy;
 
-package it.univaq.soccorsoweb.data.model.impl.proxy;
-
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
 import it.univaq.soccorsoweb.data.dao.UtenteDAO;
-import it.univaq.soccorsoweb.data.model.Aggiornamento;
+
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.soccorsoweb.data.model.impl.AggiornamentoImpl;
@@ -14,7 +12,6 @@ import it.univaq.framework.data.DataLayer;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemProxy {
 

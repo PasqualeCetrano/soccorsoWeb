@@ -9,7 +9,6 @@ import it.univaq.soccorsoweb.data.dao.UtenteDAO;
 import it.univaq.soccorsoweb.data.model.Aggiornamento;
 import it.univaq.soccorsoweb.data.model.Materiale;
 import it.univaq.soccorsoweb.data.model.Mezzo;
-import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 import it.univaq.soccorsoweb.data.model.Squadra;
 import it.univaq.soccorsoweb.data.model.Utente;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MissioneProxy extends MissioneImpl implements DataItemProxy {
 
@@ -87,7 +85,8 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
     public RichiestaSoccorso getRichiestaSoccorso() {
         if (super.getRichiestaSoccorso() == null && richiesta_key > 0) {
             try {
-                super.setRichiestaSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class)).getRichiestaSoccorso(richiesta_key));
+                super.setRichiestaSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class))
+                        .getRichiestaSoccorso(richiesta_key));
             } catch (DataException ex) {
                 Logger.getLogger(MissioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -212,7 +211,8 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
     public List<Aggiornamento> getAggiornamenti() {
         if (super.getAggiornamenti() == null && getKey() != null && getKey() > 0) {
             try {
-                super.setAggiornamenti(((AggiornamentoDAO) dataLayer.getDAO(Aggiornamento.class)).getAggiornamentiByMissione(this));
+                super.setAggiornamenti(
+                        ((AggiornamentoDAO) dataLayer.getDAO(Aggiornamento.class)).getAggiornamentiByMissione(this));
             } catch (DataException ex) {
                 Logger.getLogger(MissioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }

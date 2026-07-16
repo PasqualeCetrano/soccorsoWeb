@@ -33,7 +33,7 @@ NULL
   
 CREATE TABLE Richiesta_Soccorso ( 
     id_richiesta_soccorso INT PRIMARY KEY AUTO_INCREMENT, 
-    stato ENUM('attivo', 'in_corso', 'chiuso','annullata','in attesa') NOT NULL, 
+    stato ENUM('attiva', 'in_corso', 'chiuso','annullata','da convalidare') NOT NULL, 
     foto LONGBLOB, 
     stringa_convalida VARCHAR(255) DEFAULT NULL UNIQUE, 
     ip VARCHAR(45) NOT NULL, 

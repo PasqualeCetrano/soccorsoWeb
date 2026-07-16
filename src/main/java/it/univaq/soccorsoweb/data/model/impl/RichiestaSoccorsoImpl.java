@@ -3,10 +3,7 @@ package it.univaq.soccorsoweb.data.model.impl;
 import it.univaq.framework.data.DataItemImpl;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 
-import it.univaq.soccorsoweb.data.model.Utente;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements RichiestaSoccorso {
 

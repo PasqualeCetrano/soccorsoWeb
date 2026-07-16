@@ -2,7 +2,6 @@ package it.univaq.soccorsoweb.data.model;
 
 import it.univaq.framework.data.DataItem;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface RichiestaSoccorso extends DataItem<Integer> {
 

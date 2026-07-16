@@ -1,10 +1,7 @@
 package it.univaq.soccorsoweb.data.model.impl.proxy;
 
-package it.univaq.soccorsoweb.data.model.impl.proxy;
-
 import it.univaq.soccorsoweb.data.dao.SquadraDAO;
 import it.univaq.soccorsoweb.data.dao.UtenteDAO;
-import it.univaq.soccorsoweb.data.model.Partecipa;
 import it.univaq.soccorsoweb.data.model.Squadra;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.soccorsoweb.data.model.impl.PartecipaImpl;
@@ -13,7 +10,6 @@ import it.univaq.framework.data.DataItemProxy;
 import it.univaq.framework.data.DataLayer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class PartecipaProxy extends PartecipaImpl implements DataItemProxy {
 

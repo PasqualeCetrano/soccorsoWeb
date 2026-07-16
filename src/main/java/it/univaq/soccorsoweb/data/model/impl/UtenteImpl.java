@@ -5,7 +5,7 @@ import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Aggiornamento;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Patente;
-import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
+
 import it.univaq.soccorsoweb.data.model.Telefono;
 import it.univaq.soccorsoweb.data.model.Utente;
 import java.time.LocalDate;
@@ -213,7 +213,6 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         }
         this.aggiornamenti.add(aggiornamento);
     }
-
 
     @Override
     public List<Missione> getMissioniChiuse() {

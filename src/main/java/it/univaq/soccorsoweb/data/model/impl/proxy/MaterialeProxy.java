@@ -1,7 +1,5 @@
 package it.univaq.soccorsoweb.data.model.impl.proxy;
 
-package it.univaq.soccorsoweb.data.model.impl.proxy;
-
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.impl.MaterialeImpl;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MaterialeProxy extends MaterialeImpl implements DataItemProxy {
 
