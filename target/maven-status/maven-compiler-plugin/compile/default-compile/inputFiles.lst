@@ -36,11 +36,13 @@ C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\framework\data\DataE
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\SquadraDAO.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\impl\RichiestaSoccorsoImpl.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\AbilitaDAO.java
+C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\impl\MissioneDAO_MySQL.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\Patente.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\Squadra.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\MissioneDAO.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\RichiestaSoccorsoDAO.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\impl\proxy\UtenteProxy.java
+C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\impl\MaterialeDAO_MySQL.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\impl\proxy\AggiornamentoProxy.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\dao\impl\AggiornamentoDAO_MySQL.java
 C:\Users\pasqu\projects\soccorsoWeb\src\main\java\it\univaq\soccorsoweb\data\model\impl\AbilitaImpl.java
