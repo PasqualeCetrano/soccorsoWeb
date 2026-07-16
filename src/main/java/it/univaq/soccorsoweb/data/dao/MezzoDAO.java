@@ -1,5 +1,6 @@
 package it.univaq.soccorsoweb.data.dao;
 
+import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Mezzo;
 import it.univaq.framework.data.DataException;
 import java.util.List;
@@ -25,4 +26,7 @@ public interface MezzoDAO {
 
     // 5) tutti i mezzi (per essere visualizzati nella pagina admin)
     List<Mezzo> getMezzi() throws DataException;
+
+    // 6) mezzi associati a una specifica missione (chiamato da MissioneProxy)
+    List<Mezzo> getMezziByMissione(Missione missione) throws DataException;
 }

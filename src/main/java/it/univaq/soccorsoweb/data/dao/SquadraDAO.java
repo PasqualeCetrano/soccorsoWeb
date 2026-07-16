@@ -2,8 +2,10 @@ package it.univaq.soccorsoweb.data.dao;
 
 import it.univaq.soccorsoweb.data.model.Partecipa;
 import it.univaq.soccorsoweb.data.model.Squadra;
-import it.univaq.framework.data.DataException;
+
 import java.util.List;
+
+import it.univaq.framework.data.DataException;
 
 public interface SquadraDAO {
 
@@ -14,7 +16,7 @@ public interface SquadraDAO {
     // Factory!
     Partecipa createPartecipa();
 
-    // --- METODI DA AGGIORNAMENTI.TXT ---
+    // METODI DA AGGIORNAMENTI.TXT
 
     // 1) Inserimento squadra (il DAO si occuperà di salvare sia la Squadra sia la
     // sua lista di Partecipazioni nella tabella ponte)
@@ -22,4 +24,9 @@ public interface SquadraDAO {
 
     // Metodo di utilità per recuperare una squadra
     Squadra getSquadra(int id_squadra) throws DataException;
+
+    // serve per ottenere la lista di utenti e i ruoli che appartengono a una
+    // squadra
+    List<Partecipa> getPartecipazioniBySquadra(Squadra squadra) throws DataException;
+
 }

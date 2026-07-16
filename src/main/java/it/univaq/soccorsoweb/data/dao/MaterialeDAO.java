@@ -3,6 +3,7 @@ package it.univaq.soccorsoweb.data.dao;
 import it.univaq.soccorsoweb.data.model.Materiale;
 import it.univaq.framework.data.DataException;
 import java.util.List;
+import it.univaq.soccorsoweb.data.model.Missione;
 
 public interface MaterialeDAO {
 
@@ -25,4 +26,7 @@ public interface MaterialeDAO {
 
     // 5) tutti i materiali (per essere visualizzati nella pagina admin)
     List<Materiale> getMateriali() throws DataException;
+
+    // 6) materiali associati a una specifica missione (chiamato da MissioneProxy)
+    List<Materiale> getMaterialiByMissione(Missione missione) throws DataException;
 }
