@@ -27,7 +27,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private List<Patente> patenti;
     private List<Abilita> abilita;
     private List<Aggiornamento> aggiornamenti;
-    private List<RichiestaSoccorso> richiesteSoccorso;
+
     private List<Missione> missioniChiuse;
     private List<Missione> missioniPartecipate; // storico missioni
 
@@ -47,7 +47,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.patenti = null;
         this.abilita = null;
         this.aggiornamenti = null;
-        this.richiesteSoccorso = null;
+
         this.missioniChiuse = null;
         this.missioniPartecipate = null;
     }
@@ -214,23 +214,6 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.aggiornamenti.add(aggiornamento);
     }
 
-    @Override
-    public List<RichiestaSoccorso> getRichiesteSoccorso() {
-        return richiesteSoccorso;
-    }
-
-    @Override
-    public void setRichiesteSoccorso(List<RichiestaSoccorso> richiesteSoccorso) {
-        this.richiesteSoccorso = richiesteSoccorso;
-    }
-
-    @Override
-    public void addRichiestaSoccorso(RichiestaSoccorso richiestaSoccorso) {
-        if (this.richiesteSoccorso == null) {
-            this.richiesteSoccorso = new ArrayList<>();
-        }
-        this.richiesteSoccorso.add(richiestaSoccorso);
-    }
 
     @Override
     public List<Missione> getMissioniChiuse() {

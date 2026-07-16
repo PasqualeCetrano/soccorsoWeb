@@ -70,12 +70,6 @@ public interface Utente extends DataItem<Integer> {
     void addAggiornamento(Aggiornamento aggiornamento);
 
 
-    // Lista di richieste di soccorso gestite da questo utente
-    List<RichiestaSoccorso> getRichiesteSoccorso();
-
-    void setRichiesteSoccorso(List<RichiestaSoccorso> richiesteSoccorso);
-
-    void addRichiestaSoccorso(RichiestaSoccorso richiestaSoccorso);
 
 
     // Missioni chiuse da questo utente (se amministratore)

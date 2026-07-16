@@ -4,14 +4,14 @@ import it.univaq.soccorsoweb.data.dao.AbilitaDAO;
 import it.univaq.soccorsoweb.data.dao.AggiornamentoDAO;
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
 import it.univaq.soccorsoweb.data.dao.PatenteDAO;
-import it.univaq.soccorsoweb.data.dao.RichiestaSoccorsoDAO;
+
 import it.univaq.soccorsoweb.data.dao.TelefonoDAO;
 import it.univaq.soccorsoweb.data.dao.UtenteDAO;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Aggiornamento;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Patente;
-import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
+
 import it.univaq.soccorsoweb.data.model.Telefono;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.soccorsoweb.data.model.impl.UtenteImpl;
@@ -238,35 +238,6 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         this.modified = true;
     }
 
-    @Override
-    public List<RichiestaSoccorso> getRichiesteSoccorso() {
-        if (super.getRichiesteSoccorso() == null && getKey() != null && getKey() > 0) {
-            try {
-                super.setRichiesteSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class))
-                        .getRichiesteSoccorsoByUtente(this));
-            } catch (DataException ex) {
-                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if (super.getRichiesteSoccorso() == null) {
-            super.setRichiesteSoccorso(new ArrayList<>());
-        }
-        return super.getRichiesteSoccorso();
-    }
-
-    @Override
-    public void setRichiesteSoccorso(List<RichiestaSoccorso> richiesteSoccorso) {
-        super.setRichiesteSoccorso(richiesteSoccorso);
-        this.modified = true;
-    }
-
-    @Override
-    public void addRichiestaSoccorso(RichiestaSoccorso richiestaSoccorso) {
-        List<RichiestaSoccorso> list = getRichiesteSoccorso();
-        list.add(richiestaSoccorso);
-        richiestaSoccorso.setUtente(this);
-        this.modified = true;
-    }
 
     @Override
     public List<Missione> getMissioniChiuse() {

@@ -1,5 +1,5 @@
 QUERY DA IMPLEMENTARE
-    RICHIESTA SOCCORSO
+    RICHIESTA SOCCORSO 
 1) implementare query inserimento di una RICHIESTA SOCCORSO ->  OBBLIGATORIE:  descrizione, posizione, nome e email del segnalante FACOLTATIVA : foto (ricordiamoci di modificare la richiesta per rimuovere la lista di segnalanti perche assumiamo che la richeista ha al massimo un solo segnalante)
 2) implementare la convalida 
 3) implementare query per ottenere le richieste di soccorso attive,
@@ -8,7 +8,8 @@ QUERY DA IMPLEMENTARE
                                                             e chiuse (serviranno per la pagina dove l amministratore le gestisce )
 4) implementare la query che permette di modificare lo stato di una richiesta attiva(serve per annullarla o per quando si vuole creare una nuova missione associata alla richiesta)
 5) implementare le query per ottenere tutte le info di una richiesta(come nel punto 3 serviranno per la pagina dove l amminsitratore le gestisce)
-
+ 
+implementato in richiestasoccorsoDao
     
     
     MISSIONE
@@ -16,16 +17,18 @@ QUERY DA IMPLEMENTARE
 2) implementare la query che restituisce lo storico di missioni di un materiale
 3) implementare la query che restituisce lo storico di missioni di un mezzo
 4) implementare la query che recupera le missioni chiuse da un certo utente
-5) impelementare la query che recupera le missioni aperte da un certo utente
+5) implementare la query che recupera le missioni aperte da un certo utente
 6) implementare la query che serve per chiudere una missione (inserendo timestamp fine, livello di successo e commenti)
 7) implementare la query che resituisce tutti gli attrivuti di una missione dato un id_missione
 8) implementare la query che restituisce le missioni in corso 
-    
+ 
+implementato in missioneDAO  
     
     SQUADRA
-1) implementare query inserimento di una squadra (prima della ) permettendo di inserire solo gli utenti disponibili, 
+1) implementare query inserimento di una squadra (prima della richiesta di soccorso ) permettendo di inserire solo gli utenti disponibili, 
    nella pagina web 
 
+implementato in missioneDao
    
    
    
@@ -37,7 +40,7 @@ QUERY DA IMPLEMENTARE
 5) implementare la query che permette la creazione di un utente (solo admin potra usarla)
 6) implementare la query che restituisce tutti gli operatori( per essere visualizzati nella pagina dell admin)
    
-   
+   IMPLEMENTATO IN MISSIONE DAO 
    
    
    
@@ -47,7 +50,7 @@ QUERY DA IMPLEMENTARE
 3) impelentare query per permettere all amminstratore di aggiungere/rimuovere/modificare un mezzo
 4) implementare la query che permette di ricevere tutti i mezzi(per essere visualizzati nella pagina dell admin)
 
-
+implementato 
 
     MATERIALE
 1) implementare la query che restituisce solo i materiali dispoinibili
@@ -55,6 +58,7 @@ QUERY DA IMPLEMENTARE
 3) impelentare query per permettere all amminstratore di aggiungere/rimuovere/modificare un materiale
 4) implementare la query che permette di ricevere tutti i materiali(per essere visualizzati nella pagina dell admin)
  
+implementato
 
     AGGIORNAMENTO  
 1) implementare la query che inserisce un aggionamento composta da blocco di testo, id missione(bisogna controllare che la missione non sia chiusa), timestamp,id utente che inserice l'aggiornamento
