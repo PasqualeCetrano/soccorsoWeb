@@ -6,9 +6,30 @@ import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.AbilitaDAO;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Utente;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class AbilitaDAO_MySQL extends DAO implements AbilitaDAO {
+
+    private PreparedStatement sAbilitaByUtente;
+    private PreparedStatement sStoreAbilita;
+    private PreparedStatement sGetAbilita;
+
+    @Override
+    public void init() throws DataException {
+        try {
+            super.init();
+
+            sAbilitaByUtente = connection.prepareStatement(
+                    "SELECT a.* FROM Abilita a JOIN Possiede p ON a.id_abilita = p.fk_id_abilita WHERE p.fk_id_utente = ?");
+            sGetAbilita = connection.prepareStatement("SELECT * FROM Abilita");
+
+        } catch (SQLException ex) {
+            throw new DataException("Error initializing newspaper data layer", ex);
+        }
+    }
 
     public AbilitaDAO_MySQL(DataLayer d) {
         super(d);
