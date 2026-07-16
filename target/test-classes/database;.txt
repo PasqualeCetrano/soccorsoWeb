@@ -130,11 +130,3 @@ CREATE TABLE Possiede (
     FOREIGN KEY (fk_id_utente) REFERENCES Utente(id_utente) 
 ); 
   
-CREATE TABLE Invia ( 
-    id_invia INT PRIMARY KEY AUTO_INCREMENT, 
-    fk_id_richiesta_soccorso INT NOT NULL, 
-    fk_id_segnalante INT NOT NULL, 
-    FOREIGN KEY (fk_id_richiesta_soccorso) REFERENCES 
-Richiesta_Soccorso(id_richiesta_soccorso), 
-    FOREIGN KEY (fk_id_segnalante) REFERENCES Segnalante(id_segnalante) 
-); 
