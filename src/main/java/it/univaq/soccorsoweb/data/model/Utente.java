@@ -43,11 +43,9 @@ public interface Utente extends DataItem<Integer> {
 
     void setAmministratoreCreatore(Utente amministratore);
 
-    List<Telefono> getTelefoni();
+    Integer getTelefono();
 
-    void setTelefoni(List<Telefono> telefoni);
-
-    void addTelefono(Telefono telefono);
+    void setTelefono(Integer numero);
 
     List<Patente> getPatenti();
 

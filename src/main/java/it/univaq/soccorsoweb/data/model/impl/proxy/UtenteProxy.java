@@ -5,14 +5,12 @@ import it.univaq.soccorsoweb.data.dao.AggiornamentoDAO;
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
 import it.univaq.soccorsoweb.data.dao.PatenteDAO;
 
-import it.univaq.soccorsoweb.data.dao.TelefonoDAO;
 import it.univaq.soccorsoweb.data.dao.UtenteDAO;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Aggiornamento;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Patente;
 
-import it.univaq.soccorsoweb.data.model.Telefono;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.soccorsoweb.data.model.impl.UtenteImpl;
 import it.univaq.framework.data.DataException;
@@ -120,34 +118,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public List<Telefono> getTelefoni() {
-        if (super.getTelefoni() == null && getKey() != null && getKey() > 0) {
-            try {
-                super.setTelefoni(((TelefonoDAO) dataLayer.getDAO(Telefono.class)).getTelefoniByUtente(this));
-            } catch (DataException ex) {
-                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        // caso in cui l'utente non è ancora stato inserito nel DB, quindi non ha una
-        // key,
-        // evita di fare una query inutile
-        if (super.getTelefoni() == null) {
-            super.setTelefoni(new ArrayList<>());
-        }
-        return super.getTelefoni();
-    }
-
-    @Override
-    public void setTelefoni(List<Telefono> telefoni) {
-        super.setTelefoni(telefoni);
-        this.modified = true;
-    }
-
-    @Override
-    public void addTelefono(Telefono telefono) {
-        List<Telefono> list = getTelefoni();
-        list.add(telefono);
-        telefono.setUtente(this);
+    public void setTelefono(Integer numero) {
+        super.setTelefono(numero);
         this.modified = true;
     }
 

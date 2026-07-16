@@ -5,8 +5,6 @@ import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Aggiornamento;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Patente;
-
-import it.univaq.soccorsoweb.data.model.Telefono;
 import it.univaq.soccorsoweb.data.model.Utente;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private LocalDate dataNascita;
     private String tipo;
     private Utente amministratoreCreatore;
-    private List<Telefono> telefoni;
+    private Integer telefono;
     private List<Patente> patenti;
     private List<Abilita> abilita;
     private List<Aggiornamento> aggiornamenti;
@@ -43,7 +41,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.tipo = "";
         this.amministratoreCreatore = null;
         // Inizializzati a null per supportare il lazy loading del Proxy
-        this.telefoni = null;
+        this.telefono = null;
         this.patenti = null;
         this.abilita = null;
         this.aggiornamenti = null;
@@ -143,21 +141,13 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
-    public List<Telefono> getTelefoni() {
-        return telefoni;
+    public Integer getTelefono() {
+        return telefono;
     }
 
     @Override
-    public void setTelefoni(List<Telefono> telefoni) {
-        this.telefoni = telefoni;
-    }
-
-    @Override
-    public void addTelefono(Telefono telefono) {
-        if (this.telefoni == null) {
-            this.telefoni = new ArrayList<>();
-        }
-        this.telefoni.add(telefono);
+    public void setTelefono(Integer numero) {
+        this.telefono = numero;
     }
 
     @Override
