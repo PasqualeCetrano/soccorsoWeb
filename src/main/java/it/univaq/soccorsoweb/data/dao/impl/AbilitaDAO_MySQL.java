@@ -6,25 +6,27 @@ import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.AbilitaDAO;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Utente;
-
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
 public class AbilitaDAO_MySQL extends DAO implements AbilitaDAO {
 
-    private PreparedStatement sAbilitaByUtente;
-    private PreparedStatement sStoreAbilita;
-    private PreparedStatement sGetAbilita;
+    private PreparedStatement selectAbilitaByUtente;
+    private PreparedStatement insertAbilita;
+    private PreparedStatement selectAbilita;
 
     @Override
     public void init() throws DataException {
         try {
             super.init();
 
-            sAbilitaByUtente = connection.prepareStatement(
+            selectAbilitaByUtente = connection.prepareStatement(
                     "SELECT a.* FROM Abilita a JOIN Possiede p ON a.id_abilita = p.fk_id_abilita WHERE p.fk_id_utente = ?");
-            sGetAbilita = connection.prepareStatement("SELECT * FROM Abilita");
+            selectAbilita = connection.prepareStatement("SELECT * FROM Abilita");
+            insertAbilita = connection.prepareStatement("INSERT INTO Abilita (descrizione) VALUES (?)",
+                    Statement.RETURN_GENERATED_KEYS);
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing newspaper data layer", ex);
@@ -58,5 +60,5 @@ public class AbilitaDAO_MySQL extends DAO implements AbilitaDAO {
 
         throw new UnsupportedOperationException("Unimplemented method 'getAbilita'");
     }
-
+    // implementate query per le abilita
 }
