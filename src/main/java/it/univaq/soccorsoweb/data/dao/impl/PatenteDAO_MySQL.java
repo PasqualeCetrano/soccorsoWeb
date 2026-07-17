@@ -15,13 +15,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
 
     private PreparedStatement selectPatenteByUtente;
     private PreparedStatement selectPatenti;
     private PreparedStatement insertPatente;
+    private PreparedStatement insertPatenteUtente;
 
     public PatenteDAO_MySQL(DataLayer d) {
         super(d);
@@ -32,10 +31,14 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
         try {
             super.init();
 
-            selectPatenteByUtente = connection.prepareStatement("SELECT Patente.* FROM Patente INNER JOIN Detiene ON Patente.id_patente = Detiene.fk_id_patente WHERE Detiene.fk_id_utente = ?;");
+            selectPatenteByUtente = connection.prepareStatement(
+                    "SELECT Patente.* FROM Patente INNER JOIN Detiene ON Patente.id_patente = Detiene.fk_id_patente WHERE Detiene.fk_id_utente = ?;");
             selectPatenti = connection.prepareStatement("SELECT * FROM patente");
-            insertPatente = connection.prepareStatement("INSERT INTO Patente (codice_patente, tipo) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
-            
+            insertPatente = connection.prepareStatement("INSERT INTO Patente (tipo) VALUES (?);",
+                    Statement.RETURN_GENERATED_KEYS);
+            insertPatenteUtente = connection
+                    .prepareStatement("INSERT IGNORE INTO Detiene (fk_id_utente, fk_id_patente) VALUES (?, ?);");
+
         } catch (SQLException ex) {
             throw new DataException("Error initializing soccorso data layer", ex);
         }
@@ -47,6 +50,9 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
             selectPatenteByUtente.close();
             selectPatenti.close();
             insertPatente.close();
+            if (insertPatenteUtente != null) {
+                insertPatenteUtente.close();
+            }
         } catch (SQLException ex) {
             // ignore
         }
@@ -61,9 +67,8 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
     private PatenteProxy createPatente(ResultSet rs) throws DataException {
         PatenteProxy p = (PatenteProxy) createPatente();
         try {
-            p.setKey(rs.getInt("ID"));
+            p.setKey(rs.getInt("id_patente"));
             p.setTipo(rs.getString("tipo"));
-            p.setVersion(rs.getLong("version"));
         } catch (SQLException ex) {
             throw new DataException("Unable to create Patente object from ResultSet", ex);
         }
@@ -72,13 +77,19 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
 
     @Override
     public List<Patente> getPatentiByUtente(Utente utente) throws DataException {
-        List<Patente> result = new ArrayList<>();
+        List<Patente> result = new java.util.ArrayList<>();
         try {
             selectPatenteByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = selectPatenteByUtente.executeQuery()) {
                 while (rs.next()) {
-                    Patente p = createPatente(rs);
-                    dataLayer.getCache().add(Patente.class, p);
+                    int id_patente = rs.getInt("id_patente");
+                    Patente p = null;
+                    if (dataLayer.getCache().has(Patente.class, id_patente)) {
+                        p = (Patente) dataLayer.getCache().get(Patente.class, id_patente);
+                    } else {
+                        p = createPatente(rs);
+                        dataLayer.getCache().add(Patente.class, p);
+                    }
                     result.add(p);
                 }
             }
@@ -90,16 +101,43 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
 
     @Override
     public void storePatente(Patente patente) throws DataException {
-
+        try {
+            if (patente.getKey() != null && patente.getKey() > 0) { // UPDATE
+                // Ignoriamo l'update perché una patente (es. "Patente C") una volta creata non
+                // viene modificata
+            } else { // INSERT
+                insertPatente.setString(1, patente.getTipo());
+                if (insertPatente.executeUpdate() == 1) {
+                    try (ResultSet keys = insertPatente.getGeneratedKeys()) {
+                        if (keys.next()) {
+                            int key = keys.getInt(1);
+                            patente.setKey(key);
+                            dataLayer.getCache().add(Patente.class, patente);
+                        }
+                    }
+                }
+            }
+            if (patente instanceof PatenteProxy) {
+                ((PatenteProxy) patente).setModified(false);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to store Patente", ex);
+        }
     }
 
     @Override
     public List<Patente> getPatenti() throws DataException {
-        List<Patente> result = new ArrayList<>();
+        List<Patente> result = new java.util.ArrayList<>();
         try (ResultSet rs = selectPatenti.executeQuery()) {
             while (rs.next()) {
-                Patente p = createPatente(rs);
-                dataLayer.getCache().add(Patente.class, p);
+                int id_patente = rs.getInt("id_patente");
+                Patente p = null;
+                if (dataLayer.getCache().has(Patente.class, id_patente)) {
+                    p = (Patente) dataLayer.getCache().get(Patente.class, id_patente);
+                } else {
+                    p = createPatente(rs);
+                    dataLayer.getCache().add(Patente.class, p);
+                }
                 result.add(p);
             }
         } catch (SQLException ex) {
@@ -107,5 +145,21 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
         }
         return result;
     }
-}
 
+    @Override // permette di associare la patente a un utente se la patente non esiste a db la
+              // inserisce prima poi aggiorna la tabella detiene
+    public void aggiungiPatenteUtente(Utente utente, Patente patente) throws DataException {
+        try {
+            // Se la patente non è ancora a sistema (non ha un ID), la salviamo prima
+            if (patente.getKey() == null) {
+                storePatente(patente);
+            }
+
+            insertPatenteUtente.setInt(1, utente.getKey());
+            insertPatenteUtente.setInt(2, patente.getKey());
+            insertPatenteUtente.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Unable to add patente to utente", ex);
+        }
+    }
+}
