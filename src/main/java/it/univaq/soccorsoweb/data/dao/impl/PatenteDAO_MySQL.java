@@ -7,12 +7,11 @@ import it.univaq.soccorsoweb.data.model.impl.proxy.PatenteProxy;
 import it.univaq.framework.data.DAO;
 import it.univaq.framework.data.DataException;
 import it.univaq.framework.data.DataLayer;
-import it.univaq.framework.data.DataItemProxy;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
