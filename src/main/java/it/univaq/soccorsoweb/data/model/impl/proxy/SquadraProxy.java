@@ -67,7 +67,7 @@ public class SquadraProxy extends SquadraImpl implements DataItemProxy {
         if (super.getPartecipazioni() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setPartecipazioni(
-                        ((SquadraDAO) dataLayer.getDAO(Squadra.class)).getPartecipazioniBySquadra(this));
+                        ((it.univaq.soccorsoweb.data.dao.PartecipaDAO) dataLayer.getDAO(Partecipa.class)).getPartecipazioniBySquadra(this));
             } catch (DataException ex) {
                 Logger.getLogger(SquadraProxy.class.getName()).log(Level.SEVERE, null, ex);
             }

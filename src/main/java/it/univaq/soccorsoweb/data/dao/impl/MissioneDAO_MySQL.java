@@ -40,7 +40,7 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
             super.init();
 
             insertMissione = connection.prepareStatement(
-                    "INSERT INTO Aggiornamento (timestamp_agg, testo, fk_id_missione, fk_id_utente) VALUES (?, ?, ?, ?);",
+                    "INSERT INTO Missione (posizione, obiettivo, inizio, fk_id_utente, fk_id_richiesta_soccorso) VALUES (?, ?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
 
             updateMissione = connection.prepareStatement(
