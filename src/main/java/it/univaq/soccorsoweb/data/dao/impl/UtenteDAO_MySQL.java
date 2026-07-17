@@ -68,12 +68,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
             u.setTipo(rs.getString("tipo"));
 
-            int telefono = rs.getInt("telefono");
-            if (rs.wasNull()) {
-                u.setTelefono(null);
-            } else {
-                u.setTelefono(telefono);
-            }
+            u.setTelefono(rs.getString("telefono"));
 
             int adminId = rs.getInt("id_utente_amministratore");
             if (rs.wasNull()) {
@@ -150,9 +145,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             }
             insertUtente.setString(4, utente.getEmail());
             if (utente.getTelefono() != null) {
-                insertUtente.setInt(5, utente.getTelefono());
+                insertUtente.setString(5, utente.getTelefono());
             } else {
-                insertUtente.setNull(5, java.sql.Types.INTEGER);
+                insertUtente.setNull(5, java.sql.Types.VARCHAR);
             }
             insertUtente.setString(6, utente.getNome());
             insertUtente.setString(7, utente.getCognome());

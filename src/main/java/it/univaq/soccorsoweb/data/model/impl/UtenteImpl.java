@@ -141,12 +141,12 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
     @Override
-    public void setTelefono(Integer numero) {
+    public void setTelefono(String numero) {
         this.telefono = numero;
     }
 
