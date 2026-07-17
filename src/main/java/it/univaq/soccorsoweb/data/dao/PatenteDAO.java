@@ -22,4 +22,8 @@ public interface PatenteDAO {
     // 3) recupero di tutte le patenti a sistema (utile per riempire le tendine nel
     // web)
     List<Patente> getPatenti() throws DataException;
+
+    // 4) permette all'operatore di aggiungere una patente alla propria lista (dalla
+    // sua vista)
+    void aggiungiPatenteUtente(Utente utente, Patente patente) throws DataException;
 }
