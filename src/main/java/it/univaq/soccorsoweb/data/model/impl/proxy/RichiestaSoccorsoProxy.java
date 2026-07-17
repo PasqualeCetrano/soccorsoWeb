@@ -29,14 +29,8 @@ public class RichiestaSoccorsoProxy extends RichiestaSoccorsoImpl implements Dat
     }
 
     @Override
-    public void setLatitudine(Double latitudine) {
-        super.setLatitudine(latitudine);
-        this.modified = true;
-    }
-
-    @Override
-    public void setLongitudine(Double longitudine) {
-        super.setLongitudine(longitudine);
+    public void setCoordinate(String coordinate) {
+        super.setCoordinate(coordinate);
         this.modified = true;
     }
 

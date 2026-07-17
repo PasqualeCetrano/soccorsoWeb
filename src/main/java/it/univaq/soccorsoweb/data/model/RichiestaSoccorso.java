@@ -9,13 +9,9 @@ public interface RichiestaSoccorso extends DataItem<Integer> {
 
     void setDescrizione(String descrizione);
 
-    Double getLatitudine();
+    String getCoordinate();
 
-    void setLatitudine(Double latitudine);
-
-    Double getLongitudine();
-
-    void setLongitudine(Double longitudine);
+    void setCoordinate(String coordinate);
 
     LocalDateTime getDataOraInvio();
 
