@@ -134,11 +134,97 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override
     public void storeUtente(Utente utente) throws DataException {
-        throw new UnsupportedOperationException("Metodo 'storeUtente' non ancora implementato");
+        try {
+            if (utente.getKey() != null && utente.getKey() > 0) {
+                // Il requisito prevede che storeUtente permetta SOLO l'inserimento
+                throw new DataException(
+                        "Aggiornamento non supportato: il metodo storeUtente permette solo l'inserimento di nuovi utenti.");
+            }
+
+            insertUtente.setString(1, utente.getIndirizzo());
+            insertUtente.setString(2, utente.getTipo());
+            if (utente.getDataNascita() != null) {
+                insertUtente.setDate(3, java.sql.Date.valueOf(utente.getDataNascita()));
+            } else {
+                insertUtente.setNull(3, java.sql.Types.DATE);
+            }
+            insertUtente.setString(4, utente.getEmail());
+            if (utente.getTelefono() != null) {
+                insertUtente.setInt(5, utente.getTelefono());
+            } else {
+                insertUtente.setNull(5, java.sql.Types.INTEGER);
+            }
+            insertUtente.setString(6, utente.getNome());
+            insertUtente.setString(7, utente.getCognome());
+            insertUtente.setString(8, utente.getCodiceFiscale());
+            insertUtente.setString(9, utente.getPassword());
+
+            if (utente.getAmministratoreCreatore() != null) { // controllo se ho l amministratore settato
+                insertUtente.setInt(10, utente.getAmministratoreCreatore().getKey());
+            } else {
+                throw new DataException(
+                        "Impossibile inserire l'utente: è obbligatorio specificare l'amministratore creatore.");
+            }
+
+            if (insertUtente.executeUpdate() == 1) {
+                try (ResultSet keys = insertUtente.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        int key = keys.getInt(1);
+                        utente.setKey(key);
+                        dataLayer.getCache().add(Utente.class, utente);
+                    }
+                }
+                if (utente instanceof UtenteProxy) { // setto modified a false perche l ho appena iserito e quindi l
+                                                     // oggetto corrisponde con il record del database
+                    ((UtenteProxy) utente).setModified(false);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to store utente", ex);
+        }
     }
 
     @Override
     public List<Utente> getOperatori() throws DataException {
-        throw new UnsupportedOperationException("Metodo 'getOperatori' non ancora implementato");
+        List<Utente> result = new ArrayList<>();
+        try (ResultSet rs = selectOperatori.executeQuery()) {
+            while (rs.next()) {
+                int id_utente = rs.getInt("id_utente");
+                Utente u = null;
+
+                if (dataLayer.getCache().has(Utente.class, id_utente)) {
+                    u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
+                } else {
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                }
+
+                result.add(u);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load operatori", ex);
+        }
+        return result;
+    }
+
+    @Override // serve per chiudere le query
+    public void destroy() throws DataException {
+        try {
+            if (selectOperatoriDisponibili != null) {
+                selectOperatoriDisponibili.close();
+            }
+            if (selectUtenteById != null) {
+                selectUtenteById.close();
+            }
+            if (insertUtente != null) {
+                insertUtente.close();
+            }
+            if (selectOperatori != null) {
+                selectOperatori.close();
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Errore durante la chiusura delle query nel data layer Utente", ex);
+        }
+        super.destroy();
     }
 }
