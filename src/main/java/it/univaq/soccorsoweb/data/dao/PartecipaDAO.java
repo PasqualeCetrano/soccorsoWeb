@@ -14,4 +14,7 @@ public interface PartecipaDAO {
     // query per inserire una partecipazione in squadra
     void storePartecipa(Partecipa partecipa) throws DataException;
 
+    // query per ottenere le partecipazioni data una squadra
+    List<Partecipa> getPartecipazioniBySquadra(Squadra squadra) throws DataException;
+
 }

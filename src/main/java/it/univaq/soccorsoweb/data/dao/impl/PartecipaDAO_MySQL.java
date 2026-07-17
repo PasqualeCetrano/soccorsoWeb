@@ -20,6 +20,7 @@ import java.util.List;
 public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
 
     private PreparedStatement insertPartecipa;
+    private PreparedStatement selectPartecipazioniBySquadra;
 
     public PartecipaDAO_MySQL(DataLayer d) {
         super(d);
@@ -33,6 +34,10 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
             insertPartecipa = connection.prepareStatement(
                     "INSERT INTO Partecipa (fk_id_squadra, fk_id_utente, ruolo) VALUES (?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
+            // serve per ottenere la lista dei componenti di una squadra con il rispettivo
+            // ruolo
+            selectPartecipazioniBySquadra = connection.prepareStatement(
+                    "SELECT * FROM Partecipa WHERE fk_id_squadra = ?;");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing Partecipa data layer", ex);
@@ -42,8 +47,12 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
     @Override
     public void destroy() throws DataException {
         try {
-            if (insertPartecipa != null)
+            if (insertPartecipa != null) {
                 insertPartecipa.close();
+            }
+            if (selectPartecipazioniBySquadra != null) {
+                selectPartecipazioniBySquadra.close();
+            }
         } catch (SQLException ex) {
             // ignore
         }
@@ -71,24 +80,7 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
     @Override
     public void storePartecipa(Partecipa partecipa) throws DataException {
         try {
-            if (partecipa.getKey() != null && partecipa.getKey() > 0) {
-                // UPDATE
-                if (partecipa.getSquadra() != null) {
-                    updatePartecipa.setInt(1, partecipa.getSquadra().getKey());
-                } else {
-                    throw new DataException("Partecipa must be associated with a Squadra");
-                }
-
-                if (partecipa.getUtente() != null) {
-                    updatePartecipa.setInt(2, partecipa.getUtente().getKey());
-                } else {
-                    throw new DataException("Partecipa must be associated with an Utente");
-                }
-
-                updatePartecipa.setString(3, partecipa.getRuolo());
-                updatePartecipa.setInt(4, partecipa.getKey());
-                updatePartecipa.executeUpdate();
-            } else {
+            if (partecipa.getKey() == null || partecipa.getKey() <= 0) {
                 // INSERT
                 if (partecipa.getSquadra() != null) {
                     insertPartecipa.setInt(1, partecipa.getSquadra().getKey());
@@ -124,23 +116,6 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
     }
 
     @Override
-    public Partecipa getPartecipa(int id_partecipa) throws DataException {
-        try {
-            selectPartecipaById.setInt(1, id_partecipa);
-            try (ResultSet rs = selectPartecipaById.executeQuery()) {
-                if (rs.next()) {
-                    Partecipa p = createPartecipa(rs);
-                    dataLayer.getCache().add(Partecipa.class, p);
-                    return p;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load partecipa by ID", ex);
-        }
-        return null;
-    }
-
-    @Override
     public List<Partecipa> getPartecipazioniBySquadra(Squadra squadra) throws DataException {
         List<Partecipa> result = new ArrayList<>();
         try {
@@ -156,47 +131,5 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
             throw new DataException("Unable to load partecipazioni by squadra", ex);
         }
         return result;
-    }
-
-    @Override
-    public List<Partecipa> getPartecipazioniByUtente(Utente utente) throws DataException {
-        List<Partecipa> result = new ArrayList<>();
-        try {
-            selectPartecipazioniByUtente.setInt(1, utente.getKey());
-            try (ResultSet rs = selectPartecipazioniByUtente.executeQuery()) {
-                while (rs.next()) {
-                    Partecipa p = createPartecipa(rs);
-                    dataLayer.getCache().add(Partecipa.class, p);
-                    result.add(p);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load partecipazioni by utente", ex);
-        }
-        return result;
-    }
-
-    @Override
-    public void deletePartecipa(Partecipa partecipa) throws DataException {
-        try {
-            if (partecipa.getKey() != null && partecipa.getKey() > 0) {
-                deletePartecipa.setInt(1, partecipa.getKey());
-                deletePartecipa.executeUpdate();
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to delete partecipa", ex);
-        }
-    }
-
-    @Override
-    public void deletePartecipazioniBySquadra(Squadra squadra) throws DataException {
-        try {
-            if (squadra.getKey() != null && squadra.getKey() > 0) {
-                deletePartecipazioniBySquadra.setInt(1, squadra.getKey());
-                deletePartecipazioniBySquadra.executeUpdate();
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to delete partecipazioni by squadra", ex);
-        }
     }
 }

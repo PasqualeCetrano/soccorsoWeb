@@ -5,10 +5,13 @@ import it.univaq.framework.data.DataException;
 import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.UtenteDAO;
 import it.univaq.soccorsoweb.data.model.Utente;
+import it.univaq.soccorsoweb.data.model.impl.proxy.UtenteProxy;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
@@ -43,18 +46,90 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override
     public Utente createUtente() {
-        // Implementazione factory per creare un'istanza vuota (o proxy) di Utente
-        throw new UnsupportedOperationException("Metodo 'createUtente' non ancora implementato");
+        return new UtenteProxy(getDataLayer());
     }
 
-    @Override
+    // metodo per creare un utente partendo da un risultato del database
+    private UtenteProxy createUtente(ResultSet rs) throws DataException {
+        UtenteProxy u = (UtenteProxy) createUtente();
+        try {
+            u.setKey(rs.getInt("id_utente"));
+            u.setNome(rs.getString("nome"));
+            u.setCognome(rs.getString("cognome"));
+            u.setEmail(rs.getString("email"));
+            u.setPassword(rs.getString("password"));
+            u.setIndirizzo(rs.getString("indirizzo"));
+            u.setCodiceFiscale(rs.getString("codicefiscale"));
+
+            java.sql.Date nascita = rs.getDate("nascita");
+            if (nascita != null) {
+                u.setDataNascita(nascita.toLocalDate());
+            }
+
+            u.setTipo(rs.getString("tipo"));
+
+            int telefono = rs.getInt("telefono");
+            if (rs.wasNull()) {
+                u.setTelefono(null);
+            } else {
+                u.setTelefono(telefono);
+            }
+
+            int adminId = rs.getInt("id_utente_amministratore");
+            if (rs.wasNull()) {
+                u.setAmministratoreKey(0);
+            } else {
+                u.setAmministratoreKey(adminId);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to create Utente object from ResultSet", ex);
+        }
+        return u;
+    }
+
+    @Override // sfurrtta la query per ottenere gli operatori liberi , crea un operatore per
+              // ogni risultato del database, poi inserisce questi operatori in una lista
     public List<Utente> getOperatoriDisponibili() throws DataException {
-        throw new UnsupportedOperationException("Metodo 'getOperatoriDisponibili' non ancora implementato");
+        List<Utente> result = new ArrayList<>();
+        try (ResultSet rs = selectOperatoriDisponibili.executeQuery()) {
+            while (rs.next()) {
+                int id_utente = rs.getInt("id_utente");
+                Utente u = null;
+                // controllo se ho gia l'utente nella cache
+                if (dataLayer.getCache().has(Utente.class, id_utente)) {
+                    u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
+                } else {
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                }
+
+                result.add(u);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load operatori disponibili", ex);
+        }
+        return result;
     }
 
     @Override
     public Utente getUtente(int id_utente) throws DataException {
-        throw new UnsupportedOperationException("Metodo 'getUtente' non ancora implementato");
+        // Controlla se l'utente è già nella cache del DataLayer
+        if (dataLayer.getCache().has(Utente.class, id_utente)) {
+            return (Utente) dataLayer.getCache().get(Utente.class, id_utente);
+        }
+        try {
+            selectUtenteById.setInt(1, id_utente);
+            try (ResultSet rs = selectUtenteById.executeQuery()) {
+                if (rs.next()) {
+                    Utente u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                    return u;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load utente by ID", ex);
+        }
+        return null;
     }
 
     @Override

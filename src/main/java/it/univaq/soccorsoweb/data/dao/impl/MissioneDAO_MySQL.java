@@ -29,6 +29,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     private PreparedStatement selectMissioniChiuseByUtente;
     private PreparedStatement selectMissioniPartecipateByUtente;
     private PreparedStatement selectMissioniInCorso;
+    private PreparedStatement insertImpiegaMateriale; // aggiorna tabella impiegaMateriale
+    private PreparedStatement insertImpiegaMezzo; // aggiorna tabella impiegaMezzo
 
     public MissioneDAO_MySQL(DataLayer d) {
         super(d);
@@ -63,6 +65,12 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
 
             selectMissioniInCorso = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE inizio <= NOW() AND fine IS NULL;");
+
+            insertImpiegaMateriale = connection
+                    .prepareStatement("INSERT INTO Impiega_Materiale (fk_id_missione, fk_id_materiale) VALUES (?, ?);");
+
+            insertImpiegaMezzo = connection
+                    .prepareStatement("INSERT INTO Impiega_Mezzo (fk_id_missione, fk_id_mezzo) VALUES (?, ?);");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing Missione data layer", ex);
