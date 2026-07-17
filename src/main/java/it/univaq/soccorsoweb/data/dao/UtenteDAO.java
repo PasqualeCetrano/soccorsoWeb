@@ -9,14 +9,13 @@ public interface UtenteDAO {
     // --- METODI FACTORY ---
     Utente createUtente();
 
-    // --- METODI DA AGGIORNAMENTI.TXT ---
+    // METODI DA AGGIORNAMENTI.TXT
 
     // 1) operatori disponibili
     List<Utente> getOperatoriDisponibili() throws DataException;
 
-    // 2,3) recupero anagrafica (nome,cognome,email,indirizzo,data di nascita, tipo,
+    // 2 recupero anagrafica (nome,cognome,email,indirizzo,data di nascita, tipo,
     // patente, abilità,missioni associate)
-
     Utente getUtente(int id_utente) throws DataException;
 
     // 4,5) creazione e modifica anagrafica (usata solo da admin)
