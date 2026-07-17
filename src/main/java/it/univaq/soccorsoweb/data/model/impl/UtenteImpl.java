@@ -21,7 +21,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private LocalDate dataNascita;
     private String tipo;
     private Utente amministratoreCreatore;
-    private Integer telefono;
+    private String telefono;
     private List<Patente> patenti;
     private List<Abilita> abilita;
     private List<Aggiornamento> aggiornamenti;

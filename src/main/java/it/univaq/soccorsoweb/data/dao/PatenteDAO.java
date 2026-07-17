@@ -24,6 +24,6 @@ public interface PatenteDAO {
     List<Patente> getPatenti() throws DataException;
 
     // 4) permette all'operatore di aggiungere una patente alla propria lista (dalla
-    // sua vista)
+    // sua vista, modifica quindi la tabella di associazioni)
     void aggiungiPatenteUtente(Utente utente, Patente patente) throws DataException;
 }
