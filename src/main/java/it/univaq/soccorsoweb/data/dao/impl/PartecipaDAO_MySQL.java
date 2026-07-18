@@ -7,7 +7,6 @@ import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.PartecipaDAO;
 import it.univaq.soccorsoweb.data.model.Partecipa;
 import it.univaq.soccorsoweb.data.model.Squadra;
-import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.soccorsoweb.data.model.impl.proxy.PartecipaProxy;
 
 import java.sql.PreparedStatement;
@@ -80,33 +79,24 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
     @Override
     public void storePartecipa(Partecipa partecipa) throws DataException {
         try {
-            if (partecipa.getKey() == null || partecipa.getKey() <= 0) {
-                // INSERT
-                if (partecipa.getSquadra() != null) {
-                    insertPartecipa.setInt(1, partecipa.getSquadra().getKey());
-                } else {
-                    throw new DataException("Partecipa must be associated with a Squadra");
-                }
+            if (partecipa.getSquadra() == null) {
+                throw new DataException("Partecipa deve essere associata a una Squadra");
+            }
+            if (partecipa.getUtente() == null) {
+                throw new DataException("Partecipa deve essere associata a un Utente");
+            }
+            insertPartecipa.setInt(1, partecipa.getSquadra().getKey());
+            insertPartecipa.setInt(2, partecipa.getUtente().getKey());
+            insertPartecipa.setString(3, partecipa.getRuolo());
 
-                if (partecipa.getUtente() != null) {
-                    insertPartecipa.setInt(2, partecipa.getUtente().getKey());
-                } else {
-                    throw new DataException("Partecipa must be associated with an Utente");
-                }
-
-                insertPartecipa.setString(3, partecipa.getRuolo());
-
-                if (insertPartecipa.executeUpdate() == 1) {
-                    try (ResultSet keys = insertPartecipa.getGeneratedKeys()) {
-                        if (keys.next()) {
-                            int key = keys.getInt(1);
-                            partecipa.setKey(key);
-                            dataLayer.getCache().add(Partecipa.class, partecipa);
-                        }
+            if (insertPartecipa.executeUpdate() == 1) {
+                try (ResultSet keys = insertPartecipa.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        partecipa.setKey(keys.getInt(1));
+                        dataLayer.getCache().add(Partecipa.class, partecipa);
                     }
                 }
             }
-
             if (partecipa instanceof DataItemProxy) {
                 ((DataItemProxy) partecipa).setModified(false);
             }
@@ -122,8 +112,14 @@ public class PartecipaDAO_MySQL extends DAO implements PartecipaDAO {
             selectPartecipazioniBySquadra.setInt(1, squadra.getKey());
             try (ResultSet rs = selectPartecipazioniBySquadra.executeQuery()) {
                 while (rs.next()) {
-                    Partecipa p = createPartecipa(rs);
-                    dataLayer.getCache().add(Partecipa.class, p);
+                    int id_partecipa = rs.getInt("id_partecipa");
+                    Partecipa p = null;
+                    if (dataLayer.getCache().has(Partecipa.class, id_partecipa)) {
+                        p = (Partecipa) dataLayer.getCache().get(Partecipa.class, id_partecipa);
+                    } else {
+                        p = createPartecipa(rs);
+                        dataLayer.getCache().add(Partecipa.class, p);
+                    }
                     result.add(p);
                 }
             }
