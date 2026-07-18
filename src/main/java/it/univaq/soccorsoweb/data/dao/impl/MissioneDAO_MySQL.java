@@ -2,8 +2,8 @@ package it.univaq.soccorsoweb.data.dao.impl;
 
 import it.univaq.framework.data.DAO;
 import it.univaq.framework.data.DataException;
-import it.univaq.framework.data.DataLayer;
 import it.univaq.framework.data.DataItemProxy;
+import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Materiale;
@@ -22,15 +22,14 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
 
     private PreparedStatement insertMissione;
     private PreparedStatement updateMissione;
-    private PreparedStatement selectIdMissione;
     private PreparedStatement selectMissioneById;
     private PreparedStatement selectMissioniByMateriale;
     private PreparedStatement selectMissioniByMezzo;
     private PreparedStatement selectMissioniChiuseByUtente;
     private PreparedStatement selectMissioniPartecipateByUtente;
     private PreparedStatement selectMissioniInCorso;
-    private PreparedStatement insertImpiegaMateriale; // aggiorna tabella impiegaMateriale
-    private PreparedStatement insertImpiegaMezzo; // aggiorna tabella impiegaMezzo
+    private PreparedStatement insertImpiegaMateriale;
+    private PreparedStatement insertImpiegaMezzo;
 
     public MissioneDAO_MySQL(DataLayer d) {
         super(d);
@@ -40,13 +39,17 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     public void init() throws DataException {
         try {
             super.init();
-
+            // query per aprire la missione dalla richiesta di soccorso prende in automatico
+            // fk_id_richiesta
             insertMissione = connection.prepareStatement(
-                    "INSERT INTO Missione (posizione, obiettivo, inizio, fk_id_utente, fk_id_richiesta_soccorso) VALUES (?, ?, ?, ?, ?);",
+                    "INSERT INTO Missione (posizione, obiettivo, inizio, fk_id_richiesta_soccorso) VALUES (?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
-
+            // query per chiudere la missione (aggiunto AND fine IS NULL per evitare modifiche a missioni già chiuse)
             updateMissione = connection.prepareStatement(
-                    "UPDATE Missione SET posizione = ?, obiettivo = ?, livello_successo = ?, commenti = ?, inizio = ?, fine = ?, fk_id_utente = ?, fk_id_richiesta_soccorso = ? WHERE id_missione = ?");
+                    "UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ? ,commenti = ? WHERE id_missione = ? AND fine IS NULL;");
+
+            selectMissioneById = connection.prepareStatement(
+                    "SELECT * FROM Missione WHERE id_missione = ?");
 
             selectMissioniByMateriale = connection.prepareStatement(
                     "SELECT Missione.* FROM Missione INNER JOIN Impiega_Materiale ON Missione.id_missione = Impiega_Materiale.fk_id_missione WHERE Impiega_Materiale.fk_id_materiale = ?;");
@@ -60,17 +63,14 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
             selectMissioniPartecipateByUtente = connection.prepareStatement(
                     "SELECT Missione.* FROM Missione INNER JOIN Squadra ON Missione.id_missione = Squadra.fk_id_missione INNER JOIN Partecipa ON Squadra.id_squadra = Partecipa.fk_id_squadra WHERE Partecipa.fk_id_utente = ?;");
 
-            selectIdMissione = connection.prepareStatement(
-                    "SELECT * FROM Missione WHERE id_missione = ?");
-
             selectMissioniInCorso = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE inizio <= NOW() AND fine IS NULL;");
 
-            insertImpiegaMateriale = connection
-                    .prepareStatement("INSERT INTO Impiega_Materiale (fk_id_missione, fk_id_materiale) VALUES (?, ?);");
+            insertImpiegaMateriale = connection.prepareStatement(
+                    "INSERT INTO Impiega_Materiale (fk_id_missione, fk_id_materiale) VALUES (?, ?);");
 
-            insertImpiegaMezzo = connection
-                    .prepareStatement("INSERT INTO Impiega_Mezzo (fk_id_missione, fk_id_mezzo) VALUES (?, ?);");
+            insertImpiegaMezzo = connection.prepareStatement(
+                    "INSERT INTO Impiega_Mezzo (fk_id_missione, fk_id_mezzo) VALUES (?, ?);");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing Missione data layer", ex);
@@ -96,6 +96,10 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 selectMissioniPartecipateByUtente.close();
             if (selectMissioniInCorso != null)
                 selectMissioniInCorso.close();
+            if (insertImpiegaMateriale != null)
+                insertImpiegaMateriale.close();
+            if (insertImpiegaMezzo != null)
+                insertImpiegaMezzo.close();
         } catch (SQLException ex) {
             // ignore
         }
@@ -142,12 +146,6 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
 
             m.setRichiestaKey(rs.getInt("fk_id_richiesta_soccorso"));
 
-            int squadraId = rs.getInt("id_squadra");
-            if (rs.wasNull()) {
-                m.setSquadraKey(0);
-            } else {
-                m.setSquadraKey(squadraId);
-            }
         } catch (SQLException ex) {
             throw new DataException("Unable to create Missione object from ResultSet", ex);
         }
@@ -157,94 +155,56 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     @Override
     public void storeMissione(Missione missione) throws DataException {
         try {
-            if (missione.getKey() != null && missione.getKey() > 0) {
-                // UPDATE
-                updateMissione.setString(1, missione.getPosizione());
-                updateMissione.setString(2, missione.getObiettivo());
-
-                if (missione.getLivelloSuccesso() != null) {
-                    updateMissione.setInt(3, missione.getLivelloSuccesso());
-                } else {
-                    updateMissione.setNull(3, java.sql.Types.TINYINT);
+            if (missione.getKey() == null) {
+                // CASO 1: NUOVA MISSIONE — data e ora di inizio prese in automatico
+                if (missione.getRichiestaSoccorso() == null) {
+                    throw new DataException("La missione deve essere collegata a una RichiestaSoccorso");
                 }
+                java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
 
-                updateMissione.setString(4, missione.getCommenti());
-
-                if (missione.getInizio() != null) {
-                    updateMissione.setTimestamp(5, java.sql.Timestamp.valueOf(missione.getInizio()));
-                } else {
-                    updateMissione.setNull(5, java.sql.Types.TIMESTAMP);
-                }
-
-                if (missione.getFine() != null) {
-                    updateMissione.setTimestamp(6, java.sql.Timestamp.valueOf(missione.getFine()));
-                } else {
-                    updateMissione.setNull(6, java.sql.Types.TIMESTAMP);
-                }
-
-                if (missione.getAmministratore() != null) {
-                    updateMissione.setInt(7, missione.getAmministratore().getKey());
-                } else {
-                    updateMissione.setNull(7, java.sql.Types.INTEGER);
-                }
-
-                if (missione.getRichiestaSoccorso() != null) {
-                    updateMissione.setInt(8, missione.getRichiestaSoccorso().getKey());
-                } else {
-                    throw new DataException("Missione must be associated with a RichiestaSoccorso");
-                }
-
-                updateMissione.setInt(9, missione.getKey());
-
-                updateMissione.executeUpdate();
-            } else {
-                // INSERT
                 insertMissione.setString(1, missione.getPosizione());
                 insertMissione.setString(2, missione.getObiettivo());
-
-                if (missione.getLivelloSuccesso() != null) {
-                    insertMissione.setInt(3, missione.getLivelloSuccesso());
-                } else {
-                    insertMissione.setNull(3, java.sql.Types.TINYINT);
-                }
-
-                insertMissione.setString(4, missione.getCommenti());
-
-                if (missione.getInizio() != null) {
-                    insertMissione.setTimestamp(5, java.sql.Timestamp.valueOf(missione.getInizio()));
-                } else {
-                    insertMissione.setNull(5, java.sql.Types.TIMESTAMP);
-                }
-
-                if (missione.getFine() != null) {
-                    insertMissione.setTimestamp(6, java.sql.Timestamp.valueOf(missione.getFine()));
-                } else {
-                    insertMissione.setNull(6, java.sql.Types.TIMESTAMP);
-                }
-
-                if (missione.getAmministratore() != null) {
-                    insertMissione.setInt(7, missione.getAmministratore().getKey());
-                } else {
-                    insertMissione.setNull(7, java.sql.Types.INTEGER);
-                }
-
-                if (missione.getRichiestaSoccorso() != null) {
-                    insertMissione.setInt(8, missione.getRichiestaSoccorso().getKey());
-                } else {
-                    throw new DataException("Missione must be associated with a RichiestaSoccorso");
-                }
+                insertMissione.setTimestamp(3, now); // inizio automatico
+                insertMissione.setInt(4, missione.getRichiestaSoccorso().getKey());
 
                 if (insertMissione.executeUpdate() == 1) {
                     try (ResultSet keys = insertMissione.getGeneratedKeys()) {
                         if (keys.next()) {
-                            int key = keys.getInt(1);
-                            missione.setKey(key);
-                            // add to cache
+                            missione.setKey(keys.getInt(1));
+                            missione.setInizio(now.toLocalDateTime()); // aggiorna oggetto in memoria
                             dataLayer.getCache().add(Missione.class, missione);
                         }
                     }
                 }
+            } else {
+                // CASO 2: CHIUSURA MISSIONE
+                // Query: UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ? ,commenti = ? WHERE id_missione = ?;
+                if (missione.getLivelloSuccesso() != null) {
+                    updateMissione.setInt(1, missione.getLivelloSuccesso());
+                } else {
+                    updateMissione.setNull(1, java.sql.Types.TINYINT);
+                }
+
+                if (missione.getFine() != null) {
+                    updateMissione.setTimestamp(2, java.sql.Timestamp.valueOf(missione.getFine()));
+                } else {
+                    updateMissione.setNull(2, java.sql.Types.TIMESTAMP);
+                }
+
+                if (missione.getAmministratore() != null) {
+                    updateMissione.setInt(3, missione.getAmministratore().getKey());
+                } else {
+                    updateMissione.setNull(3, java.sql.Types.INTEGER);
+                }
+
+                updateMissione.setString(4, missione.getCommenti());
+                updateMissione.setInt(5, missione.getKey());
+
+                if (updateMissione.executeUpdate() == 0) {
+                    throw new DataException("Impossibile aggiornare la missione: la missione non esiste oppure è già stata chiusa.");
+                }
             }
+
             if (missione instanceof DataItemProxy) {
                 ((DataItemProxy) missione).setModified(false);
             }
@@ -255,105 +215,53 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
 
     @Override
     public List<Missione> getMissioniByMateriale(Materiale materiale) throws DataException {
-        List<Missione> result = new ArrayList<>();
-        try {
-            selectMissioniByMateriale.setInt(1, materiale.getKey());
-            try (ResultSet rs = selectMissioniByMateriale.executeQuery()) {
-                while (rs.next()) {
-                    Missione m = createMissione(rs);
-                    dataLayer.getCache().add(Missione.class, m);
-                    result.add(m);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load missioni by materiale", ex);
-        }
-        return result;
+        throw new UnsupportedOperationException("Unimplemented method 'getMissioniByMateriale'");
     }
 
     @Override
     public List<Missione> getMissioniByMezzo(Mezzo mezzo) throws DataException {
-        List<Missione> result = new ArrayList<>();
-        try {
-            selectMissioniByMezzo.setInt(1, mezzo.getKey());
-            try (ResultSet rs = selectMissioniByMezzo.executeQuery()) {
-                while (rs.next()) {
-                    Missione m = createMissione(rs);
-                    dataLayer.getCache().add(Missione.class, m);
-                    result.add(m);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load missioni by mezzo", ex);
-        }
-        return result;
+        throw new UnsupportedOperationException("Unimplemented method 'getMissioniByMezzo'");
     }
 
     @Override
     public List<Missione> getMissioniChiuseByUtente(Utente utente) throws DataException {
-        List<Missione> result = new ArrayList<>();
-        try {
-            selectMissioniChiuseByUtente.setInt(1, utente.getKey());
-            try (ResultSet rs = selectMissioniChiuseByUtente.executeQuery()) {
-                while (rs.next()) {
-                    Missione m = createMissione(rs);
-                    dataLayer.getCache().add(Missione.class, m);
-                    result.add(m);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load closed missioni by utente", ex);
-        }
-        return result;
+        throw new UnsupportedOperationException("Unimplemented method 'getMissioniChiuseByUtente'");
     }
 
     @Override
     public List<Missione> getMissioniPartecipateByUtente(Utente utente) throws DataException {
-        List<Missione> result = new ArrayList<>();
-        try {
-            selectMissioniPartecipateByUtente.setInt(1, utente.getKey());
-            try (ResultSet rs = selectMissioniPartecipateByUtente.executeQuery()) {
-                while (rs.next()) {
-                    Missione m = createMissione(rs);
-                    dataLayer.getCache().add(Missione.class, m);
-                    result.add(m);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load participated missioni by utente", ex);
-        }
-        return result;
+        throw new UnsupportedOperationException("Unimplemented method 'getMissioniPartecipateByUtente'");
     }
 
     @Override
     public Missione getMissione(int id_missione) throws DataException {
-        try {
-            selectMissioneById.setInt(1, id_missione);
-            try (ResultSet rs = selectMissioneById.executeQuery()) {
-                if (rs.next()) {
-                    Missione m = createMissione(rs);
-                    dataLayer.getCache().add(Missione.class, m);
-                    return m;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load missione by ID", ex);
-        }
-        return null;
+        throw new UnsupportedOperationException("Unimplemented method 'getMissione'");
     }
 
     @Override
     public List<Missione> getMissioniInCorso() throws DataException {
-        List<Missione> result = new ArrayList<>();
-        try (ResultSet rs = selectMissioniInCorso.executeQuery()) {
-            while (rs.next()) {
-                Missione m = createMissione(rs);
-                dataLayer.getCache().add(Missione.class, m);
-                result.add(m);
-            }
+        throw new UnsupportedOperationException("Unimplemented method 'getMissioniInCorso'");
+    }
+
+    @Override
+    public void storeImpiegaMateriale(Missione missione, Materiale materiale) throws DataException {
+        try {
+            insertImpiegaMateriale.setInt(1, missione.getKey());
+            insertImpiegaMateriale.setInt(2, materiale.getKey());
+            insertImpiegaMateriale.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataException("Unable to load missioni in corso", ex);
+            throw new DataException("Errore durante l'assegnazione del materiale alla missione", ex);
         }
-        return result;
+    }
+
+    @Override
+    public void storeImpiegaMezzo(Missione missione, Mezzo mezzo) throws DataException {
+        try {
+            insertImpiegaMezzo.setInt(1, missione.getKey());
+            insertImpiegaMezzo.setInt(2, mezzo.getKey());
+            insertImpiegaMezzo.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Errore durante l'assegnazione del mezzo alla missione", ex);
+        }
     }
 }

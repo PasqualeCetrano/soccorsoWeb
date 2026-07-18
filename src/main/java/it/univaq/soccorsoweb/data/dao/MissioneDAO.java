@@ -38,4 +38,9 @@ public interface MissioneDAO {
 
     // 8) missioni in corso per vista amministratore
     List<Missione> getMissioniInCorso() throws DataException;
+
+    // 9) Assegnazione materiali e mezzi a una missione
+    void storeImpiegaMateriale(Missione missione, Materiale materiale) throws DataException;
+    
+    void storeImpiegaMezzo(Missione missione, Mezzo mezzo) throws DataException;
 }
