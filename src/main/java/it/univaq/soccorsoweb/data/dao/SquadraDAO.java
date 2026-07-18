@@ -1,9 +1,6 @@
 package it.univaq.soccorsoweb.data.dao;
 
-import it.univaq.soccorsoweb.data.model.Partecipa;
 import it.univaq.soccorsoweb.data.model.Squadra;
-
-import java.util.List;
 
 import it.univaq.framework.data.DataException;
 
