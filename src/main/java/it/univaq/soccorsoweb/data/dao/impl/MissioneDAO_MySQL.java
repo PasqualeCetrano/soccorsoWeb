@@ -44,25 +44,26 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
             insertMissione = connection.prepareStatement(
                     "INSERT INTO Missione (posizione, obiettivo, inizio, fk_id_richiesta_soccorso) VALUES (?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
-            // query per chiudere la missione (aggiunto AND fine IS NULL per evitare modifiche a missioni già chiuse)
+            // query per chiudere la missione (aggiunto AND fine IS NULL per evitare
+            // modifiche a missioni già chiuse)
             updateMissione = connection.prepareStatement(
                     "UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ? ,commenti = ? WHERE id_missione = ? AND fine IS NULL;");
-
+            // seleziona la missione in base all id
             selectMissioneById = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE id_missione = ?");
-
+            // select storico missioni di un materiale
             selectMissioniByMateriale = connection.prepareStatement(
                     "SELECT Missione.* FROM Missione INNER JOIN Impiega_Materiale ON Missione.id_missione = Impiega_Materiale.fk_id_missione WHERE Impiega_Materiale.fk_id_materiale = ?;");
-
+            // select missioni in base al mezzo utilizzato
             selectMissioniByMezzo = connection.prepareStatement(
                     "SELECT Missione.* FROM Missione INNER JOIN Impiega_Mezzo ON Missione.id_missione = Impiega_Mezzo.fk_id_missione WHERE Impiega_Mezzo.fk_id_mezzo = ?;");
-
+            // seleziona le missioni chiuse da un determinato amminstratore
             selectMissioniChiuseByUtente = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE fk_id_utente = ? AND fine IS NOT NULL;");
-
+            // select missioni in cui ha partecipato un utente
             selectMissioniPartecipateByUtente = connection.prepareStatement(
                     "SELECT Missione.* FROM Missione INNER JOIN Squadra ON Missione.id_missione = Squadra.fk_id_missione INNER JOIN Partecipa ON Squadra.id_squadra = Partecipa.fk_id_squadra WHERE Partecipa.fk_id_utente = ?;");
-
+            // seleziona le missioni in corso
             selectMissioniInCorso = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE inizio <= NOW() AND fine IS NULL;");
 
@@ -178,7 +179,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 }
             } else {
                 // CASO 2: CHIUSURA MISSIONE
-                // Query: UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ? ,commenti = ? WHERE id_missione = ?;
+                // Query: UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ?
+                // ,commenti = ? WHERE id_missione = ?;
                 if (missione.getLivelloSuccesso() != null) {
                     updateMissione.setInt(1, missione.getLivelloSuccesso());
                 } else {
@@ -201,7 +203,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 updateMissione.setInt(5, missione.getKey());
 
                 if (updateMissione.executeUpdate() == 0) {
-                    throw new DataException("Impossibile aggiornare la missione: la missione non esiste oppure è già stata chiusa.");
+                    throw new DataException(
+                            "Impossibile aggiornare la missione: la missione non esiste oppure è già stata chiusa.");
                 }
             }
 
@@ -213,34 +216,144 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         }
     }
 
-    @Override
+    @Override // storico missioni di un materiale
     public List<Missione> getMissioniByMateriale(Materiale materiale) throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissioniByMateriale'");
+        List<Missione> result = new ArrayList<>();
+        try {
+            selectMissioniByMateriale.setInt(1, materiale.getKey());
+            try (ResultSet rs = selectMissioniByMateriale.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni by materiale", ex);
+        }
+        return result;
     }
 
     @Override
     public List<Missione> getMissioniByMezzo(Mezzo mezzo) throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissioniByMezzo'");
+        List<Missione> result = new ArrayList<>();
+        try {
+            selectMissioniByMezzo.setInt(1, mezzo.getKey());
+            try (ResultSet rs = selectMissioniByMezzo.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni by mezzo", ex);
+        }
+        return result;
     }
 
     @Override
     public List<Missione> getMissioniChiuseByUtente(Utente utente) throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissioniChiuseByUtente'");
+        List<Missione> result = new ArrayList<>();
+        try {
+            selectMissioniChiuseByUtente.setInt(1, utente.getKey());
+            try (ResultSet rs = selectMissioniChiuseByUtente.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni chiuse by utente", ex);
+        }
+        return result;
     }
 
     @Override
     public List<Missione> getMissioniPartecipateByUtente(Utente utente) throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissioniPartecipateByUtente'");
+        List<Missione> result = new ArrayList<>();
+        try {
+            selectMissioniPartecipateByUtente.setInt(1, utente.getKey());
+            try (ResultSet rs = selectMissioniPartecipateByUtente.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni partecipate by utente", ex);
+        }
+        return result;
     }
 
     @Override
     public Missione getMissione(int id_missione) throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissione'");
+        Missione m = null;
+        if (dataLayer.getCache().has(Missione.class, id_missione)) {
+            m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+        } else {
+            try {
+                selectMissioneById.setInt(1, id_missione);
+                try (ResultSet rs = selectMissioneById.executeQuery()) {
+                    if (rs.next()) {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load missione by id", ex);
+            }
+        }
+        return m;
     }
 
-    @Override
+    @Override // seleziona le missioni che non sono state ancora chiuse
     public List<Missione> getMissioniInCorso() throws DataException {
-        throw new UnsupportedOperationException("Unimplemented method 'getMissioniInCorso'");
+        List<Missione> result = new ArrayList<>();
+        try {
+            try (ResultSet rs = selectMissioniInCorso.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni in corso", ex);
+        }
+        return result;
     }
 
     @Override
