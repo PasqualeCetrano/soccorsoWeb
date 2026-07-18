@@ -3,7 +3,6 @@ package it.univaq.soccorsoweb.data.dao;
 import it.univaq.framework.data.DataException;
 import it.univaq.soccorsoweb.data.model.Partecipa;
 import it.univaq.soccorsoweb.data.model.Squadra;
-import it.univaq.soccorsoweb.data.model.Utente;
 
 import java.util.List;
 
