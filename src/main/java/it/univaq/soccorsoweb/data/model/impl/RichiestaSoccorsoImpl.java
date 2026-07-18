@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements RichiestaSoccorso {
 
     private String descrizione;
-    private Double latitudine;
-    private Double longitudine;
+    private String coordinate;
     private LocalDateTime dataOraInvio;
     private String stato;
     private String tokenConvalida;
@@ -20,8 +19,7 @@ public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements Rich
 
     public RichiestaSoccorsoImpl() {
         this.descrizione = "";
-        this.latitudine = null;
-        this.longitudine = null;
+        this.coordinate = "";
         this.dataOraInvio = null;
         this.stato = "";
         this.tokenConvalida = "";
@@ -42,23 +40,13 @@ public class RichiestaSoccorsoImpl extends DataItemImpl<Integer> implements Rich
     }
 
     @Override
-    public Double getLatitudine() {
-        return latitudine;
+    public String getCoordinate() {
+        return coordinate;
     }
 
     @Override
-    public void setLatitudine(Double latitudine) {
-        this.latitudine = latitudine;
-    }
-
-    @Override
-    public Double getLongitudine() {
-        return longitudine;
-    }
-
-    @Override
-    public void setLongitudine(Double longitudine) {
-        this.longitudine = longitudine;
+    public void setCoordinate(String coordinate) {
+        this.coordinate = coordinate;
     }
 
     @Override

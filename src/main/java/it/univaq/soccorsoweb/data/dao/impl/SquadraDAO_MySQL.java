@@ -115,8 +115,6 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
             if (squadra.getPartecipazioni() != null) {
                 PartecipaDAO partecipaDAO = (PartecipaDAO) dataLayer.getDAO(Partecipa.class);
                 if (partecipaDAO != null) {
-                    // Sincronizziamo la lista
-                    partecipaDAO.deletePartecipazioniBySquadra(squadra);
                     for (Partecipa p : squadra.getPartecipazioni()) {
                         p.setSquadra(squadra); // assicuriamoci che il link ci sia
                         partecipaDAO.storePartecipa(p);

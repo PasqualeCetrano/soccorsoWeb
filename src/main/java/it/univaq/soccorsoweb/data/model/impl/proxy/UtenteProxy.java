@@ -118,7 +118,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setTelefono(Integer numero) {
+    public void setTelefono(String numero) {
         super.setTelefono(numero);
         this.modified = true;
     }

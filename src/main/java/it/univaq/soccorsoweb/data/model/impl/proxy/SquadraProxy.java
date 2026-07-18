@@ -1,10 +1,10 @@
 package it.univaq.soccorsoweb.data.model.impl.proxy;
 
 import it.univaq.soccorsoweb.data.dao.MissioneDAO;
-import it.univaq.soccorsoweb.data.dao.SquadraDAO;
+
 import it.univaq.soccorsoweb.data.model.Missione;
 import it.univaq.soccorsoweb.data.model.Partecipa;
-import it.univaq.soccorsoweb.data.model.Squadra;
+
 import it.univaq.soccorsoweb.data.model.impl.SquadraImpl;
 import it.univaq.framework.data.DataException;
 import it.univaq.framework.data.DataItemProxy;
@@ -67,7 +67,8 @@ public class SquadraProxy extends SquadraImpl implements DataItemProxy {
         if (super.getPartecipazioni() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setPartecipazioni(
-                        ((it.univaq.soccorsoweb.data.dao.PartecipaDAO) dataLayer.getDAO(Partecipa.class)).getPartecipazioniBySquadra(this));
+                        ((it.univaq.soccorsoweb.data.dao.PartecipaDAO) dataLayer.getDAO(Partecipa.class))
+                                .getPartecipazioniBySquadra(this));
             } catch (DataException ex) {
                 Logger.getLogger(SquadraProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
