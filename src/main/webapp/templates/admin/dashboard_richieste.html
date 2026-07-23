@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Dashboard Richieste</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html">Mezzi</a>
+            <a href="materiali_database.html">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Monitoraggio Missioni</h1>
+                <p>Gestisci le richieste di soccorso attive, segui quelle in corso e consulta lo storico di quelle
+                    concluse.</p>
+            </div>
+        </div>
+
+        <!-- 1. TABELLA RICHIESTE ATTIVE -->
+        <section class="missions-section mb-2">
+            <div class="admin-card ">
+                <h2 class="card-title text-danger"> Richieste Attive (Da Gestire)</h2>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ora Invio</th>
+                                <th>Posizione</th>
+                                <th>Descrizione</th>
+                                <th>Email Segnalante</th>
+                                <th></th> <!-- Colonna per il pulsante -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Riga Esempio -->
+                            <tr>
+                                <td><strong>18:45</strong><br><small>20/07/2026</small></td>
+                                <td>Via Roma 10, Milano</td>
+                                <td>Incidente stradale, feriti multipli.</td>
+                                <td>mario.rossi@email.it</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <!-- Form che porta alla pagina di gestione di questa specifica richiesta -->
+                                        <form action="gestione_richiesta_attiva.html" method="GET" class="m-0">
+                                            <input type="hidden" name="id_richiesta" value="1">
+                                            <button type="submit" class="btn-primary btn-small">Gestisci
+                                                Richiesta</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Altra Riga Esempio -->
+                            <tr>
+                                <td><strong>18:50</strong><br><small>20/07/2026</small></td>
+                                <td>Viale Dante 5, Milano</td>
+                                <td>Sospetto infarto in abitazione privata.</td>
+                                <td>luca.verdi@email.it</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <form action="gestione_richiesta_attiva.html" method="GET" class="m-0">
+                                            <input type="hidden" name="id_richiesta" value="2">
+                                            <button type="submit" class="btn-primary btn-small">Gestisci
+                                                Richiesta</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TABELLA RICHIESTE IN CORSO -->
+        <section class="missions-section mb-2">
+            <div class="admin-card">
+                <h2 class="card-title text-warning"> Richieste in Corso</h2>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ora Invio</th>
+                                <th>Posizione</th>
+                                <th>Descrizione</th>
+                                <th>Email Segnalante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Riga Esempio -->
+                            <tr>
+                                <td><strong>18:10</strong><br><small>20/07/2026</small></td>
+                                <td>Piazza Duomo, Milano</td>
+                                <td>Malore improvviso in strada.</td>
+                                <td>anna.neri@email.it</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TABELLA RICHIESTE CHIUSE -->
+        <section class="missions-section">
+            <div class="admin-card">
+                <h2 class="card-title text-success"> Richieste Chiuse</h2>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ora Invio</th>
+                                <th>Posizione</th>
+                                <th>Descrizione</th>
+                                <th>Email Segnalante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Riga Esempio -->
+                            <tr>
+                                <td><strong>14:30</strong><br><small>20/07/2026</small></td>
+                                <td>Via Torino 55, Milano</td>
+                                <td>Caduta accidentale, lieve entità.</td>
+                                <td>giulia.bianchi@email.it</td>
+                            </tr>
+
+                            <!-- Altra Riga Esempio -->
+                            <tr>
+                                <td><strong>09:15</strong><br><small>20/07/2026</small></td>
+                                <td>Stazione Centrale, Milano</td>
+                                <td>Crisi di panico, paziente stabilizzato.</td>
+                                <td>marco.gialli@email.it</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

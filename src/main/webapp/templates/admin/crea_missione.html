@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Crea Missione</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html">Mezzi</a>
+            <a href="materiali_database.html">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Inizializza Nuova Missione</h1>
+                <p>Inserisci l'obiettivo operativo per avviare la missione associata alla richiesta di soccorso.</p>
+            </div>
+            <div>
+                <!-- Ritorna alla gestione della richiesta attiva in caso di ripensamento -->
+                <a href="gestione_richiesta_attiva.html?id_richiesta=123" class="btn-outline btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Torna Indietro
+                </a>
+            </div>
+        </div>
+
+        <div class="missions-layout justify-center">
+
+            <section class="missions-section max-w-600 w-100">
+                <div class="admin-card">
+                    <h2 class="card-title text-primary">Nuova Missione di Soccorso</h2>
+
+                    <!-- Il form manda alla pagina successiva passando i parametri tramite GET -->
+                    <form action="crea_squadra_materiali_mezzi.html" method="GET">
+
+                        <!-- Richiesta Scatenante (Disabilitata ma inviata nel form come hidden) -->
+                        <div class="form-group w-100 text-left mt-1-5">
+                            <label for="id_richiesta_display">ID Richiesta Scatenante</label>
+                            <input type="text" id="id_richiesta_display" class="form-control" value="123" disabled>
+                            <!-- Input nascosto per inviare effettivamente il dato al submit -->
+                            <input type="hidden" name="id_richiesta" value="123">
+                        </div>
+
+                        <!-- Posizione (Presa in automatico dalla richiesta precedente, non modificabile) -->
+                        <div class="form-group w-100 text-left mt-1-5">
+                            <label for="posizione">Posizione Intervento (GPS)</label>
+                            <input type="text" id="posizione" name="posizione" class="form-control"
+                                value="Via Roma 10, Milano (45.4642, 9.1900)" readonly>
+                            <small class="text-muted">Coordinate geografiche importate automaticamente dalla
+                                segnalazione.</small>
+                        </div>
+
+                        <!-- Obiettivo della Missione (Da compilare) -->
+                        <div class="form-group w-100 text-left">
+                            <label for="obiettivo">Obiettivo Operativo della Missione</label>
+                            <textarea id="obiettivo" name="obiettivo" class="form-control" rows="4"
+                                placeholder="Descrivi l'obiettivo (es. Stabilizzazione paziente e trasporto codice rosso al Pronto Soccorso)"
+                                required></textarea>
+                        </div>
+
+                        <!-- Pulsante per procedere allo step successivo -->
+                        <button type="submit" class="btn-primary btn-block btn-large">
+                            Continua: Seleziona Squadra, Mezzi e Materiali →
+                        </button>
+
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+
+</html>

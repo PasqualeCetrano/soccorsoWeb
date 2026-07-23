@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Gestione Utenti</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+
+        <div class="nav-links">
+            <a href="home_admin.html">Dashboard</a>
+            <a href="utenti.html" class="active">Utenti</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <!-- HEADER CON BOTTONE -->
+        <div class="header-actions">
+            <div>
+                <h1>Gestione Utenti</h1>
+                <p>Visualizza e gestisci tutto il personale a sistema (Operatori e Amministratori).</p>
+            </div>
+            <div>
+                <a href="nuovo_utente.html" class="btn-primary btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Aggiungi Nuovo Utente
+                </a>
+            </div>
+        </div>
+
+        <!-- TABELLA UTENTI -->
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Utente 1 -->
+                    <tr>
+                        <td>101</td>
+                        <td>Mario</td>
+                        <td>Rossi</td>
+                        <td>m.rossi@soccorsoweb.it</td>
+                        <td><span class="status-badge admin">Amministratore</span></td>
+                        <td>
+                            <a href="#" class="btn-outline btn-sm">Modifica</a>
+                        </td>
+                    </tr>
+                    <!-- Utente 2 -->
+                    <tr>
+                        <td>102</td>
+                        <td>Luigi</td>
+                        <td>Verdi</td>
+                        <td>l.verdi@soccorsoweb.it</td>
+                        <td><span class="status-badge operator">Operatore</span></td>
+                        <td>
+                            <a href="#" class="btn-outline btn-sm">Modifica</a>
+                        </td>
+                    </tr>
+                    <!-- Utente 3 -->
+                    <tr>
+                        <td>103</td>
+                        <td>Giulia</td>
+                        <td>Bianchi</td>
+                        <td>g.bianchi@soccorsoweb.it</td>
+                        <td><span class="status-badge operator">Operatore</span></td>
+                        <td>
+                            <a href="#" class="btn-outline btn-sm">Modifica</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+</body>
+
+</html>

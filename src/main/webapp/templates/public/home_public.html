@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Richiesta Emergenza</title>
+    <!-- Collegamento al file CSS -->
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVIGAZIONE -->
+    <nav class="navbar">
+        <a href="#" class="logo">Soccorso<span>Web</span></a>
+        <div class="nav-links">
+            <a href="#descrizione">Chi Siamo</a>
+            <a href="#invia-richiesta">Invia Richiesta</a>
+            <!-- Pulsante in alto a destra per login generico (admin/operatore) -->
+            <a href="login.html" class="btn-login">Accedi al Sistema</a>
+        </div>
+    </nav>
+
+
+    <!-- CONTENITORE PRINCIPALE DIVISO A METÀ -->
+    <main class="main-container">
+
+        <!-- PARTE SINISTRA: Testo e Accesso Veloce -->
+        <section class="info-section" id="descrizione">
+            <h1>Emergenza?<br>Inviaci una segnalazione immediata.</h1>
+            <p>
+                Il portale <strong>SoccorsoWeb</strong> ti permette di richiedere l'intervento
+                delle nostre squadre in pochi secondi. Compila il modulo indicando con precisione la tua
+                posizione e il tipo di emergenza. La nostra centrale operativa analizzerà la richiesta
+                e invierà i mezzi necessari sul posto.
+            </p>
+
+
+        </section>
+
+
+        <!-- PARTE DESTRA: Il Modulo per inviare la Richiesta -->
+        <section class="form-section" id="invia-richiesta">
+            <h2>Nuova Segnalazione</h2>
+            <p>Tutti i campi sono obbligatori.</p>
+
+            <form action="InviaRichiestaServlet" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="segnalante">Nome Segnalante </label>
+                    <input type="text" id="segnalante" name="segnalante" placeholder="Inserisci il tuo nome completo"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email_segnalante">Email Segnalante </label>
+                    <input type="email" id="email_segnalante" name="email_segnalante"
+                        placeholder="es. mario.rossi@email.it" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="coordinate">Posizione o Coordinate GPS </label>
+                    <input type="text" id="coordinate" name="coordinate"
+                        placeholder="Es. Via Roma 15, Milano oppure 45.4642, 9.1900" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descrizione">Descrizione dell'Emergenza </label>
+                    <textarea id="descrizione" name="descrizione"
+                        placeholder="Descrivi brevemente cosa è successo e di cosa c'è bisogno..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="foto">Allega una Foto (Opzionale)</label>
+                    <input type="file" id="foto" name="foto" accept="image/png, image/jpeg">
+                </div>
+
+                <!-- L'indirizzo IP verrà preso in automatico dalla Servlet, non serve un campo -->
+
+                <button type="submit" class="btn-submit">Invia Richiesta di Soccorso</button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 SoccorsoWeb. Piattaforma Gestionale Emergenze.</p>
+    </footer>
+
+</body>
+
+</html>

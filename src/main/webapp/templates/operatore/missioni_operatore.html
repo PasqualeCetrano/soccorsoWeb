@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Le Mie Missioni</title>
+    <!-- Usa lo stesso file CSS di base per mantenere i colori -->
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body style="background-color: var(--light);">
+
+    <!-- NAVBAR PRIVATA (Operatore) -->
+    <nav class="navbar">
+        <a href="home_operatore.html" class="logo">Soccorso<span>Web</span>
+            <small style="font-size: 0.8rem; color: var(--gray); font-weight: normal; margin-left: 10px;">Area
+                Operatore</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_operatore.html">Il Mio Profilo</a>
+            <!-- Questo link ora è evidenziato perché ci troviamo qui -->
+            <a href="missioni_operatore.html" style="color: var(--primary); font-weight: bold;">Le mie Missioni</a>
+
+            <!-- Pulsante Logout -->
+            <a href="../public/login.html" class="btn-login"
+                style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="dashboard-header">
+            <h1 style="color: var(--dark);">Le mie Missioni</h1>
+            <p style="color: var(--gray);">Visualizza le tue missioni attuali e lo storico degli interventi completati.
+            </p>
+        </div>
+
+        <div class="missions-layout">
+            <!-- SEZIONE 1: MISSIONI IN CORSO -->
+            <section class="missions-section">
+                <h2>
+                    <!-- Icona Activity -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                        stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    Missioni in Corso
+                </h2>
+
+                <!-- Card Missione Attiva (Bordo Rosso) -->
+                <div class="mission-card active">
+                    <div class="mission-info">
+                        <span class="status-badge active">IN CORSO</span>
+                        <h3>Incidente Stradale - Codice Rosso</h3>
+                        <div class="mission-details">
+                            <span><strong>Data:</strong> Oggi, 14:30</span>
+                            <span><strong>Luogo:</strong> Via Roma 15, Milano</span>
+                            <span><strong>Squadra:</strong> Alfa (ID: #42)</span>
+                        </div>
+                        <p>Scontro frontale tra due autoveicoli. Necessario supporto vitale avanzato sul posto.</p>
+                    </div>
+
+                </div>
+
+                <!-- Si possono avere più missioni in corso se la squadra è divisa, ma di solito è una sola -->
+
+            </section>
+
+            <!-- SEZIONE 2: STORICO MISSIONI CHIUSE -->
+            <section class="missions-section">
+                <h2>
+                    <!-- Icona Check -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Storico Missioni
+                </h2>
+
+                <!-- Card Missione Chiusa 1 (Bordo Verde) -->
+                <div class="mission-card closed">
+                    <div class="mission-info">
+                        <span class="status-badge closed">COMPLETATA</span>
+                        <h3>Malore Improvviso - Codice Giallo</h3>
+                        <div class="mission-details">
+                            <span><strong>Inizio:</strong> 18 Luglio 2026, 09:15</span>
+                            <span><strong>Fine:</strong> 18 Luglio 2026, 11:30</span>
+                            <span><strong>Luogo:</strong> Piazza Duomo, Milano</span>
+                            <span><strong>Esito:</strong> Trasporto in Ospedale (Niguarda)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Missione Chiusa 2 (Bordo Verde) -->
+                <div class="mission-card closed">
+                    <div class="mission-info">
+                        <span class="status-badge closed">COMPLETATA</span>
+                        <h3>Trauma Sportivo - Codice Verde</h3>
+                        <div class="mission-details">
+                            <span><strong>Inizio:</strong> 15 Luglio 2026, 16:45</span>
+                            <span><strong>Fine:</strong> 15 Luglio 2026, 17:20</span>
+                            <span><strong>Luogo:</strong> Centro Sportivo S.Siro</span>
+                            <span><strong>Esito:</strong> Medicazione sul posto</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Configura Missione</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html">Mezzi</a>
+            <a href="materiali_database.html">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Configurazione Risorse Missione</h1>
+                <p>Seleziona gli operatori, i materiali e i mezzi da impiegare. Verrà inviata una notifica email alla
+                    squadra.</p>
+            </div>
+            <div>
+                <a href="crea_missione.html" class="btn-outline btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Torna Indietro
+                </a>
+            </div>
+        </div>
+
+        <!-- FORM PRINCIPALE -->
+        <form action="dashboard_richieste.html" method="GET" id="form-missione">
+
+            <!-- Dati ereditati nascosti (ricevuti dalla pagina precedente via GET/POST) -->
+            <input type="hidden" name="id_richiesta" value="123">
+            <input type="hidden" name="posizione" value="Via Roma 10, Milano (45.4642, 9.1900)">
+            <input type="hidden" name="obiettivo"
+                value="Stabilizzazione paziente e trasporto codice rosso al Pronto Soccorso">
+
+            <div class="missions-layout">
+
+                <!-- COLONNA SINISTRA: Selezione Caposquadra e Operatori -->
+                <section class="missions-section flex-1-2">
+                    <div class="admin-card">
+                        <h2 class="card-title">Selezione Squadra</h2>
+                        <p class="card-subtitle">Nomina il Caposquadra ed inserisci gli altri operatori che faranno
+                            parte della squadra.</p>
+
+                        <!-- Scelta Caposquadra Obbligatoria (Dropdown) -->
+                        <div class="form-group w-100 text-left mt-1-5">
+                            <label for="caposquadra">Caposquadra (Obbligatorio)</label>
+                            <select id="caposquadra" name="caposquadra" class="form-control" required>
+                                <option value="" disabled selected>-- Seleziona il Caposquadra --</option>
+                                <option value="1">Mario Rossi</option>
+                                <option value="2">Luigi Bianchi</option>
+                                <option value="3">Anna Neri</option>
+                                <option value="4">Giuseppe Verdi</option>
+                            </select>
+                        </div>
+
+                        <!-- Scelta Altri Membri (Checkboxes) -->
+                        <div class="form-group w-100 text-left mt-1-5">
+                            <label>Altri Operatori della Squadra</label>
+                            <div class="checkbox-list max-h-450">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="operatori" value="1">
+                                    <span>Mario Rossi</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="operatori" value="2">
+                                    <span>Luigi Bianchi</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="operatori" value="3">
+                                    <span>Anna Neri</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="operatori" value="4">
+                                    <span>Giuseppe Verdi</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COLONNA DESTRA: Selezione Mezzi e Materiali -->
+                <section class="missions-section column-gap-2">
+
+                    <!-- Sotto-sezione Mezzi -->
+                    <div class="admin-card">
+                        <h2 class="card-title">Mezzi Disponibili</h2>
+
+                        <div class="checkbox-list">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mezzi" value="1">
+                                <span>Ambulanza 1 (MSA - Rianimazione)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mezzi" value="2">
+                                <span>Ambulanza 2 (MSB - Soccorso Base)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="mezzi" value="3">
+                                <span>Automedica Alfa</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sotto-sezione Materiali -->
+                    <div class="admin-card">
+                        <h2 class="card-title"> Materiali Sanitari / Attrezzature</h2>
+
+                        <div class="checkbox-list">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="materiali" value="1">
+                                <span>Defibrillatore DAE</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="materiali" value="2">
+                                <span>Zaino Emergenza Sanitaria</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="materiali" value="3">
+                                <span>Barella Spinale / Immobilizzazione</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="materiali" value="4">
+                                <span>Bombola Ossigeno Terapeutico</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Pulsante Salva e Invia Email -->
+                    <div>
+                        <button type="submit" class="btn-primary btn-block btn-large mt-0">
+                            Attiva Missione
+                        </button>
+                        <p class="help-text">Provvede a inviare la mail a ogni operatore coinvolto.</p>
+                    </div>
+
+
+                </section>
+
+            </div>
+        </form>
+    </main>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Accesso Area Riservata</title>
+    <!-- Riutilizziamo lo stesso CSS della home pubblica per mantenere coerenza! -->
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+
+</head>
+
+<body>
+
+    <!-- NAVBAR MINIMALISTA -->
+    <!-- solo il logo che riporta alla home, senza i pulsanti "Invia Richiesta" che non servono qui -->
+    <nav class="navbar">
+        <a href="home_public.html" class="logo">Soccorso<span>Web</span></a>
+    </nav>
+
+    <!-- AREA CENTRALE CON IL FORM -->
+    <main class="login-page-wrapper">
+        <div class="login-card">
+
+
+            <h2>Accesso Riservato</h2>
+            <p>Inserisci le tue credenziali. Sarai reindirizzato automaticamente alla tua dashboard.</p>
+
+            <!-- L'azione chiamerà la Servlet unica (LoginServlet) che farà tutto il lavoro! -->
+            <form action="LoginServlet" method="POST">
+
+                <div class="form-group">
+                    <label for="email">Indirizzo Email</label>
+                    <input type="email" id="email" name="email" placeholder="nome.cognome@soccorsoweb.it" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <!-- Riutilizziamo la nostra fantastica classe .btn-submit! -->
+                <button type="submit" class="btn-submit">Entra nel Sistema</button>
+            </form>
+
+            <a href="home_public.html" class="back-link">← Torna alla Home Pubblica</a>
+        </div>
+    </main>
+
+</body>
+
+</html>

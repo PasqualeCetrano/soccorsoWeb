@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Database Mezzi</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html" class="active">Mezzi</a>
+            <a href="materiali_database.html">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Gestione Database Mezzi</h1>
+                <p>Aggiungi nuovi mezzi, modifica quelli esistenti o rimuovi quelli dismessi.</p>
+            </div>
+        </div>
+
+        <div class="missions-layout">
+
+            <!-- COLONNA SINISTRA: Form Aggiunta Mezzo -->
+            <section class="missions-section">
+                <div class="admin-card">
+                    <h2 class="card-title">Aggiungi Nuovo Mezzo</h2>
+
+                    <form action="AggiungiMezzoServlet" method="POST">
+                        <div class="form-group w-100 text-left">
+                            <label for="nome">Nome del Mezzo</label>
+                            <input type="text" id="nome" name="nome" class="form-control" placeholder="Es. Ambulanza 1"
+                                required>
+                        </div>
+
+                        <div class="form-group w-100 text-left">
+                            <label for="descrizione">Descrizione </label>
+                            <textarea id="descrizione" name="descrizione" class="form-control" rows="3"
+                                placeholder="Aggiungi una descrizione per questo mezzo..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-block" style="margin-top: 1rem;">Salva
+                            Mezzo</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- COLONNA DESTRA: Tabella Mezzi -->
+            <section class="missions-section" style="flex: 2;">
+                <div class="admin-card">
+                    <h2 class="card-title">Mezzi Presenti nel Database</h2>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome Mezzo</th>
+                                    <th>Descrizione</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Esempio Mezzo 1 -->
+                                <tr>
+                                    <td><strong>Ambulanza 1 (MSA)</strong></td>
+                                    <td>Mezzo attrezzato per la rianimazione avanzata.</td>
+                                    <td>
+                                        <div class="action-buttons">
+
+                                            <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="id_mezzo" value="1">
+                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Esempio Mezzo 2 -->
+                                <tr>
+                                    <td><strong>Automedica Alfa</strong></td>
+                                    <td>Servizio trasporto organi e personale medico.</td>
+                                    <td>
+                                        <div class="action-buttons">
+
+                                            <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="id_mezzo" value="2">
+                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+
+</html>

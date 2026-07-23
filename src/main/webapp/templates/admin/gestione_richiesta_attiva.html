@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Gestione Richiesta Attiva</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html">Mezzi</a>
+            <a href="materiali_database.html">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Gestione Richiesta Attiva</h1>
+                <p>Esamina i dettagli della segnalazione ricevuta e decidi come procedere.</p>
+            </div>
+            <div>
+                <a href="home_admin.html" class="btn-outline btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Torna alla Dashboard
+                </a>
+            </div>
+        </div>
+
+        <div class="missions-layout">
+
+            <!-- COLONNA SINISTRA: Dettagli della Richiesta -->
+            <section class="missions-section flex-2">
+                <div class="admin-card">
+                    <h2 class="card-title ">Dettagli Richiesta #123</h2>
+
+                    <div class="details-grid">
+
+                        <div class="form-group">
+                            <label><strong>Nome Segnalante:</strong></label>
+                            <p class="detail-value">Mario Rossi</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label><strong>Email Segnalante:</strong></label>
+                            <p class="detail-value">mario.rossi@email.it</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label><strong>Data e Ora Ricezione:</strong></label>
+                            <p class="detail-value">20/07/2026 18:45</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label><strong>Indirizzo IP Mittente:</strong></label>
+                            <p class="detail-value">192.168.1.50</p>
+                        </div>
+
+                        <div class="form-group grid-span-2">
+                            <label><strong>Posizione GPS / Coordinate:</strong></label>
+                            <p class="detail-value-mono">Via Roma 10, Milano (45.4642, 9.1900)</p>
+                        </div>
+
+                        <div class="form-group grid-span-2">
+                            <label><strong>Descrizione Emergenza:</strong></label>
+                            <p class="detail-desc-box">
+                                Incidente stradale grave, coinvolte due auto e una moto. Ci sono feriti multipli a terra
+                                che necessitano di soccorso medico immediato.
+                            </p>
+                        </div>
+
+                        <!-- Sezione Foto Allegata (se presente) -->
+                        <div class="form-group grid-span-2">
+                            <label><strong>Foto Allegata dal Segnalante:</strong></label>
+                            <div class="detail-photo-box">
+                                <!-- Qui in futuro la servlet mostrerà l'immagine reale dal database -->
+                                <p>Nessuna foto allegata alla segnalazione.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLONNA DESTRA: Azioni Operative -->
+            <section class="missions-section">
+                <div class="admin-card">
+                    <h2 class="card-title">Azioni Disponibili</h2>
+
+
+                    <div class="button-stack">
+
+                        <!-- OPZIONE 1: Crea Missione Associata -->
+                        <form action="crea_missione.html" method="GET" class="m-0">
+                            <!-- Passiamo l'ID richiesta così la pagina di creazione sa a quale richiesta associarsi -->
+                            <input type="hidden" name="id_richiesta" value="123">
+                            <button type="submit" class="btn-primary btn-block btn-large">
+                                Crea Missione Associata
+                            </button>
+                        </form>
+
+                        <!-- OPZIONE 2: Annulla Richiesta -->
+                        <form action="AnnullaRichiestaServlet" method="POST" class="m-0"
+                            onsubmit="return confirm('Sei sicuro di voler annullare e archiviare questa richiesta? L\'azione non è reversibile.');">
+                            <input type="hidden" name="id_richiesta" value="123">
+                            <button type="submit" class="btn-danger btn-block btn-large">
+                                Annulla Richiesta
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+
+</html>

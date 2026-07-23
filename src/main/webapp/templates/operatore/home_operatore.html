@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Profilo Operatore</title>
+    <!-- Usa lo stesso file CSS di base per i colori e font -->
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR PRIVATA (Operatore) -->
+    <nav class="navbar">
+        <a href="home_operatore.html" class="logo">Soccorso<span>Web</span>
+            <small style="font-size: 0.8rem; color: var(--gray); font-weight: normal; margin-left: 10px;">Area
+                Operatore</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_operatore.html" style="color: var(--primary); font-weight: bold;">Il Mio Profilo</a>
+            <!-- Immagino che avrai una pagina per le sue missioni assegnate -->
+            <a href="missioni_operatore.html">Le mie Missioni</a>
+            <!-- Pulsante Logout: lo rimanda al login! -->
+            <a href="../public/login.html" class="btn-login"
+                style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO DASHBOARD -->
+    <main class="dashboard-container">
+
+        <div class="dashboard-header">
+            <!-- Qui la Servlet in futuro scriverà il VERO nome dell'utente -->
+            <h1 style="color: var(--dark);">Benvenuto, Mario Rossi</h1>
+            <p style="color: var(--gray);">Gestisci la tua anagrafica, le tue patenti e specializzazioni.</p>
+        </div>
+
+        <div class="dashboard-grid">
+
+            <!-- SCHEDA 1: DATI ANAGRAFICI -->
+            <div class="dashboard-card">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                        stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Dati Anagrafici
+                </h3>
+                <ul class="info-list">
+                    <li><strong>Nome:</strong> <span>Mario</span></li>
+                    <li><strong>Cognome:</strong> <span>Rossi</span></li>
+                    <li><strong>Codice Fiscale:</strong> <span>RSSMRA80A01H501Z</span></li>
+                    <li><strong>Email:</strong> <span>mario.rossi@soccorsoweb.it</span></li>
+                    <li><strong>Ruolo:</strong> <span class="tag">Operatore</span></li>
+                </ul>
+                <!-- Mettiamo un pulsante finto nel caso volesse modificare la mail/password in futuro -->
+                <a href="#" class="btn-action" style="background-color: var(--gray);">Modifica Profilo</a>
+            </div>
+
+            <!-- SCHEDA 2: LE MIE PATENTI -->
+            <div class="dashboard-card">
+                <h3>
+                    <!-- Icona volante/auto -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                        stroke-width="2">
+                        <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                        <circle cx="12" cy="5" r="2"></circle>
+                        <path d="M12 7v4"></path>
+                        <line x1="8" y1="16" x2="8" y2="16"></line>
+                        <line x1="16" y1="16" x2="16" y2="16"></line>
+                    </svg>
+                    Le mie Patenti
+                </h3>
+                <ul class="info-list">
+                    <li class="stacked">
+                        <strong>Patente B</strong>
+                        <span>Guida autoveicoli fino a 3.5t</span>
+                    </li>
+                    <li class="stacked">
+                        <strong>Patente CRI (Tipo 4)</strong>
+                        <span>Abilitazione guida ambulanze e mezzi in emergenza</span>
+                    </li>
+                </ul>
+                <!-- Collegamento alla pagina richiesta -->
+                <a href="utente_aggiungi_patente_abilita.html" class="btn-action">+ Aggiungi Patente</a>
+            </div>
+
+            <!-- SCHEDA 3: LE MIE SPECIALIZZAZIONI -->
+            <div class="dashboard-card">
+                <h3>
+                    <!-- Icona Stella -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                        stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                        </polygon>
+                    </svg>
+                    Le mie Specializzazioni
+                </h3>
+                <ul class="info-list">
+                    <li class="stacked">
+                        <strong>Soccorritore (118)</strong>
+                    </li>
+                    <li class="stacked">
+                        <strong>Operatore DAE</strong>
+                    </li>
+                    <li class="stacked">
+                        <strong>Autista Mezzi Eme.</strong>
+                    </li>
+                </ul>
+                <!-- Collegamento alla stessa pagina richiesta -->
+                <a href="utente_aggiungi_patente_abilita.html" class="btn-action">+ Aggiungi Specializzazione</a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

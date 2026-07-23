@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Database Materiali</title>
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR ADMIN -->
+    <nav class="navbar">
+        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+            <small class="logo-badge">Area Admin</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_admin.html">Dashboard</a>
+            <a href="utenti.html">Utenti</a>
+            <a href="mezzi_database.html">Mezzi</a>
+            <a href="materiali_database.html" class="active">Materiali</a>
+            <a href="../public/login.html" class="btn-logout">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="header-actions">
+            <div>
+                <h1>Gestione Database Materiali</h1>
+                <p>Aggiungi nuovi materiali, modifica quelli esistenti o rimuovi quelli terminati.</p>
+            </div>
+        </div>
+
+        <div class="missions-layout">
+
+            <!-- COLONNA SINISTRA: Form Aggiunta Materiale -->
+            <section class="missions-section">
+                <div class="admin-card">
+                    <h2 class="card-title">Aggiungi Nuovo Materiale</h2>
+
+                    <form action="AggiungiMaterialeServlet" method="POST">
+                        <div class="form-group w-100 text-left">
+                            <label for="nome">Nome del Materiale</label>
+                            <input type="text" id="nome" name="nome" class="form-control"
+                                placeholder="Es. Defibrillatore DAE" required>
+                        </div>
+
+                        <div class="form-group w-100 text-left">
+                            <label for="descrizione">Descrizione (Opzionale)</label>
+                            <textarea id="descrizione" name="descrizione" class="form-control" rows="3"
+                                placeholder="Aggiungi una descrizione per questo materiale..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-block" style="margin-top: 1rem;">Salva
+                            Materiale</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- COLONNA DESTRA: Tabella Materiali -->
+            <section class="missions-section" style="flex: 2;">
+                <div class="admin-card">
+                    <h2 class="card-title">Materiali Presenti nel Database</h2>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome Materiale</th>
+                                    <th>Descrizione</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Esempio Materiale 1 -->
+                                <tr>
+                                    <td><strong>Defibrillatore DAE</strong></td>
+                                    <td>Dispositivo salvavita portatile.</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="id_materiale" value="1">
+                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Esempio Materiale 2 -->
+                                <tr>
+                                    <td><strong>Kit Medicazione Avanzata</strong></td>
+                                    <td>Bende, garze, disinfettanti e laccio emostatico.</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
+                                                <input type="hidden" name="id_materiale" value="2">
+                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+
+</html>

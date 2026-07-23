@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccorsoWeb - Aggiungi Competenze</title>
+    <!-- Usiamo il nostro solito CSS -->
+    <link rel="stylesheet" href="../../style/stile_pubblico.css">
+</head>
+
+<body style="background-color: var(--light);">
+
+    <!-- NAVBAR PRIVATA (Operatore) -->
+    <nav class="navbar">
+        <a href="home_operatore.html" class="logo">Soccorso<span>Web</span>
+            <small style="font-size: 0.8rem; color: var(--gray); font-weight: normal; margin-left: 10px;">Area
+                Operatore</small>
+        </a>
+        <div class="nav-links">
+            <a href="home_operatore.html" style="color: var(--primary); font-weight: bold;">Il Mio Profilo</a>
+            <a href="missioni_operatore.html">Le mie Missioni</a>
+            <!-- Pulsante Logout -->
+            <a href="../public/login.html" class="btn-login"
+                style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Esci</a>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main class="dashboard-container">
+
+        <div class="dashboard-header">
+            <h1 style="color: var(--dark);">Aggiorna Competenze</h1>
+            <p style="color: var(--gray);">Aggiungi una nuova patente di guida o una specializzazione al tuo profilo.
+            </p>
+        </div>
+
+        <!-- Sfruttiamo il layout a griglia (metà e metà) che abbiamo appena imparato! -->
+        <div class="missions-layout">
+
+            <!-- COLONNA SINISTRA: PATENTI -->
+            <section class="missions-section">
+                <!-- Usiamo lo stile delle card per contenere il form -->
+                <div class="mission-card" style="display: block;">
+                    <h2 class="card-title">
+                        <!-- Icona Patente/Carta -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                            <line x1="7" y1="8" x2="17" y2="8"></line>
+                            <line x1="7" y1="12" x2="17" y2="12"></line>
+                            <line x1="7" y1="16" x2="11" y2="16"></line>
+                        </svg>
+                        Aggiungi Patente
+                    </h2>
+
+                    <form action="AggiungiPatenteServlet" method="POST">
+                        <div class="form-group">
+                            <label for="tipoPatente">Tipo di Patente</label>
+                            <select id="tipoPatente" name="tipoPatente" class="form-control" required>
+                                <option value="" disabled selected>Seleziona una patente...</option>
+                                <option value="1">Patente B (Auto)</option>
+                                <option value="2">Patente C (Camion)</option>
+                                <option value="3">Patente C.R.I. Tipo 4 (Ambulanza)</option>
+                                <option value="4">Patente C.R.I. Tipo 5 (Mezzi Pesanti)</option>
+                            </select>
+                        </div>
+
+
+
+                        <button type="submit" class="btn-primary"
+                            style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                            Salva Patente
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- COLONNA DESTRA: SPECIALIZZAZIONI -->
+            <section class="missions-section">
+                <div class="mission-card" style="display: block;">
+                    <h2 class="card-title">
+                        <!-- Icona Specializzazione/Medaglia -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                            stroke-width="2">
+                            <path d="M12 15l-3 3-2-2m5-1l3 3 2-2M12 3a9 9 0 100 18 9 9 0 000-18z"></path>
+                        </svg>
+                        Aggiungi Specializzazione
+                    </h2>
+
+                    <form action="AggiungiSpecializzazioneServlet" method="POST">
+                        <div class="form-group">
+                            <label for="tipoSpecializzazione">Abilitazione / Specializzazione</label>
+                            <select id="tipoSpecializzazione" name="tipoSpecializzazione" class="form-control" required>
+                                <option value="" disabled selected>Seleziona un'abilitazione...</option>
+                                <option value="1">BLSD (Basic Life Support - Defibrillation)</option>
+                                <option value="2">PBLSD (Pediatric BLSD)</option>
+                                <option value="3">PTC (Prehospital Trauma Care)</option>
+                                <option value="4">Autista Soccorritore 118</option>
+                                <option value="5">Soccorritore Avanzato (ALS)</option>
+                            </select>
+                        </div>
+
+                        <!-- Le specializzazioni potrebbero non avere scadenza, oppure sì. Ho omesso la data qui per variare, ma possiamo aggiungerla se serve -->
+
+                        <button type="submit" class="btn-primary"
+                            style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                            Salva Specializzazione
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Pulsante per tornare indietro -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="home_operatore.html" class="btn-outline">Torna al Profilo</a>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
