@@ -1052,7 +1052,7 @@ body {
 }
 
 .help-text {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--gray);
     margin-top: 0rem !important;
     display: block;
@@ -1068,4 +1068,45 @@ body {
     border-radius: 5px;
     margin-bottom: 1.5rem;
     font-weight: 500;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+/* =========================================
+   STILI CRONOLOGIA AGGIORNAMENTI (Timeline)
+   ========================================= */
+.update-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.update-item {
+    background-color: var(--light);
+    border-left: 4px solid var(--primary);
+    padding: 1rem;
+    border-radius: 0 5px 5px 0;
+}
+
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.update-header strong {
+    color: var(--dark);
+}
+
+.update-text {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0;
 }
