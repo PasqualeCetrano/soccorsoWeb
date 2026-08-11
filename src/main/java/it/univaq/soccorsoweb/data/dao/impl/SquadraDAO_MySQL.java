@@ -79,6 +79,9 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
         try {
             if (squadra.getKey() != null && squadra.getKey() > 0) {
                 // UPDATE
+                if (squadra instanceof DataItemProxy && !((DataItemProxy) squadra).isModified()) {
+                    return;
+                }
                 updateSquadra.setString(1, squadra.getCodice());
                 if (squadra.getMissione() != null) {
                     updateSquadra.setInt(2, squadra.getMissione().getKey());

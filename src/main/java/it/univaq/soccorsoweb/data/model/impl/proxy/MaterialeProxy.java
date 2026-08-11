@@ -42,6 +42,7 @@ public class MaterialeProxy extends MaterialeImpl implements DataItemProxy {
 
     @Override
     public List<Missione> getMissioni() {
+        // con getKey andiamo a chiamare la chiave del materiale stesso
         if (super.getMissioni() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setMissioni(((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniByMateriale(this));
@@ -49,6 +50,8 @@ public class MaterialeProxy extends MaterialeImpl implements DataItemProxy {
                 Logger.getLogger(MaterialeProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        // nel caso peggiore viene restituita una lista vuota evitando il null pointer
+        // exception
         if (super.getMissioni() == null) {
             super.setMissioni(new ArrayList<>());
         }

@@ -18,6 +18,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     private PreparedStatement selectOperatoriDisponibili;
     private PreparedStatement selectUtenteById;
+    private PreparedStatement selectUtenteByEmail;
     private PreparedStatement insertUtente; // usata da amministratore
     private PreparedStatement selectOperatori;
 
@@ -33,6 +34,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             selectOperatoriDisponibili = connection.prepareStatement(
                     "SELECT u.* FROM Utente u WHERE u.tipo = 'operatore'   AND u.id_utente NOT IN (SELECT p.fk_id_utente FROM Partecipa p JOIN Squadra s ON p.fk_id_squadra = s.id_squadra JOIN Missione m ON s.fk_id_missione = m.id_missione WHERE m.fine IS NULL)");
             selectUtenteById = connection.prepareStatement("SELECT * FROM Utente WHERE id_utente = ?");
+            selectUtenteByEmail = connection.prepareStatement("SELECT * FROM Utente WHERE email = ?");
             // usata solo da amministratore
             insertUtente = connection.prepareStatement(
                     "INSERT INTO Utente (indirizzo, tipo, nascita, email, telefono, nome, cognome, codicefiscale, password, id_utente_amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -128,6 +130,24 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     @Override
+    public Utente getUtenteByEmail(String email) throws DataException {
+        try {
+            selectUtenteByEmail.setString(1, email);
+            try (ResultSet rs = selectUtenteByEmail.executeQuery()) {
+                if (rs.next()) {
+                    Utente u = createUtente(rs);
+                    // Aggiungiamo alla cache con il suo ID appena estratto
+                    dataLayer.getCache().add(Utente.class, u);
+                    return u;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load utente by email", ex);
+        }
+        return null;
+    }
+
+    @Override
     public void storeUtente(Utente utente) throws DataException {
         try {
             if (utente.getKey() != null && utente.getKey() > 0) {
@@ -210,6 +230,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             }
             if (selectUtenteById != null) {
                 selectUtenteById.close();
+            }
+            if (selectUtenteByEmail != null) {
+                selectUtenteByEmail.close();
             }
             if (insertUtente != null) {
                 insertUtente.close();

@@ -1,3 +1,8 @@
+/*nel file css è come se andassimo a definire un'insieme di regole che vengono 
+rappresentate sottoforma di classi per poi essere chiamate all'interno dei file html 
+per dare uno stile alla struttura (bottoni, righe di testo ecc..) che andiamo a 
+definire proprio nei file html*/
+
 /* stile_pubblico.css */
 :root {
     --primary: #0293f4;
@@ -37,6 +42,8 @@ body {
     z-index: 1000;
 }
 
+/*come se avessimo definito una classe logo che poi verrà richiamata dall' html per 
+prenderne lo stile*/
 .logo {
     font-size: 1.5rem;
     font-weight: 700;

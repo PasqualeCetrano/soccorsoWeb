@@ -6,15 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 
-/**
- *
- * @author Giuseppe Della Penna
- */
 public class DataLayer implements AutoCloseable {
 
+    // il datasource contiene i dati per connettersi a MySQL
     private final DataSource datasource;
     private Connection connection;
+    // mappa contenente le associazioni tra le classi e i relativi DAO, ovvero per
+    // ogni classe vi è un DAO corrispondente
     private final Map<Class, DAO> daos;
+    // la cache viene utilizzata per memorizzare gli oggetti Java che vengono
+    // recuperati dal DB, in questo modo si evita di accedere continuamente al DB e
+    // si migliora le prestazioni
     private final DataCache cache;
 
     public DataLayer(DataSource datasource) throws SQLException {
@@ -25,6 +27,8 @@ public class DataLayer implements AutoCloseable {
         this.cache = new DataCache();
     }
 
+    // serve a caricare in memoria tutti i dao per una richiesta appena arrivata,
+    // per poi distruggerli liberando la memoria
     public void registerDAO(Class entityClass, DAO dao) throws DataException {
         daos.put(entityClass, dao);
         dao.init();
@@ -35,7 +39,7 @@ public class DataLayer implements AutoCloseable {
     }
 
     public void init() throws DataException {
-        //call registerDAO for your own DAOs
+        // call registerDAO for your own DAOs
     }
 
     public void destroy() {
@@ -61,11 +65,10 @@ public class DataLayer implements AutoCloseable {
         return cache;
     }
 
-    //metodo dell'interfaccia AutoCloseable (permette di usare questa classe nei try-with-resources)
-    //method from the Autocloseable interface (allows this class to be used in try-with-resources)
+    // metodo dell'interfaccia AutoCloseable (permette di usare questa classe nei
+    // try-with-resources), così da chiamare automaticamente il metodo close
     @Override
     public void close() throws Exception {
         destroy();
     }
 }
-

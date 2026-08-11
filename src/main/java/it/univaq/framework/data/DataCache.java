@@ -12,6 +12,9 @@ import java.util.Map;
 // che estendono dataitem.
 public class DataCache {
 
+    // Class = tipo di entità(cassetto)
+    // Object = chiave(ID)
+    // Object = oggetto java vero e proprio
     public Map<Class, Map<Object, Object>> cache;
 
     public DataCache() {
@@ -33,6 +36,9 @@ public class DataCache {
         }
     }
 
+    // attualmente abbiamo l'oggetto in mano e lo passiamo come parametro per
+    // trovare le
+    // informazioni che vogliamo
     public <C extends DataItem> boolean has(Class<C> c, C o) {
         // Logger.getLogger("DataCache").log(Level.INFO, "Cache lookup: object of class
         // {0} with key {1}", new Object[]{c.getName(), o.getKey()});
@@ -49,6 +55,9 @@ public class DataCache {
         }
     }
 
+    // permette di verificare se un oggetto è memorizzato in cache passando il tipo
+    // della classe dell'oggetto e la chiave che si conosce(attualmente non abbiamo
+    // l'oggetto in mano)
     public boolean has(Class c, Object key) {
         // Logger.getLogger("DataCache").log(Level.INFO, "Cache lookup: object of class
         // {0} with key {1}", new Object[]{c.getName(), key});
@@ -57,6 +66,7 @@ public class DataCache {
 
     public void delete(Class c, Object key) {
         if (has(c, key)) {
+            // dal cassetto di c va a rimuovere il record corrispondente alla chiave key
             cache.get(c).remove(key);
         }
     }

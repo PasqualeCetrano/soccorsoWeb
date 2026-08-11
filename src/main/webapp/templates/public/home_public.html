@@ -43,7 +43,27 @@
         <!-- PARTE DESTRA: Il Modulo per inviare la Richiesta -->
         <section class="form-section" id="invia-richiesta">
             <h2>Nuova Segnalazione</h2>
-            <p>Tutti i campi sono obbligatori.</p>
+            
+            <#if richiesta_validata??>
+                <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                    <strong>Successo!</strong> La tua richiesta è stata validata ed è attiva. I soccorsi stanno arrivando!
+                </div>
+            <#elseif richiesta_inviata?? && token_convalida??>
+                <!-- Popup JavaScript di convalida simulata -->
+                <script type="text/javascript">
+                    window.onload = function() {
+                        var conferma = window.confirm("Per evitare spam, devi confermare l'invio.\n\nVuoi convalidare la tua richiesta di soccorso ora?");
+                        if (conferma) {
+                            window.location.href = "InviaRichiestaServlet?token=${token_convalida}";
+                        }
+                    };
+                </script>
+                <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                    <strong>Attenzione!</strong> Devi convalidare la tua richiesta per attivarla. Clicca su OK nel pop-up o <a href="InviaRichiestaServlet?token=${token_convalida}">clicca qui</a>.
+                </div>
+            <#else>
+                <p>Tutti i campi sono obbligatori.</p>
+            </#if>
 
             <form action="InviaRichiestaServlet" method="POST" enctype="multipart/form-data">
 

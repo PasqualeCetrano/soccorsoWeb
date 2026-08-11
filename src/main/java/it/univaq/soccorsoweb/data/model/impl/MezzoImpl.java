@@ -10,7 +10,15 @@ public class MezzoImpl extends DataItemImpl<Integer> implements Mezzo {
 
     private String nome;
     private String descrizione;
-    private List<Missione> missioni; // serve per tenere traccia dello storico delle missioni di un mezzo
+    // serve per tenere traccia dello storico delle missioni di un mezzo, volendo si
+    // sarebbe anche potuto evitare di mettere questa lista dentro Mezzo ed
+    // effettuare
+    // una query nella tabella Missioni andando a prendere solo quelle con un certo
+    // mezzo, ma la query sarebbe stata eseguita ogni volta che si sarebbe voluto
+    // vedere
+    // lo storico di un Mezzo, mentre con l'introduzione della lista di Missioni in
+    // Mezzo la lista viene caricata solamente una volta.
+    private List<Missione> missioni;
 
     public MezzoImpl() {
         this.nome = "";
@@ -48,7 +56,7 @@ public class MezzoImpl extends DataItemImpl<Integer> implements Mezzo {
         this.missioni = missioni;
     }
 
-    @Override // aggiungeuna missione allo storico
+    @Override // aggiunge una missione allo storico
     public void addMissione(Missione missione) {
         if (this.missioni == null) {
             this.missioni = new ArrayList<>();

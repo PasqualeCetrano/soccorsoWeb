@@ -35,6 +35,7 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         super(d);
     }
 
+    // va a compilare le query SQL una sola volta per tutta l'applicazione
     @Override
     public void init() throws DataException {
         try {
@@ -78,6 +79,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         }
     }
 
+    // serve a chiudere e distruggere le variabili contenenti le query quando non
+    // servono più, liberando memoria
     @Override
     public void destroy() throws DataException {
         try {
@@ -112,6 +115,9 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         return new MissioneProxy(getDataLayer());
     }
 
+    // metodo private usato solo all'interno di questa classe, ogni volta che viene
+    // eseguita una query per ottenere una missione, viene usato questo metodo per
+    // trasformare il risultato della query in un oggetto Missione in java
     private MissioneProxy createMissione(ResultSet rs) throws DataException {
         MissioneProxy m = (MissioneProxy) createMissione();
         try {
@@ -163,6 +169,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 }
                 java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
 
+                // tutte le colonne che non sono state nominate nella query di Insert vengono
+                // inizializzate al loro valore di default
                 insertMissione.setString(1, missione.getPosizione());
                 insertMissione.setString(2, missione.getObiettivo());
                 insertMissione.setTimestamp(3, now); // inizio automatico
@@ -181,6 +189,13 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 // CASO 2: CHIUSURA MISSIONE
                 // Query: UPDATE missione SET livello_successo = ?, fine = ?, fk_id_utente = ?
                 // ,commenti = ? WHERE id_missione = ?;
+
+                // il parametro Missione nel caso dell'aggiornamento rappresenta un oggetto
+                // modificato solo in RAM e non ancora salvato sul DB
+                if (missione instanceof DataItemProxy && !((DataItemProxy) missione).isModified()) {
+                    return;
+                }
+
                 if (missione.getLivelloSuccesso() != null) {
                     updateMissione.setInt(1, missione.getLivelloSuccesso());
                 } else {
@@ -202,12 +217,14 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 updateMissione.setString(4, missione.getCommenti());
                 updateMissione.setInt(5, missione.getKey());
 
+                // numero di righe aggiornate
                 if (updateMissione.executeUpdate() == 0) {
                     throw new DataException(
                             "Impossibile aggiornare la missione: la missione non esiste oppure è già stata chiusa.");
                 }
             }
 
+            // questo reimposta la modifica a false dopo aver già salvato l'oggetto nel DB
             if (missione instanceof DataItemProxy) {
                 ((DataItemProxy) missione).setModified(false);
             }

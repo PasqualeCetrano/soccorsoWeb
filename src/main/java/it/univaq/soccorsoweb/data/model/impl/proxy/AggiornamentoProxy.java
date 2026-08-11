@@ -13,9 +13,22 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//nei Proxy facciamo l'Override di tutti i metodi set(in questo caso di AggiornamentoImpl
+//e DataItemProxy), mentre effettuiamo l'Override dei metodi get solo degli attributi +
+//impegnativi, ovvero gli oggetti
+
 public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemProxy {
 
     protected boolean modified;
+    // in AggiornamentoImpl, noi abbiamo l'attributo missione che rappresenta
+    // l'intero
+    // oggetto missione, quindi può contenere un intero oggetto missione.
+    // mentre nel momento in cui riceviamo i dati dal db per l'aggiornamento, noi
+    // invece
+    // dell'intero oggetto missione, otteniamo il valore della chiave esterna che
+    // andremo a salvare nella nuova variabile missione_key e poi da li saremo in
+    // grado
+    // di risalire all'intero oggetto missione (permette il lazy_loading)
     protected int missione_key;
     protected int utente_key;
     protected DataLayer dataLayer;

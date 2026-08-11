@@ -6,6 +6,10 @@ import it.univaq.framework.data.DataLayer;
 
 public class AbilitaProxy extends AbilitaImpl implements DataItemProxy {
 
+    // con protected le variabili sono accessibili da tutte le classi all'interno
+    // dello
+    // stesso package, più tutte le sottoclassi che estendono dalle classi che
+    // possiedono quelle variabili, anche se presenti in altri package
     protected boolean modified;
     protected DataLayer dataLayer;
 
@@ -21,6 +25,9 @@ public class AbilitaProxy extends AbilitaImpl implements DataItemProxy {
         // metodo
         // viene eseguito il metodo setKey della superclasse DataItemImpl che imposta la
         // variabile key
+        // inizialmente le chiavi degli oggetti Java sono null, per poi essere
+        // modificate tramite questo metodo in quando l'ID viene generato
+        // automaticamente dal DB
         super.setKey(key);
         this.modified = true;
     }

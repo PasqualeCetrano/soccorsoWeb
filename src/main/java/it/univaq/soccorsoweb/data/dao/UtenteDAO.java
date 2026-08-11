@@ -17,6 +17,9 @@ public interface UtenteDAO {
     // 2 recupero anagrafica (nome,cognome,email,indirizzo,data di nascita, tipo,
     // patente, abilità,missioni associate)
     Utente getUtente(int id_utente) throws DataException;
+    
+    // Recupero utente per login (tramite email)
+    Utente getUtenteByEmail(String email) throws DataException;
 
     // 4,5) creazione e modifica anagrafica (usata solo da admin)
     void storeUtente(Utente utente) throws DataException;

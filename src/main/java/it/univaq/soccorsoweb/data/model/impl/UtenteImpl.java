@@ -40,12 +40,10 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.dataNascita = null;
         this.tipo = "";
         this.amministratoreCreatore = null;
-        // Inizializzati a null per supportare il lazy loading del Proxy
-        this.telefono = null;
+        this.telefono = "";
         this.patenti = null;
         this.abilita = null;
         this.aggiornamenti = null;
-
         this.missioniChiuse = null;
         this.missioniPartecipate = null;
     }

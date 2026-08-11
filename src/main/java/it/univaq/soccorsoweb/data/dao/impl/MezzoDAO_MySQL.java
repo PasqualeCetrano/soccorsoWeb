@@ -2,6 +2,7 @@ package it.univaq.soccorsoweb.data.dao.impl;
 
 import it.univaq.framework.data.DAO;
 import it.univaq.framework.data.DataException;
+import it.univaq.framework.data.DataItemProxy;
 import it.univaq.framework.data.DataLayer;
 import it.univaq.soccorsoweb.data.dao.MezzoDAO;
 import it.univaq.soccorsoweb.data.model.Mezzo;
@@ -123,6 +124,9 @@ public class MezzoDAO_MySQL extends DAO implements MezzoDAO {
                     }
                 }
             } else { // UPDATE
+                if (mezzo instanceof DataItemProxy && !((DataItemProxy) mezzo).isModified()) {
+                    return;
+                }
                 updateMezzo.setString(1, mezzo.getNome());
                 updateMezzo.setString(2, mezzo.getDescrizione());
                 updateMezzo.setInt(3, mezzo.getKey());
@@ -153,6 +157,8 @@ public class MezzoDAO_MySQL extends DAO implements MezzoDAO {
     public List<Mezzo> getMezzi() throws DataException {
         List<Mezzo> result = new ArrayList<>();
         try (ResultSet rs = selectAllMezzi.executeQuery()) {
+            // rs.next è come se fosse posizionato prima della prima riga e quindi va a
+            // verificare se vi è effettivamente un rige vera
             while (rs.next()) {
                 int id_mezzo = rs.getInt("id_mezzo");
                 Mezzo m = null;
