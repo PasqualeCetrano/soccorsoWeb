@@ -43,28 +43,43 @@
         <!-- PARTE DESTRA: Il Modulo per inviare la Richiesta -->
         <section class="form-section" id="invia-richiesta">
             <h2>Nuova Segnalazione</h2>
-            
+
             <#if richiesta_validata??>
-                <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
-                    <strong>Successo!</strong> La tua richiesta è stata validata ed è attiva. I soccorsi stanno arrivando!
+                <div
+                    style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                    <strong>Successo!</strong> La tua richiesta è stata validata ed è attiva. I soccorsi stanno
+                    arrivando!
                 </div>
-            <#elseif richiesta_inviata?? && token_convalida??>
-                <!-- Popup JavaScript di convalida simulata -->
-                <script type="text/javascript">
-                    window.onload = function() {
-                        var conferma = window.confirm("Per evitare spam, devi confermare l'invio.\n\nVuoi convalidare la tua richiesta di soccorso ora?");
-                        if (conferma) {
-                            window.location.href = "InviaRichiestaServlet?token=${token_convalida}";
-                        }
-                    };
-                </script>
-                <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
-                    <strong>Attenzione!</strong> Devi convalidare la tua richiesta per attivarla. Clicca su OK nel pop-up o <a href="InviaRichiestaServlet?token=${token_convalida}">clicca qui</a>.
-                </div>
-            <#else>
-                <p>Tutti i campi sono obbligatori.</p>
+                <!-- Nel caso gli venissero passati entrambi i valori (success e token), 
+                     allora manderà a schermo la simulazione dell'email. Questo comando "?? && ??"
+                     significa: "Se la variabile richiesta_inviata esiste E la variabile token_convalida esiste" -->
+                <#elseif richiesta_inviata?? && token_convalida??>
+                    <!-- SIMULAZIONE EMAIL: Come richiesto dalle specifiche del prof -->
+                    <div
+                        style="background-color: #f8f9fa; border: 2px dashed #007bff; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h3 style="color: #007bff; margin-top: 0; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                            ✉️ SIMULAZIONE EMAIL RICEVUTA
+                        </h3>
+                        <p><strong>Da:</strong> noreply@soccorsoweb.it</p>
+                        <p><strong>Oggetto:</strong> Convalida richiesta di emergenza</p>
+                        <p>Gentile utente, abbiamo ricevuto la tua richiesta di soccorso.</p>
+                        <p>Per confermare la tua identità ed <strong>attivare l'emergenza</strong>, devi cliccare
+                            sul link qui sotto:</p>
+
+                        <div style="text-align: center; margin: 20px 0;">
+                            <a href="ConvalidaRichiestaServlet?token=${token_convalida}"
+                                style="background-color: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                                🚨 CONFERMA E ATTIVA SOCCORSI
+                            </a>
+                        </div>
+                        <p style="font-size: 0.85em; color: #666; margin-bottom: 0;">(Questa schermata sostituisce
+                            l'invio fisico dell'email, a solo scopo illustrativo del progetto)</p>
+                    </div>
+                    <#else>
+                        <p>Tutti i campi sono obbligatori.</p>
             </#if>
 
+            <!-- specifica che la richiesta deve essere spedita alla servlet InviaRichiestaServlet, con il metodo POST e con il multipart/form-data indica che in questo form non vi è solo del semplice testo, ma anche un file binario per la foto -->
             <form action="InviaRichiestaServlet" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">

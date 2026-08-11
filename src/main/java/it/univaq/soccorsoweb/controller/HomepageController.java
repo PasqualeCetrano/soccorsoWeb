@@ -21,6 +21,8 @@ public class HomepageController extends SoccorsoWebBaseController {
             request.setAttribute("page_title", "SoccorsoWeb - Invia Segnalazione");
 
             // Controllo del parametro success per far apparire un messaggio di conferma!
+            // confronta le stringhe carattere per carattere, nel caso entrambe contengano
+            // 1, allora verranno considerate uguali
             if ("1".equals(request.getParameter("success"))) {
                 request.setAttribute("richiesta_inviata", true);
                 if (request.getParameter("token") != null) {
@@ -34,6 +36,7 @@ public class HomepageController extends SoccorsoWebBaseController {
             }
 
             // Attiva il template. Il percorso base dei template verrà definito nel web.xml
+            // (è come se andasse a chiamare FreeMarker)
             res.activate("public/home_public.html", request, response);
 
         } catch (TemplateManagerException ex) {

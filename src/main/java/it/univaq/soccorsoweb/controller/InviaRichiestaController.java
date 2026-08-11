@@ -42,7 +42,12 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             richiesta.setDescrizione(descrizione);
             richiesta.setIp(ip);
 
-            // Generiamo un token univoco di convalida
+            // SICUREZZA: Generiamo un token univoco di convalida (una stringa casuale
+            // lunghissima).
+            // Questo token viene generato e salvato nel DB ora, per poi essere inserito nel
+            // link della Finta Email.
+            // Permetterà alla "ConvalidaRichiestaController" di ritrovare questa specifica
+            // richiesta in modo sicuro.
             richiesta.setTokenConvalida(UUID.randomUUID().toString());
 
             // 4. Gestione della Foto (Opzionale)
@@ -61,7 +66,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             // 6. una volta che l'utente ha inviato la richiesta, viene reindirizzato alla
             // homePage pubblica e grazie al + richiesta ecc dopo aver ricaricato la pagina
             // gli comparirà un pop-up per la convalidazione della richiesta (il pop-up
-            // viene creato all'interno del file home_public.html)
+
             response.sendRedirect("?success=1&token=" + richiesta.getTokenConvalida());
 
         } catch (DataException ex) {
@@ -72,43 +77,12 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
         }
     }
 
-    private void action_convalida(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
-        String token = request.getParameter("token");
-
-        try {
-            // Cerchiamo la richiesta nel database tramite il token magico
-            RichiestaSoccorso richiesta = dl.getRichiestaSoccorsoDAO().getRichiestaByStringaConvalida(token);
-
-            if (richiesta != null && "da convalidare".equals(richiesta.getStato())) {
-                // Trovata! La attiviamo ufficialmente
-                richiesta.setStato("attiva");
-                dl.getRichiestaSoccorsoDAO().storeRichiestaSoccorso(richiesta);
-
-                // Rimandiamo l'utente alla home con il flag "validated"
-                response.sendRedirect("?validated=1");
-            } else {
-                // Token errato o richiesta già validata
-                response.sendRedirect("?error=1");
-            }
-        } catch (DataException ex) {
-            Logger.getLogger(InviaRichiestaController.class.getName()).log(Level.SEVERE,
-                    "Errore nella convalida della richiesta", ex);
-            response.sendRedirect("?error=1");
-        }
-    }
-
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // Se la richiesta è POST, significa che l'utente ha premuto il tasto Invia del
         // form
         if (request.getMethod().equalsIgnoreCase("POST")) {
             action_invia_richiesta(request, response);
-        } else if (request.getParameter("token") != null) {
-            // Se c'è un token nell'URL (metodo GET), l'utente sta validando la richiesta
-            // dal pop-up
-            action_convalida(request, response);
         } else {
             // Se l'utente prova ad accedere a questa Servlet tramite URL (metodo GET), lo
             // rimandiamo alla homepage
