@@ -88,8 +88,8 @@ public abstract class AbstractBaseController extends HttpServlet {
         try (DataLayer datalayer = createDataLayer((DataSource) getServletContext().getAttribute("datasource"))) {
             datalayer.init(); // inizializza il datalayer caricando tutti i e i dao
             initRequest(request, datalayer);
-            // check the access rules for this resource
-            if (hasLoggedAccess(request, response)) { // controlla se la pagina a cui vogliamo accedere è protetta
+            // si occupa di verificare se la pagina richiesta dall'utente è protetta o meno
+            if (hasLoggedAccess(request, response)) {
                 if (s != null) { // controlla se l'utente ha fatto il login
                     if (!checkAccessRoles(request, response)) { // controlla se l'utente ha i ruoli per accedere alla
                                                                 // pagina
@@ -112,6 +112,8 @@ public abstract class AbstractBaseController extends HttpServlet {
     protected boolean hasLoggedAccess(HttpServletRequest request, HttpServletResponse response)
             throws UnsupportedEncodingException, IOException {
         String uri = request.getRequestURI();
+        // Vai a pescare dalla memoria RAM le regole che il listener aveva letto dal
+        // web.xml all'avvio
         Pattern protect = (Pattern) getServletContext().getAttribute("protect_pattern"); // recupera tutti gli url
                                                                                          // protetti tramite una regular
                                                                                          // expression
