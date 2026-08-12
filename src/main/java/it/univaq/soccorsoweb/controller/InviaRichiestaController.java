@@ -67,13 +67,14 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             // homePage pubblica e grazie al + richiesta ecc dopo aver ricaricato la pagina
             // gli comparirà un pop-up per la convalidazione della richiesta (il pop-up
 
-            response.sendRedirect("?success=1&token=" + richiesta.getTokenConvalida());
+            //
+            response.sendRedirect("homepage?success=1&token=" + richiesta.getTokenConvalida());
 
         } catch (DataException ex) {
             Logger.getLogger(InviaRichiestaController.class.getName()).log(Level.SEVERE,
                     "Errore nel salvataggio della richiesta", ex);
             // In caso di errore critico, rimandiamo alla home con un flag di errore
-            response.sendRedirect("?error=1");
+            response.sendRedirect("homepage?error=1");
         }
     }
 
@@ -86,7 +87,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
         } else {
             // Se l'utente prova ad accedere a questa Servlet tramite URL (metodo GET), lo
             // rimandiamo alla homepage
-            response.sendRedirect("");
+            response.sendRedirect("homepage");
         }
     }
 }

@@ -28,7 +28,7 @@ public class LogoutController extends SoccorsoWebBaseController {
         } else {
             // Se non c'è nessun referrer, lo rimandiamo semplicemente alla radice del sito
             // (ovvero alla nostra Homepage pubblica, gestita dall'HomepageController).
-            response.sendRedirect("");
+            response.sendRedirect("homepage");
         }
     }
 

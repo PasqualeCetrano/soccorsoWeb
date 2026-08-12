@@ -31,14 +31,14 @@ public class ConvalidaRichiestaController extends SoccorsoWebBaseController {
                 dl.getRichiestaSoccorsoDAO().storeRichiestaSoccorso(richiesta);
                 
                 // Rimandiamo l'utente alla home con il flag di successo
-                response.sendRedirect("?validated=1");
+                response.sendRedirect("homepage?validated=1");
             } else {
                 // Token errato o richiesta già validata
-                response.sendRedirect("?error=1");
+                response.sendRedirect("homepage?error=1");
             }
         } catch (DataException ex) {
             Logger.getLogger(ConvalidaRichiestaController.class.getName()).log(Level.SEVERE, "Errore nella convalida della richiesta", ex);
-            response.sendRedirect("?error=1");
+            response.sendRedirect("homepage?error=1");
         }
     }
 
@@ -49,7 +49,7 @@ public class ConvalidaRichiestaController extends SoccorsoWebBaseController {
             action_convalida(request, response);
         } else {
             // Accesso senza token: lo rimandiamo alla home
-            response.sendRedirect("");
+            response.sendRedirect("homepage");
         }
     }
 }

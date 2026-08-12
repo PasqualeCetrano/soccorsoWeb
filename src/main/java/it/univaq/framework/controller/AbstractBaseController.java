@@ -33,6 +33,7 @@ public abstract class AbstractBaseController extends HttpServlet {
     // override to init other information to offer to all the servlets
     protected void initRequest(HttpServletRequest request, DataLayer dl) {
         String completeRequestURL = request.getRequestURL()
+                // QueryString è tutta la parte nell'URL dopo il ?
                 + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
         request.setAttribute("thispageurl", completeRequestURL);
         request.setAttribute("datalayer", dl);
@@ -54,6 +55,9 @@ public abstract class AbstractBaseController extends HttpServlet {
     // override to provide your login information in the request
     protected void accessCheckSuccessful(HttpServletRequest request, HttpServletResponse response)
             throws UnsupportedEncodingException, IOException {
+        // usiamo il false come parametro in modo tale che se l'utente non ha una
+        // sessione,
+        // questa non viene creata(vuota) e viene restituito null
         HttpSession s = request.getSession(false); // recupera la sessione per prelevare i dati e inserirli nella
                                                    // richiesta in modo da non toccare gli elementi della sessione che
                                                    // riesdono sul server ma usare esclusivamente gli elementi che ho

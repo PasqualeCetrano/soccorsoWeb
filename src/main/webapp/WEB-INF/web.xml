@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    
+    <!-- Configurazione del database e del framework (Parametri globali) -->
+    <context-param>
+        <param-name>view.encoding</param-name>
+        <param-value>UTF-8</param-value>
+    </context-param>
+    <context-param>
+        <param-name>view.template_directory</param-name>
+        <param-value>templates</param-value>
+    </context-param>
+    <context-param>
+        <param-name>view.error_template</param-name>
+        <param-value>error.html</param-value>
+    </context-param>
+    <context-param>
+        <param-name>view.debug</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Protezione basata su URL Pattern (Gestita da AbstractBaseController) -->
+    <context-param>
+        <param-name>security.protect.patterns</param-name>
+        <param-value>
+            /admin/.*=amministratore;
+            /operatore/.*=operatore,amministratore
+        </param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>data.source</param-name>
+        <param-value>jdbc/soccorso</param-value>
+    </context-param>
+
+    <!-- Inizializzatore dell'applicazione (Si occupa di collegare il Database all'avvio) -->
+    <listener>
+        <listener-class>it.univaq.framework.application.ApplicationInitializer</listener-class>
+    </listener>
+
+    <!-- ============================================== -->
+    <!-- MAPPATURE DELLE SERVLET DELLA PARTE PUBBLICA   -->
+    <!-- ============================================== -->
+
+    <!-- 1. HomepageController -->
+    <servlet>
+        <servlet-name>HomepageServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.HomepageController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomepageServlet</servlet-name>
+        <url-pattern>/homepage</url-pattern>
+    </servlet-mapping>
+    <!-- Mappiamo la Homepage anche sulla "radice" del sito -->
+    <servlet-mapping>
+        <servlet-name>HomepageServlet</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomepageServlet</servlet-name>
+        <url-pattern>/Home</url-pattern>
+    </servlet-mapping>
+
+    <!-- 2. InviaRichiestaController -->
+    <servlet>
+        <servlet-name>InviaRichiestaServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.InviaRichiestaController</servlet-class>
+        <!-- Impostazione vitale per permettere il caricamento delle foto (multipart) -->
+        <multipart-config>
+            <max-file-size>10485760</max-file-size> <!-- 10MB -->
+            <max-request-size>20971520</max-request-size> <!-- 20MB -->
+            <file-size-threshold>5242880</file-size-threshold> <!-- 5MB -->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InviaRichiestaServlet</servlet-name>
+        <url-pattern>/InviaRichiestaServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- 3. ConvalidaRichiestaController -->
+    <servlet>
+        <servlet-name>ConvalidaRichiestaServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.ConvalidaRichiestaController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConvalidaRichiestaServlet</servlet-name>
+        <url-pattern>/ConvalidaRichiestaServlet</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 4. HomeAdminController (Hub Centrale) -->
+    <servlet>
+        <servlet-name>HomeAdminServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.HomeAdminController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeAdminServlet</servlet-name>
+        <url-pattern>/admin/home</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5. GestioneRichiesteController (Tabella Emergenze) -->
+    <servlet>
+        <servlet-name>GestioneRichiesteServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.GestioneRichiesteController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneRichiesteServlet</servlet-name>
+        <url-pattern>/admin/richieste</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 5. LoginController -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.LoginController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <!-- Welcome File List: cosa caricare se l'utente digita solo www.sito.it/ -->
+    <welcome-file-list>
+        <welcome-file>homepage</welcome-file>
+    </welcome-file-list>
+
+</web-app>

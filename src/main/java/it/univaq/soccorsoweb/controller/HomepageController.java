@@ -13,8 +13,7 @@ public class HomepageController extends SoccorsoWebBaseController {
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
-            // Usiamo TemplateResult (FreeMarker) per caricare direttamente il bellissimo
-            // file HTML che hai creato!
+            // Usiamo TemplateResult (FreeMarker) per caricare direttamente il file HTML
             TemplateResult res = new TemplateResult(getServletContext());
 
             // Esempio: possiamo passare variabili da Java a FreeMarker
@@ -35,8 +34,10 @@ public class HomepageController extends SoccorsoWebBaseController {
                 request.setAttribute("richiesta_validata", true);
             }
 
-            // Attiva il template. Il percorso base dei template verrà definito nel web.xml
-            // (è come se andasse a chiamare FreeMarker)
+            // la Servlet dice a FreeMarker quale pagina deve far comparire all'utente,
+            // mentre FreeMarker si occupa di modificare le parti dinamiche e decidere
+            // quale parte della pagina far comparire all'utente
+            // (è come se stessimo invocando FreeMarker)
             res.activate("public/home_public.html", request, response);
 
         } catch (TemplateManagerException ex) {
@@ -68,6 +69,15 @@ public class HomepageController extends SoccorsoWebBaseController {
         HttpSession s = request.getSession(false);
 
         // Se non c'è sessione, o la sessione non contiene il login dell'utente...
+        // userid è una variabile che contiene l'identificativo univoco dell'utente,
+        // ovvero contiene il valore della sua chiave primaria nel database
+        // se un utente non possiede la sessione, vuol dire che non ha neanche fatto il
+        // Login, quindi il secondo controllo risulterebbe come una cosa inutile, però è
+        // necessario in quanto a volte è possibile che il sistema crei una sessione per
+        // l'utente ad esempio per mantenere il suo carrello(come amazon) ecc, quindi
+        // possiamo avere che lui ha una sessione ma se non ha effettuato il login e
+        // quindi
+        // gli dee essere mostrata la pagina pubblica per la richiesta
         if (s == null || s.getAttribute("userid") == null) {
             // Mostra la home pubblica con il form per segnalare un'emergenza
             action_anonymous(request, response);

@@ -70,18 +70,18 @@ public class LoginController extends SoccorsoWebBaseController {
                     // Creiamo la sessione (Cookie) passando l'oggetto utente
                     SecurityHelpers.createSession(request, u);
 
-                    // Smistamento logico (come richiesto) o ritorno al referrer
+                    // Smistamento logico o ritorno al referrer
                     if (request.getParameter("referrer") != null && !request.getParameter("referrer").isEmpty()) {
                         response.sendRedirect(request.getParameter("referrer"));
                     } else {
                         // Se non c'è referrer, controlliamo il ruolo e lo indirizziamo alla dashboard
                         // corretta
                         if (checkRole(request, "amministratore")) {
-                            response.sendRedirect("admin/dashboard");
+                            response.sendRedirect("admin/home");
                         } else if (checkRole(request, "operatore")) {
                             response.sendRedirect("operatore/dashboard");
                         } else {
-                            response.sendRedirect(""); // Fallback alla home pubblica
+                            response.sendRedirect("homepage"); // Fallback alla home pubblica
                         }
                     }
                     return;
@@ -101,7 +101,7 @@ public class LoginController extends SoccorsoWebBaseController {
 
         // Se nella request c'è il parametro 'email' (o un parametro hidden del submit),
         // stiamo inviando i dati di login
-        if (request.getParameter("login") != null || request.getParameter("email") != null) {
+        if (request.getParameter("email") != null) {
             action_login(request, response);
         } else {
             // Primo arrivo sulla pagina di login

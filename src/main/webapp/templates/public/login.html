@@ -27,7 +27,12 @@
             <p>Inserisci le tue credenziali. Sarai reindirizzato automaticamente alla tua dashboard.</p>
 
             <!-- L'azione chiamerà la Servlet unica (LoginServlet) che farà tutto il lavoro! -->
-            <form action="LoginServlet" method="POST">
+            <form action="login" method="POST">
+                
+                <!-- Il trucco del Referrer: nascondiamo l'indirizzo originale nel form! -->
+                <#if referrer??>        
+                    <input name="referrer" type="hidden" value="${referrer}"/>
+                </#if>
 
                 <div class="form-group">
                     <label for="email">Indirizzo Email</label>

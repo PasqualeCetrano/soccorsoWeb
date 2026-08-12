@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${page_title!"Dashboard Amministratore"}</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .dashboard-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-attiva { background-color: #d4edda; color: #155724; }
+        .badge-da-convalidare { background-color: #fff3cd; color: #856404; }
+        .badge-ignorata { background-color: #e2e3e5; color: #383d41; }
+        .badge-annullata { background-color: #f8d7da; color: #721c24; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Soccorso<span>Web</span></div>
+        <div class="nav-links">
+            <span style="color: #666; margin-right: 15px;">👤 Benvenuto, ${logininfo.nome!"Admin"}</span>
+            <a href="${request.contextPath}/logout" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-header">
+            <h1>Pannello di Controllo Emergenze</h1>
+            <span>Totale Segnalazioni: ${richieste?size}</span>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data e Ora</th>
+                        <th>Segnalante</th>
+                        <th>Contatto</th>
+                        <th>Posizione / GPS</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Il magico ciclo for di FreeMarker -->
+                    <#list richieste as r>
+                    <tr>
+                        <!-- FreeMarker formatta automaticamente il Timestamp dal database -->
+                        <td><strong>${r.dataOraInvio?datetime?string("dd/MM/yyyy HH:mm")}</strong></td>
+                        <td>${r.segnalante}</td>
+                        <td>${r.emailSegnalante}</td>
+                        <td><span style="font-family: monospace; background: #eee; padding: 2px 6px; border-radius: 4px;">${r.coordinate}</span></td>
+                        <td>
+                            <!-- Coloriamo il badge in base allo stato -->
+                            <#if r.stato == "attiva">
+                                <span class="badge badge-attiva">${r.stato}</span>
+                            <#elseif r.stato == "da convalidare">
+                                <span class="badge badge-da-convalidare">${r.stato}</span>
+                            <#elseif r.stato == "ignorata">
+                                <span class="badge badge-ignorata">${r.stato}</span>
+                            <#else>
+                                <span class="badge badge-annullata">${r.stato}</span>
+                            </#if>
+                        </td>
+                    </tr>
+                    </#list>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
