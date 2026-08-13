@@ -13,10 +13,14 @@ public class HomepageController extends SoccorsoWebBaseController {
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
-            // Usiamo TemplateResult (FreeMarker) per caricare direttamente il file HTML
+            // Usiamo TemplateResult (FreeMarker) per caricare direttamente il file HTML (è
+            // come se accendessimo FreeMarker)
             TemplateResult res = new TemplateResult(getServletContext());
 
-            // Esempio: possiamo passare variabili da Java a FreeMarker
+            // Esempio: possiamo passare variabili da Java a FreeMarker, ovvero il
+            // Controller
+            // prende la variabile page_title e gli assegna come valore "SoccorsoWeb - Invia
+            // Segnalazione"
             request.setAttribute("page_title", "SoccorsoWeb - Invia Segnalazione");
 
             // Controllo del parametro success per far apparire un messaggio di conferma!
@@ -35,8 +39,14 @@ public class HomepageController extends SoccorsoWebBaseController {
             }
 
             // la Servlet dice a FreeMarker quale pagina deve far comparire all'utente,
-            // mentre FreeMarker si occupa di modificare le parti dinamiche e decidere
-            // quale parte della pagina far comparire all'utente
+            // mentre FreeMarker si occupa di modificare le parti dinamiche, ovvero i file
+            // HTML
+            // all'interno di templates, diventeranno del tipo ftl.html e conterranno delle
+            // variabili tra parentesi graffe, come ad esempio la variabile ${page_title},
+            // ${richiesta_inviata}, ${richiesta_validata}, ${token_convalida} che verranno
+            // sostituite dai valori delle variabili che abbiamo precedentemente impostato
+            // nel
+            // controller e decidere quale parte della pagina far comparire all'utente
             // (è come se stessimo invocando FreeMarker)
             res.activate("public/home_public.html", request, response);
 

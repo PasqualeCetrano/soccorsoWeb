@@ -23,32 +23,42 @@
         <div class="login-card">
 
 
-            <h2>Accesso Riservato</h2>
-            <p>Inserisci le tue credenziali. Sarai reindirizzato automaticamente alla tua dashboard.</p>
+            <#if logininfo??>
+                <!-- SE L'UTENTE E' GIA' LOGGATO -->
+                <h2>Sei già nel sistema!</h2>
+                <p>Hai già effettuato l'accesso come <strong>${logininfo.username}</strong>.</p>
+                <a href="admin/home" class="btn-submit" style="text-decoration: none; display: inline-block; text-align: center; margin-bottom: 15px;">Vai alla tua Dashboard</a>
+                <a href="logout" class="back-link">Oppure fai il Logout</a>
 
-            <!-- L'azione chiamerà la Servlet unica (LoginServlet) che farà tutto il lavoro! -->
-            <form action="login" method="POST">
-                
-                <!-- Il trucco del Referrer: nascondiamo l'indirizzo originale nel form! -->
-                <#if referrer??>        
-                    <input name="referrer" type="hidden" value="${referrer}"/>
-                </#if>
+            <#else>
+                <!-- SE NON E' LOGGATO, MOSTRA IL FORM NORMALE -->
+                <h2>Accesso Riservato</h2>
+                <p>Inserisci le tue credenziali. Sarai reindirizzato automaticamente alla tua dashboard.</p>
 
-                <div class="form-group">
-                    <label for="email">Indirizzo Email</label>
-                    <input type="email" id="email" name="email" placeholder="nome.cognome@soccorsoweb.it" required>
-                </div>
+                <!-- L'azione chiamerà la Servlet unica (LoginServlet) che farà tutto il lavoro! -->
+                <form action="login" method="POST">
+                    
+                    <!-- Il trucco del Referrer: nascondiamo l'indirizzo originale nel form! -->
+                    <#if referrer??>        
+                        <input name="referrer" type="hidden" value="${referrer}"/>
+                    </#if>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
+                    <div class="form-group">
+                        <label for="email">Indirizzo Email</label>
+                        <input type="email" id="email" name="email" placeholder="nome.cognome@soccorsoweb.it" required>
+                    </div>
 
-                <!-- Riutilizziamo la nostra fantastica classe .btn-submit! -->
-                <button type="submit" class="btn-submit">Entra nel Sistema</button>
-            </form>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
 
-            <a href="home_public.html" class="back-link">← Torna alla Home Pubblica</a>
+                    <!-- Riutilizziamo la nostra fantastica classe .btn-submit! -->
+                    <button type="submit" class="btn-submit">Entra nel Sistema</button>
+                </form>
+
+                <a href="home_public.html" class="back-link">← Torna alla Home Pubblica</a>
+            </#if>
         </div>
     </main>
 
