@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Richiesta Emergenza</title>
+    <title>${page_title}</title>
     <!-- Collegamento al file CSS -->
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
@@ -18,7 +18,7 @@
             <a href="#descrizione">Chi Siamo</a>
             <a href="#invia-richiesta">Invia Richiesta</a>
             <!-- Pulsante in alto a destra per login generico (admin/operatore) -->
-            <a href="login.html" class="btn-login">Accedi al Sistema</a>
+            <a href="login" class="btn-login">Accedi al Sistema</a>
         </div>
     </nav>
 
@@ -55,7 +55,7 @@
                      allora manderà a schermo la simulazione dell'email. Questo comando "?? && ??"
                      significa: "Se la variabile richiesta_inviata esiste E la variabile token_convalida esiste" -->
                 <#elseif richiesta_inviata?? && token_convalida??>
-                    <!-- SIMULAZIONE EMAIL: Come richiesto dalle specifiche del prof -->
+                    <!-- SIMULAZIONE EMAIL -->
                     <div
                         style="background-color: #f8f9fa; border: 2px dashed #007bff; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: left; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="color: #007bff; margin-top: 0; border-bottom: 1px solid #ccc; padding-bottom: 10px;">

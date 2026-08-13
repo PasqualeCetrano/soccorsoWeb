@@ -139,6 +139,16 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <!-- LogoutController -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.LogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
     <!-- Definisce la durata massima della sessione in minuti. 
     Se un utente (anche loggato) non compie alcuna azione sul sito per questo 
     intervallo di tempo (es. 30 minuti), la sua sessione scade e verrà 

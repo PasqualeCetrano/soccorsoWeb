@@ -76,6 +76,11 @@ public class LoginController extends SoccorsoWebBaseController {
                     } else {
                         // Se non c'è referrer, controlliamo il ruolo e lo indirizziamo alla dashboard
                         // corretta
+                        // nel momento in cui si effettua una nuova richiesta tramite ad esempio il
+                        // (sendRedirect) i metodi (di AbstractBaseController) ereditati dai controller
+                        // dell'
+                        // applicazione verranno rieseguiti automaticamente come il processBaseRequest,
+                        // checkSuccesfull ecc
                         if (checkRole(request, "amministratore")) {
                             response.sendRedirect("admin/home");
                         } else if (checkRole(request, "operatore")) {
@@ -109,6 +114,8 @@ public class LoginController extends SoccorsoWebBaseController {
             // sicura, ovver HTTPS, in caso contrario crea un reindirizzamento HTTPS da
             // applicare al template
             String https_redirect_url = SecurityHelpers.checkHttps(request);
+            // con il setAttribute nella maggior parte dei casi va a creare una nuova
+            // variabile all'interno della Request
             request.setAttribute("https-redirect", https_redirect_url);
             action_default(request, response);
         }

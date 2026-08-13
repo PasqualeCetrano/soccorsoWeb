@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Dashboard Amministratore</title>
+    <title>${page_title}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,14 +12,14 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
         <div class="nav-links">
-            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="home" class="active">Dashboard</a>
 
-            <!-- Pulsante Logout -->
-            <a href="../public/login.html" class="btn-logout">Esci</a>
+            <!-- Pulsante Logout: chiama la servlet di logout che distruggerà la sessione -->
+            <a href="../logout" class="btn-logout">Esci</a>
         </div>
     </nav>
 
@@ -28,7 +28,8 @@
 
         <div class="dashboard-header">
             <h1>Pannello di Controllo</h1>
-            <p>Benvenuto nell'Area di Amministrazione. Seleziona un modulo per procedere.</p>
+            <p>Benvenuto <strong>${logininfo.username}</strong> nell'Area di Amministrazione. Seleziona un modulo per
+                procedere.</p>
         </div>
 
         <!-- GRIGLIA DASHBOARD ADMIN -->
