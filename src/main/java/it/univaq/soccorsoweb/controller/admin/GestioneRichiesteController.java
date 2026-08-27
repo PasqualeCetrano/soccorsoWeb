@@ -1,15 +1,18 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.admin;
 
 import it.univaq.framework.data.DataException;
 import it.univaq.framework.view.TemplateManagerException;
 import it.univaq.framework.view.TemplateResult;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+//serve a mostrare all'amministratore tutte le richieste di soccorso
 
 public class GestioneRichiesteController extends SoccorsoWebBaseController {
 
@@ -27,7 +30,7 @@ public class GestioneRichiesteController extends SoccorsoWebBaseController {
 
             // Attiviamo FreeMarker per caricare la tabella delle richieste
             TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("admin/dashboard.html", request, response);
+            res.activate("admin/dashboard_richieste.html", request, response);
 
         } catch (DataException | TemplateManagerException ex) {
             Logger.getLogger(GestioneRichiesteController.class.getName()).log(Level.SEVERE, null, ex);

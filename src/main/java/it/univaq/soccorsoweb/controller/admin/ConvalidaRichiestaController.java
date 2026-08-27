@@ -1,7 +1,8 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.admin;
 
 import it.univaq.framework.data.DataException;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

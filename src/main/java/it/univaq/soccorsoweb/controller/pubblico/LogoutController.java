@@ -1,6 +1,7 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.pubblico;
 
 import it.univaq.framework.security.SecurityHelpers;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import java.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

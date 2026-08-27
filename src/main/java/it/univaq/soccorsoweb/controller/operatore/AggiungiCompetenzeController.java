@@ -1,9 +1,10 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.operatore;
 
 import it.univaq.framework.data.DataException;
 import it.univaq.framework.view.TemplateManagerException;
 import it.univaq.framework.view.TemplateResult;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Patente;
 import it.univaq.soccorsoweb.data.model.Utente;

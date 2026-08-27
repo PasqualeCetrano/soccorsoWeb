@@ -1,6 +1,7 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.pubblico;
 
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.framework.data.DataException;
 import it.univaq.framework.view.TemplateManagerException;

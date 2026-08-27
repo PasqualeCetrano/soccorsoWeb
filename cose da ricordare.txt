@@ -4,5 +4,6 @@ INVIA RICHIESTA CONTROLLER:
 MANCA: il captcha 
 
 
-LOGIN CONTROLLER:
--
+LA SEZIONE DELL OPERATORE CON I RELATIVI CONTROLLER DOVREBBE ESSERE OK
+    -AGGIUNGICOMPETENZECONTROLLER permette di aggiungere solo le patenti o le compenteze gia presenti nel database
+

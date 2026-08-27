@@ -1,6 +1,7 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.pubblico;
 
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 import it.univaq.framework.data.DataException;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
 
             // Inizio controllo richieste multiple
             ServletContext context = getServletContext();
+            @SuppressWarnings("unchecked")
             Map<String, Long> inviiRecenti = (Map<String, Long>) context.getAttribute("invii_recenti");
             if (inviiRecenti == null) {
                 inviiRecenti = new ConcurrentHashMap<>();

@@ -1,9 +1,10 @@
 //questa classe si preoccupa di mostrare la home e di controllare se è stata inoltrata una richiesta con successo , in tal caso mostreera un messaggio di avvenuto successo
 
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.pubblico;
 
 import it.univaq.framework.view.TemplateManagerException;
 import it.univaq.framework.view.TemplateResult;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

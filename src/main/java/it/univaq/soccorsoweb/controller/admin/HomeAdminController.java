@@ -1,7 +1,8 @@
-package it.univaq.soccorsoweb.controller;
+package it.univaq.soccorsoweb.controller.admin;
 
 import it.univaq.framework.view.TemplateManagerException;
 import it.univaq.framework.view.TemplateResult;
+import it.univaq.soccorsoweb.controller.SoccorsoWebBaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.logging.Level;
