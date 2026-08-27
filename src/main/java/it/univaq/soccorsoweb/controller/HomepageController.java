@@ -1,7 +1,9 @@
+//questa classe si preoccupa di mostrare la home e di controllare se è stata inoltrata una richiesta con successo , in tal caso mostreera un messaggio di avvenuto successo
+
 package it.univaq.soccorsoweb.controller;
 
-import it.univaq.framework.result.TemplateManagerException;
-import it.univaq.framework.result.TemplateResult;
+import it.univaq.framework.view.TemplateManagerException;
+import it.univaq.framework.view.TemplateResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,15 +19,10 @@ public class HomepageController extends SoccorsoWebBaseController {
             // come se accendessimo FreeMarker)
             TemplateResult res = new TemplateResult(getServletContext());
 
-            // Esempio: possiamo passare variabili da Java a FreeMarker, ovvero il
-            // Controller
-            // prende la variabile page_title e gli assegna come valore "SoccorsoWeb - Invia
-            // Segnalazione"
+            // passiamo il titolo della pagina al template
             request.setAttribute("page_title", "SoccorsoWeb - Invia Segnalazione");
 
             // Controllo del parametro success per far apparire un messaggio di conferma!
-            // confronta le stringhe carattere per carattere, nel caso entrambe contengano
-            // 1, allora verranno considerate uguali
             if ("1".equals(request.getParameter("success"))) {
                 request.setAttribute("richiesta_inviata", true);
                 if (request.getParameter("token") != null) {
@@ -36,6 +33,12 @@ public class HomepageController extends SoccorsoWebBaseController {
             // Controllo del parametro validated per il successo finale
             if ("1".equals(request.getParameter("validated"))) {
                 request.setAttribute("richiesta_validata", true);
+            }
+
+            // Controllo del parametro error (proveniente da inviarichiestacontroller) per
+            // far apparire un messaggio di errore flood!
+            if ("flood".equals(request.getParameter("error"))) {
+                request.setAttribute("errore_flood", true);
             }
 
             // la Servlet dice a FreeMarker quale pagina deve far comparire all'utente,
@@ -57,43 +60,9 @@ public class HomepageController extends SoccorsoWebBaseController {
         }
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        // Se l'utente è GIÀ loggato (è un admin o un operatore), la home pubblica non
-        // serve a niente.
-        // Lo smistiamo direttamente alla sua dashboard operativa in base al ruolo!
-        if (checkRole(request, "amministratore")) {
-            response.sendRedirect("admin/dashboard"); // Manderà alla Servlet della dashboard admin
-        } else if (checkRole(request, "operatore")) {
-            response.sendRedirect("operatore/dashboard"); // Manderà alla Servlet della dashboard operatore
-        } else {
-            response.sendRedirect("logout"); // Se c'è un errore nei ruoli, lo facciamo uscire per sicurezza
-        }
-    }
-
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // Questo metodo fa da vigile urbano: smista il traffico in base alla presenza
-        // del login
-        // Recupera la sessione (senza forzarne la creazione)
-        HttpSession s = request.getSession(false);
-
-        // Se non c'è sessione, o la sessione non contiene il login dell'utente...
-        // userid è una variabile che contiene l'identificativo univoco dell'utente,
-        // ovvero contiene il valore della sua chiave primaria nel database
-        // se un utente non possiede la sessione, vuol dire che non ha neanche fatto il
-        // Login, quindi il secondo controllo risulterebbe come una cosa inutile, però è
-        // necessario in quanto a volte è possibile che il sistema crei una sessione per
-        // l'utente ad esempio per mantenere il suo carrello(come amazon) ecc, quindi
-        // possiamo avere che lui ha una sessione ma se non ha effettuato il login e
-        // quindi
-        // gli dee essere mostrata la pagina pubblica per la richiesta
-        if (s == null || s.getAttribute("userid") == null) {
-            // Mostra la home pubblica con il form per segnalare un'emergenza
-            action_anonymous(request, response);
-        } else {
-            // L'utente è già loggato! Portalo dentro l'area riservata
-            action_logged(request, response);
-        }
+        // Mostra sempre la home pubblica con il form per segnalare un'emergenza
+        action_anonymous(request, response);
     }
 }

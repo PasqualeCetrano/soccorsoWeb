@@ -28,6 +28,20 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
+
+        <!-- Aggiungiamo FreeMarker per la gestione dei template HTML -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.34</version>
+        </dependency>
+
+        <!-- Aggiungiamo il supporto di FreeMarker per le date/ora di Java 8 (LocalDateTime, ecc.) -->
+        <dependency>
+            <groupId>no.api.freemarker</groupId>
+            <artifactId>freemarker-java8</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,0 +1,8 @@
+INVIA RICHIESTA CONTROLLER: 
+-il controllo per le richieste multiple viene implementato tramite il servlet context in modo da non dover scrivere nuove classi dao 
+ e aggiornare il database, si poteva fare in modo piu robusto usando una tabella di record nel database
+MANCA: il captcha 
+
+
+LOGIN CONTROLLER:
+-

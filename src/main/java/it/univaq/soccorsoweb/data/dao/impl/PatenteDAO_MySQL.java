@@ -146,7 +146,7 @@ public class PatenteDAO_MySQL extends DAO implements PatenteDAO {
     }
 
     @Override // permette di associare la patente a un utente se la patente non esiste a db la
-              // inserisce prima poi aggiorna la tabella detiene
+              // inserisce prima, poi aggiorna la tabella detiene
     public void aggiungiPatenteUtente(Utente utente, Patente patente) throws DataException {
         try {
             // Se la patente non è ancora a sistema (non ha un ID), la salviamo prima

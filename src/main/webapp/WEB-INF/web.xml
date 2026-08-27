@@ -124,6 +124,36 @@
         <url-pattern>/admin/richieste</url-pattern>
     </servlet-mapping>
     
+    <!-- 6. HomeOperatoreController (Pannello Operatore) -->
+    <servlet>
+        <servlet-name>HomeOperatoreServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.HomeOperatoreController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeOperatoreServlet</servlet-name>
+        <url-pattern>/operatore/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- 7. MissioniOperatoreController (Le Mie Missioni) -->
+    <servlet>
+        <servlet-name>MissioniOperatoreServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.MissioniOperatoreController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MissioniOperatoreServlet</servlet-name>
+        <url-pattern>/operatore/missioni</url-pattern>
+    </servlet-mapping>
+
+    <!-- 8. AggiungiCompetenzeController (Gestione Competenze) -->
+    <servlet>
+        <servlet-name>AggiungiCompetenzeServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.AggiungiCompetenzeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AggiungiCompetenzeServlet</servlet-name>
+        <url-pattern>/operatore/competenze</url-pattern>
+    </servlet-mapping>
+
     <!-- Registra la classe Java 'LoginController' nel server assegnandole il soprannome 'LoginServlet' 
     (che verrà poi collegato a un URL specifico più in basso, nella sezione servlet-mapping) -->
     <servlet>
@@ -146,7 +176,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/logout</url-pattern>
+        <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
 
     <!-- Definisce la durata massima della sessione in minuti. 

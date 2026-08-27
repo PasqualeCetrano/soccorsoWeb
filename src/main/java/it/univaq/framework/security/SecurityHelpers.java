@@ -111,7 +111,8 @@ public class SecurityHelpers {
     }
 
     public static HttpSession createSession(HttpServletRequest request, Utente u) {
-        // se una sessione è già attiva, rimuoviamola e creiamone una nuova
+        // se una sessione è già attiva, rimuoviamola e creiamone una nuova, l ID
+        // sessione viene generato dietro le quinte quando si fa getSession(true)
         // if a session already exists, remove it and recreate a new one
         disposeSession(request);
         HttpSession s = request.getSession(true);

@@ -1117,3 +1117,86 @@ body {
     line-height: 1.4;
     margin: 0;
 }
+
+/* =========================================
+   STILI PER ALERTER E SIMULAZIONE EMAIL
+   ========================================= */
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border: 1px solid #f5c6cb !important;
+}
+
+.email-simulation {
+    background-color: #f8f9fa;
+    border: 2px dashed #007bff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.email-simulation h3 {
+    color: #007bff;
+    margin-top: 0;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.email-simulation-btn-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.btn-simulation {
+    background-color: #dc3545;
+    color: white !important;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.btn-simulation:hover {
+    background-color: #c82333;
+}
+
+.email-simulation-footer {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.logo-badge-gray {
+    color: var(--gray) !important;
+    font-weight: normal !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.mt-2 {
+    margin-top: 2rem !important;
+}
+
+.d-block {
+    display: block !important;
+}
+
+.btn-form-submit {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.8rem;
+}

@@ -1,7 +1,7 @@
 package it.univaq.soccorsoweb.controller;
 
-import it.univaq.framework.result.TemplateManagerException;
-import it.univaq.framework.result.TemplateResult;
+import it.univaq.framework.view.TemplateManagerException;
+import it.univaq.framework.view.TemplateResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

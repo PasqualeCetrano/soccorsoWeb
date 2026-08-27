@@ -40,6 +40,8 @@ public abstract class AbstractBaseController extends HttpServlet {
     }
 
     // override to enforce your policy and/or change the login url
+    // quindi rimanda sulla pagina di login aggiungendo la pagina attuale come campo
+    // referrer nell url
     protected void accessCheckLoginFailed(HttpServletRequest request, HttpServletResponse response)
             throws UnsupportedEncodingException, IOException {
         String completeRequestURL = request.getRequestURL()
@@ -98,7 +100,8 @@ public abstract class AbstractBaseController extends HttpServlet {
                         return;
                     }
                 } else {
-                    accessCheckLoginFailed(request, response);
+                    accessCheckLoginFailed(request, response); // qui se non si è loggati si viene reindirizzati alla
+                                                               // pagina di login
                     return;
                 }
             }

@@ -34,6 +34,12 @@
                 <!-- SE NON E' LOGGATO, MOSTRA IL FORM NORMALE -->
                 <h2>Accesso Riservato</h2>
                 <p>Inserisci le tue credenziali. Sarai reindirizzato automaticamente alla tua dashboard.</p>
+ 
+                <#if login_failed??>
+                    <div class="alert alert-danger">
+                        <strong>Errore!</strong> Email o password errate. Riprova.
+                    </div>
+                </#if>
 
                 <!-- L'azione chiamerà la Servlet unica (LoginServlet) che farà tutto il lavoro! -->
                 <form action="login" method="POST">

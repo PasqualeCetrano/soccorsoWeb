@@ -3,8 +3,8 @@ package it.univaq.soccorsoweb.controller;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
 import it.univaq.soccorsoweb.data.model.Utente;
 import it.univaq.framework.data.DataException;
-import it.univaq.framework.result.TemplateManagerException;
-import it.univaq.framework.result.TemplateResult;
+import it.univaq.framework.view.TemplateManagerException;
+import it.univaq.framework.view.TemplateResult;
 import it.univaq.framework.security.SecurityHelpers;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -22,12 +22,6 @@ public class LoginController extends SoccorsoWebBaseController {
         try {
             TemplateResult res = new TemplateResult(getServletContext());
             request.setAttribute("page_title", "SoccorsoWeb - Login");
-
-            // Se l'utente non sta usando HTTPS, lo avvisiamo tramite una variabile per il
-            // template
-            if (request.getAttribute("https-redirect") != null) {
-                request.setAttribute("https_redirect_url", request.getAttribute("https-redirect"));
-            }
 
             // Manteniamo il referrer originale per il redirect post-login
             if (request.getParameter("referrer") != null) {
@@ -54,17 +48,9 @@ public class LoginController extends SoccorsoWebBaseController {
             try {
                 // 1. Recuperiamo TUTTI i dati dell'utente dal Database cercando solo tramite
                 // l'email.
-                // In questo modo peschiamo anche l'hash (la password criptata) salvata a
-                // sistema.
                 Utente u = dl.getUtenteDAO().getUtenteByEmail(email);
 
-                // 2. Verifichiamo due cose:
-                // a) L'utente esiste davvero nel DB (u != null)
-                // b) La password in chiaro appena digitata, una volta passata nell'algoritmo
-                // PBKDF2,
-                // combacia matematicamente con l'hash criptato che abbiamo pescato dal DB.
-                // IMPORTANTE: Non facciamo MAI controlli sulle password tramite query SQL (es.
-                // WHERE password = ?) per motivi di sicurezza!
+                // 2. Verifichiamo se l'utente esiste e la password combacia con l'hash PBKDF2
                 if (u != null && SecurityHelpers.checkPasswordHashPBKDF2(password, u.getPassword())) {
 
                     // Creiamo la sessione (Cookie) passando l'oggetto utente
@@ -76,11 +62,6 @@ public class LoginController extends SoccorsoWebBaseController {
                     } else {
                         // Se non c'è referrer, controlliamo il ruolo e lo indirizziamo alla dashboard
                         // corretta
-                        // nel momento in cui si effettua una nuova richiesta tramite ad esempio il
-                        // (sendRedirect) i metodi (di AbstractBaseController) ereditati dai controller
-                        // dell'
-                        // applicazione verranno rieseguiti automaticamente come il processBaseRequest,
-                        // checkSuccesfull ecc
                         if (checkRole(request, "amministratore")) {
                             response.sendRedirect("admin/home");
                         } else if (checkRole(request, "operatore")) {
@@ -97,7 +78,8 @@ public class LoginController extends SoccorsoWebBaseController {
         }
 
         // Se arriviamo qui, il login ha fallito
-        request.setAttribute("login_failed", true);
+        request.setAttribute("login_failed", true); // serve per generare il messaggio di errore in caso di login
+                                                    // fallito
         action_default(request, response);
     }
 
@@ -110,13 +92,13 @@ public class LoginController extends SoccorsoWebBaseController {
             action_login(request, response);
         } else {
             // Primo arrivo sulla pagina di login
-            // verifica tramite Tomcat all'interno del metodo checkHttps se la connessione è
-            // sicura, ovver HTTPS, in caso contrario crea un reindirizzamento HTTPS da
-            // applicare al template
+            // Verifichiamo se la connessione è sicura (HTTPS). Se non lo è, reindirizziamo
+            // direttamente.
             String https_redirect_url = SecurityHelpers.checkHttps(request);
-            // con il setAttribute nella maggior parte dei casi va a creare una nuova
-            // variabile all'interno della Request
-            request.setAttribute("https-redirect", https_redirect_url);
+            if (https_redirect_url != null) {
+                response.sendRedirect(https_redirect_url);
+                return;
+            }
             action_default(request, response);
         }
 

@@ -10,11 +10,14 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 // Aggiungiamo questa annotazione per permettere alla Servlet di leggere i file caricati dal form HTML
 @MultipartConfig
@@ -33,6 +36,39 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
 
             // 2. Lettura dell'indirizzo IP dell'utente in modo invisibile
             String ip = request.getRemoteAddr();
+
+            // Inizio controllo richieste multiple
+            ServletContext context = getServletContext();
+            Map<String, Long> inviiRecenti = (Map<String, Long>) context.getAttribute("invii_recenti");
+            if (inviiRecenti == null) {
+                inviiRecenti = new ConcurrentHashMap<>();
+                context.setAttribute("invii_recenti", inviiRecenti);
+            }
+
+            long tempoAttuale = System.currentTimeMillis();
+            Long ultimoInvioIp = inviiRecenti.get("IP:" + ip);
+            Long ultimoInvioEmail = (emailSegnalante != null) ? inviiRecenti.get("EMAIL:" + emailSegnalante) : null;
+
+            // 30 secondi (30000 millisecondi)
+            if ((ultimoInvioIp != null && (tempoAttuale - ultimoInvioIp) < 30000) ||
+                    (ultimoInvioEmail != null && (tempoAttuale - ultimoInvioEmail) < 30000)) {
+
+                // Invio bloccato: reindirizziamo alla home con un parametro di errore che verra
+                // usato per segnalare l'invio bloccato
+                response.sendRedirect("homepage?error=flood");
+                return; // essenziale per non inserire una richiesta , altrimenti verrebbe inserita una
+                        // richiesta nonostante il flood
+            }
+
+            // Aggiorniamo i timestamp
+            inviiRecenti.put("IP:" + ip, tempoAttuale);
+            if (emailSegnalante != null) {
+                inviiRecenti.put("EMAIL:" + emailSegnalante, tempoAttuale);
+            }
+            // Fine controllo richieste multiple, il controllo avviene tramite la
+            // memorizzazione dell email e ip del segnalante associati
+            // all ultima ora di invio, in modo tale da controllare quanto tempo è passato e
+            // poter bloccare la richiesta il caso di flood!
 
             // 3. Creazione del modello RichiestaSoccorso tramite il DAO
             RichiestaSoccorso richiesta = dl.getRichiestaSoccorsoDAO().createRichiestaSoccorso();
