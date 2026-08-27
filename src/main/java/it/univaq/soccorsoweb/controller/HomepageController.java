@@ -7,7 +7,6 @@ import it.univaq.framework.view.TemplateResult;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class HomepageController extends SoccorsoWebBaseController {

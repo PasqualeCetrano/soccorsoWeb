@@ -3,13 +3,11 @@ package it.univaq.soccorsoweb.controller;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
 import it.univaq.soccorsoweb.data.model.RichiestaSoccorso;
 import it.univaq.framework.data.DataException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;

@@ -7,7 +7,6 @@ import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
 import it.univaq.soccorsoweb.data.model.Abilita;
 import it.univaq.soccorsoweb.data.model.Patente;
 import it.univaq.soccorsoweb.data.model.Utente;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
