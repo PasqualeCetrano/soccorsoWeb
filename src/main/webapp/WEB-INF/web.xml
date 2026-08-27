@@ -123,6 +123,16 @@
         <servlet-name>GestioneRichiesteServlet</servlet-name>
         <url-pattern>/admin/richieste</url-pattern>
     </servlet-mapping>
+
+    <!-- 5b. GestioneRichiestaAttivaController (Dettagli Emergenza Singola) -->
+    <servlet>
+        <servlet-name>GestioneRichiestaAttivaServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneRichiestaAttivaController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneRichiestaAttivaServlet</servlet-name>
+        <url-pattern>/admin/gestione_richiesta_attiva</url-pattern>
+    </servlet-mapping>
     
     <!-- 6. HomeOperatoreController (Pannello Operatore) -->
     <servlet>
