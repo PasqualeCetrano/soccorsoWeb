@@ -133,6 +133,46 @@
         <servlet-name>GestioneRichiestaAttivaServlet</servlet-name>
         <url-pattern>/admin/gestione_richiesta_attiva</url-pattern>
     </servlet-mapping>
+
+    <!-- 5c. AnnullaRichiestaController (Annulla e Archivia Emergenza) -->
+    <servlet>
+        <servlet-name>AnnullaRichiestaServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.AnnullaRichiestaController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AnnullaRichiestaServlet</servlet-name>
+        <url-pattern>/admin/AnnullaRichiestaServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5d. CreaMissioneController (Inizializza Missione) -->
+    <servlet>
+        <servlet-name>CreaMissioneServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.CreaMissioneController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreaMissioneServlet</servlet-name>
+        <url-pattern>/admin/crea_missione</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5e. CreaSquadraController (Configurazione Squadra e Risorse) -->
+    <servlet>
+        <servlet-name>CreaSquadraServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.CreaSquadraController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreaSquadraServlet</servlet-name>
+        <url-pattern>/admin/crea_squadra</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5f. SalvaMissioneController (Salvataggio Missione) -->
+    <servlet>
+        <servlet-name>SalvaMissioneServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.SalvaMissioneController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SalvaMissioneServlet</servlet-name>
+        <url-pattern>/admin/salva_missione</url-pattern>
+    </servlet-mapping>
     
     <!-- 6. HomeOperatoreController (Pannello Operatore) -->
     <servlet>

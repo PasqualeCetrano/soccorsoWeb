@@ -7,3 +7,5 @@ MANCA: il captcha
 LA SEZIONE DELL OPERATORE CON I RELATIVI CONTROLLER DOVREBBE ESSERE OK
     -AGGIUNGICOMPETENZECONTROLLER permette di aggiungere solo le patenti o le compenteze gia presenti nel database
 
+SEZIONE ADMIN 
+    - DASHBOARD RICHIESTE:resta da implementare l invio delle mail a tutti gli operatori a seguito dell'attivazione di una missione(da fare dentro a salva missione controller))
