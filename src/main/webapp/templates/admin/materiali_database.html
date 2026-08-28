@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Database Materiali</title>
+    <title>${page_title!"SoccorsoWeb - Database Materiali"}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,15 +12,15 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
         <div class="nav-links">
-            <a href="home_admin.html">Dashboard</a>
+            <a href="home">Dashboard</a>
             <a href="utenti.html">Utenti</a>
-            <a href="mezzi_database.html">Mezzi</a>
-            <a href="materiali_database.html" class="active">Materiali</a>
-            <a href="../public/login.html" class="btn-logout">Esci</a>
+            <a href="mezzi_database">Mezzi</a>
+            <a href="materiali_database" class="active">Materiali</a>
+            <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
 
@@ -75,33 +75,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Esempio Materiale 1 -->
-                                <tr>
-                                    <td><strong>Defibrillatore DAE</strong></td>
-                                    <td>Dispositivo salvavita portatile.</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
-                                                <input type="hidden" name="id_materiale" value="1">
-                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Esempio Materiale 2 -->
-                                <tr>
-                                    <td><strong>Kit Medicazione Avanzata</strong></td>
-                                    <td>Bende, garze, disinfettanti e laccio emostatico.</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
-                                                <input type="hidden" name="id_materiale" value="2">
-                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <#if materiali?? && (materiali?size > 0)>
+                                    <#list materiali as materiale>
+                                        <tr>
+                                            <td><strong>${materiale.nome!"N/D"}</strong></td>
+                                            <td>${materiale.descrizione!"Nessuna descrizione."}</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
+                                                        <input type="hidden" name="id_materiale" value="${materiale.key}">
+                                                        <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                <#else>
+                                    <tr>
+                                        <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
+                                            Nessun materiale presente nel database.
+                                        </td>
+                                    </tr>
+                                </#if>
                             </tbody>
                         </table>
                     </div>

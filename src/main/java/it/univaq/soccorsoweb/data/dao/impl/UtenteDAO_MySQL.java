@@ -21,6 +21,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private PreparedStatement selectUtenteByEmail;
     private PreparedStatement insertUtente; // usata da amministratore
     private PreparedStatement selectOperatori;
+    private PreparedStatement selectUtenti;
 
     public UtenteDAO_MySQL(DataLayer d) {
         super(d);
@@ -40,6 +41,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                     "INSERT INTO Utente (indirizzo, tipo, nascita, email, telefono, nome, cognome, codicefiscale, password, id_utente_amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             selectOperatori = connection.prepareStatement("SELECT * FROM Utente WHERE tipo = 'operatore'");
+            selectUtenti = connection.prepareStatement("SELECT * FROM Utente");
 
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del data layer Utente", ex);
@@ -222,6 +224,29 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         return result;
     }
 
+    @Override
+    public List<Utente> getUtenti() throws DataException {
+        List<Utente> result = new ArrayList<>();
+        try (ResultSet rs = selectUtenti.executeQuery()) {
+            while (rs.next()) {
+                int id_utente = rs.getInt("id_utente");
+                Utente u = null;
+
+                if (dataLayer.getCache().has(Utente.class, id_utente)) {
+                    u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
+                } else {
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                }
+
+                result.add(u);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load utenti", ex);
+        }
+        return result;
+    }
+
     @Override // serve per chiudere le query
     public void destroy() throws DataException {
         try {
@@ -239,6 +264,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             }
             if (selectOperatori != null) {
                 selectOperatori.close();
+            }
+            if (selectUtenti != null) {
+                selectUtenti.close();
             }
         } catch (SQLException ex) {
             throw new DataException("Errore durante la chiusura delle query nel data layer Utente", ex);

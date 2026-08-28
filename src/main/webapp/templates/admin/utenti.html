@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Gestione Utenti</title>
+    <title>${page_title!"SoccorsoWeb - Gestione Utenti"}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,13 +12,15 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
 
         <div class="nav-links">
-            <a href="home_admin.html">Dashboard</a>
-            <a href="utenti.html" class="active">Utenti</a>
+            <a href="home">Dashboard</a>
+            <a href="utenti" class="active">Utenti</a>
+            <a href="mezzi_database">Mezzi</a>
+            <a href="materiali_database">Materiali</a>
             <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
@@ -57,39 +59,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Utente 1 -->
-                     <tr>
-                        <td>101</td>
-                        <td>Mario</td>
-                        <td>Rossi</td>
-                        <td>m.rossi@soccorsoweb.it</td>
-                        <td><span class="status-badge admin">Amministratore</span></td>
-                        <td>
-                            <a href="../operatore/utente_aggiungi_patente_abilita.html" class="btn-outline btn-sm">Modifica</a>
-                        </td>
-                    </tr>
-                    <!-- Utente 2 -->
-                    <tr>
-                        <td>102</td>
-                        <td>Luigi</td>
-                        <td>Verdi</td>
-                        <td>l.verdi@soccorsoweb.it</td>
-                        <td><span class="status-badge operator">Operatore</span></td>
-                        <td>
-                            <a href="../operatore/utente_aggiungi_patente_abilita.html" class="btn-outline btn-sm">Modifica</a>
-                        </td>
-                    </tr>
-                    <!-- Utente 3 -->
-                    <tr>
-                        <td>103</td>
-                        <td>Giulia</td>
-                        <td>Bianchi</td>
-                        <td>g.bianchi@soccorsoweb.it</td>
-                        <td><span class="status-badge operator">Operatore</span></td>
-                        <td>
-                            <a href="../operatore/utente_aggiungi_patente_abilita.html" class="btn-outline btn-sm">Modifica</a>
-                        </td>
-                    </tr>
+                    <#if utenti?? && (utenti?size > 0)>
+                        <#list utenti as utente>
+                            <tr>
+                                <td>${utente.key}</td>
+                                <td>${utente.nome!"N/D"}</td>
+                                <td>${utente.cognome!"N/D"}</td>
+                                <td>${utente.email!"N/D"}</td>
+                                <td>
+                                    <#if utente.tipo == "amministratore" || utente.tipo == "admin">
+                                        <span class="status-badge admin">Amministratore</span>
+                                    <#else>
+                                        <span class="status-badge operator">Operatore</span>
+                                    </#if>
+                                </td>
+                                <td>
+                                    <!-- Il tasto modifica potrebbe puntare a una servlet futura. Lo lasciamo disattivato o visivo. -->
+                                    <a href="#" class="btn-outline btn-sm" style="opacity: 0.5; pointer-events: none;" title="Modifica non ancora implementata">Modifica</a>
+                                </td>
+                            </tr>
+                        </#list>
+                    <#else>
+                        <tr>
+                            <td colspan="6" class="text-muted text-center" style="padding: 2rem;">
+                                Nessun utente registrato nel sistema.
+                            </td>
+                        </tr>
+                    </#if>
                 </tbody>
             </table>
         </div>

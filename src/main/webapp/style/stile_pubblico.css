@@ -1200,3 +1200,51 @@ body {
     margin-top: 1rem;
     padding: 0.8rem;
 }
+
+/* =========================================
+   STILI PER NUOVO UTENTE E FORM GRID
+   ========================================= */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-item-new {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkbox-item-new:hover {
+    border-color: var(--primary);
+    background: rgba(2, 147, 244, 0.05);
+}
+
+.section-title {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    color: #0d47a1;
+}

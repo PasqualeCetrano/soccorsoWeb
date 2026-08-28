@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Database Mezzi</title>
+    <title>${page_title!"SoccorsoWeb - Database Mezzi"}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,15 +12,15 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
         <div class="nav-links">
-            <a href="home_admin.html">Dashboard</a>
+            <a href="home">Dashboard</a>
             <a href="utenti.html">Utenti</a>
-            <a href="mezzi_database.html" class="active">Mezzi</a>
-            <a href="materiali_database.html">Materiali</a>
-            <a href="../public/login.html" class="btn-logout">Esci</a>
+            <a href="mezzi_database" class="active">Mezzi</a>
+            <a href="materiali_database">Materiali</a>
+            <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
 
@@ -75,35 +75,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Esempio Mezzo 1 -->
-                                <tr>
-                                    <td><strong>Ambulanza 1 (MSA)</strong></td>
-                                    <td>Mezzo attrezzato per la rianimazione avanzata.</td>
-                                    <td>
-                                        <div class="action-buttons">
-
-                                            <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
-                                                <input type="hidden" name="id_mezzo" value="1">
-                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Esempio Mezzo 2 -->
-                                <tr>
-                                    <td><strong>Automedica Alfa</strong></td>
-                                    <td>Servizio trasporto organi e personale medico.</td>
-                                    <td>
-                                        <div class="action-buttons">
-
-                                            <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
-                                                <input type="hidden" name="id_mezzo" value="2">
-                                                <button type="submit" class="btn-danger btn-small">Elimina</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <#if mezzi?? && (mezzi?size > 0)>
+                                    <#list mezzi as mezzo>
+                                        <tr>
+                                            <td><strong>${mezzo.nome!"N/D"}</strong></td>
+                                            <td>${mezzo.descrizione!"Nessuna descrizione."}</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
+                                                        <input type="hidden" name="id_mezzo" value="${mezzo.key}">
+                                                        <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                <#else>
+                                    <tr>
+                                        <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
+                                            Nessun mezzo presente nel database.
+                                        </td>
+                                    </tr>
+                                </#if>
                             </tbody>
                         </table>
                     </div>

@@ -173,6 +173,106 @@
         <servlet-name>SalvaMissioneServlet</servlet-name>
         <url-pattern>/admin/salva_missione</url-pattern>
     </servlet-mapping>
+
+    <!-- 5g. GestioneMissioniController (Dashboard Missioni) -->
+    <servlet>
+        <servlet-name>GestioneMissioniServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMissioniController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneMissioniServlet</servlet-name>
+        <url-pattern>/admin/missioni</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5h. InfoMissioneController (Dettagli Missione) -->
+    <servlet>
+        <servlet-name>InfoMissioneServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.InfoMissioneController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InfoMissioneServlet</servlet-name>
+        <url-pattern>/admin/info_missione</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5i. ChiudiMissioneController (Chiusura Missione) -->
+    <servlet>
+        <servlet-name>ChiudiMissioneServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.ChiudiMissioneController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChiudiMissioneServlet</servlet-name>
+        <url-pattern>/admin/chiudi_missione</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5j. InserisciAggiornamentoController (Inserisci Aggiornamento) -->
+    <servlet>
+        <servlet-name>InserisciAggiornamentoServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.InserisciAggiornamentoController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InserisciAggiornamentoServlet</servlet-name>
+        <url-pattern>/admin/inserisci_aggiornamento</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5k. GestioneMaterialiController (Database Materiali) -->
+    <servlet>
+        <servlet-name>GestioneMaterialiServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMaterialiController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneMaterialiServlet</servlet-name>
+        <url-pattern>/admin/materiali_database</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestioneMaterialiServlet</servlet-name>
+        <url-pattern>/admin/AggiungiMaterialeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestioneMaterialiServlet</servlet-name>
+        <url-pattern>/admin/EliminaMaterialeServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5l. GestioneMezziController (Database Mezzi) -->
+    <servlet>
+        <servlet-name>GestioneMezziServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMezziController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneMezziServlet</servlet-name>
+        <url-pattern>/admin/mezzi_database</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestioneMezziServlet</servlet-name>
+        <url-pattern>/admin/AggiungiMezzoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestioneMezziServlet</servlet-name>
+        <url-pattern>/admin/EliminaMezzoServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5m. GestioneUtentiController (Lista Utenti) -->
+    <servlet>
+        <servlet-name>GestioneUtentiServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneUtentiController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GestioneUtentiServlet</servlet-name>
+        <url-pattern>/admin/utenti</url-pattern>
+    </servlet-mapping>
+
+    <!-- 5n. NuovoUtenteController (Aggiungi Nuovo Utente) -->
+    <servlet>
+        <servlet-name>NuovoUtenteServlet</servlet-name>
+        <servlet-class>it.univaq.soccorsoweb.controller.admin.NuovoUtenteController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NuovoUtenteServlet</servlet-name>
+        <url-pattern>/admin/nuovo_utente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NuovoUtenteServlet</servlet-name>
+        <url-pattern>/admin/CreaUtenteServlet</url-pattern>
+    </servlet-mapping>
     
     <!-- 6. HomeOperatoreController (Pannello Operatore) -->
     <servlet>

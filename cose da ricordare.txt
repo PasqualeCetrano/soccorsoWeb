@@ -9,3 +9,5 @@ LA SEZIONE DELL OPERATORE CON I RELATIVI CONTROLLER DOVREBBE ESSERE OK
 
 SEZIONE ADMIN 
     - DASHBOARD RICHIESTE:resta da implementare l invio delle mail a tutti gli operatori a seguito dell'attivazione di una missione(da fare dentro a salva missione controller))
+    - INSERISCI AGGIORNAMENTO CONTROLLER : rivedi la parte che si occupa di inviare la mail di notifica a tutti gli operatori coinvolti
+    -NUOVO UTENTE CONTROLLER: rivedi la parte che si occupa di inviare la mail dinotifica a tuti gli operatori

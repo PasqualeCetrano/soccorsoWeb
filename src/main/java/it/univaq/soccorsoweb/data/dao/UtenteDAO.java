@@ -26,4 +26,7 @@ public interface UtenteDAO {
 
     // 6) tutti gli operatori (admin)
     List<Utente> getOperatori() throws DataException;
+    
+    // 7) tutti gli utenti (admin e operatori)
+    List<Utente> getUtenti() throws DataException;
 }

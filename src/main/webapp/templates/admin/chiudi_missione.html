@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Chiudi Missione</title>
+    <title>${page_title!"SoccorsoWeb - Chiudi Missione"}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,15 +12,15 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
         <div class="nav-links">
-            <a href="home_admin.html" class="active">Dashboard</a>
+            <a href="home" class="active">Dashboard</a>
             <a href="utenti.html">Utenti</a>
             <a href="mezzi_database.html">Mezzi</a>
             <a href="materiali_database.html">Materiali</a>
-            <a href="../public/login.html" class="btn-logout">Esci</a>
+            <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
 
@@ -34,7 +34,7 @@
             </div>
             <div>
                 <!-- Ritorna ai dettagli della missione -->
-                <a href="info_missione.html?id_missione=101" class="btn-outline btn-icon">
+                <a href="info_missione?id_missione=${missione.key}" class="btn-outline btn-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
@@ -50,15 +50,15 @@
                 <div class="admin-card">
                     <h2>Chiusura Missione</h2>
 
-                    <!-- Il form rimanda alla lista missioni per simulare l'avvenuta chiusura nel mockup chiede coferma uan volta cliccato  -->
-                    <form action="missioni.html" method="GET"
+                    <!-- Il form rimanda alla servlet di chiusura tramite POST -->
+                    <form action="chiudi_missione" method="POST"
                         onsubmit="return confirm('Sei sicuro di voler chiudere definitivamente questa missione? L\'azione non è reversibile.');">
 
                         <!-- ID Missione (Passato e bloccato in sola lettura) -->
                         <div class="form-group w-100 text-left mt-1-5">
                             <label for="id_missione_display">ID Missione Riferimento</label>
-                            <input type="text" id="id_missione_display" class="form-control" value="101" readonly>
-                            <input type="hidden" name="id_missione" value="101">
+                            <input type="text" id="id_missione_display" class="form-control" value="${missione.key}" readonly>
+                            <input type="hidden" name="id_missione" value="${missione.key}">
                         </div>
 
                         <!-- Livello di Successo (Da 0 a 5) -->
@@ -74,8 +74,6 @@
                                 <option value="5">5 - Successo eccellente</option>
                             </select>
                         </div>
-
-
 
                         <!-- Commento di Chiusura -->
                         <div class="form-group w-100 text-left">

@@ -98,7 +98,7 @@
                         <tbody>
                             <#if richieste??>
                                 <#list richieste as richiesta>
-                                    <#if richiesta.stato == "in corso">
+                                    <#if richiesta.stato == "in_corso">
                                         <tr>
                                             <td><strong>${richiesta.dataOraInvio}</strong></td>
                                             <td>${richiesta.coordinate}</td>
@@ -132,7 +132,7 @@
                         <tbody>
                             <#if richieste??>
                                 <#list richieste as richiesta>
-                                    <#if richiesta.stato == "chiusa">
+                                    <#if richiesta.stato == "chiuso">
                                         <tr>
                                             <td><strong>${richiesta.dataOraInvio}</strong></td>
                                             <td>${richiesta.coordinate}</td>

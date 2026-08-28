@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoccorsoWeb - Nuovo Utente</title>
+    <title>${page_title!"SoccorsoWeb - Aggiungi Utente"}</title>
     <link rel="stylesheet" href="../../style/stile_pubblico.css">
 </head>
 
@@ -12,13 +12,16 @@
 
     <!-- NAVBAR ADMIN -->
     <nav class="navbar">
-        <a href="home_admin.html" class="logo">Soccorso<span>Web</span>
+        <a href="home" class="logo">Soccorso<span>Web</span>
             <small class="logo-badge">Area Admin</small>
         </a>
+
         <div class="nav-links">
-            <a href="home_admin.html">Dashboard</a>
-            <a href="utenti.html" class="active">Utenti</a>
-            <a href="../public/login.html" class="btn-logout">Esci</a>
+            <a href="home">Dashboard</a>
+            <a href="utenti" class="active">Utenti</a>
+            <a href="mezzi_database">Mezzi</a>
+            <a href="materiali_database">Materiali</a>
+            <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
 
@@ -28,103 +31,91 @@
         <div class="header-actions">
             <div>
                 <h1>Aggiungi Nuovo Utente</h1>
-                <p>Inserisci i dati anagrafici e spunta le patenti/abilitazioni dal database.</p>
+                <p>Inserisci i dati anagrafici e seleziona le competenze del nuovo membro del personale.</p>
             </div>
             <div>
-                <a href="utenti.html" class="btn-outline btn-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    Torna alla Lista
-                </a>
+                <a href="utenti" class="btn-outline">Torna alla Lista</a>
             </div>
         </div>
+        
+        <div class="alert-info">
+            <strong>Nota sulle credenziali:</strong> La password per il nuovo utente verrà generata automaticamente dal sistema. Un'email contenente le istruzioni di accesso verrà inviata all'indirizzo specificato.
+        </div>
 
-        <form action="CreaUtenteServlet" method="POST">
-            <div class="missions-layout">
-
-                <!-- COLONNA SINISTRA: Dati Utente -->
-                <section class="missions-section">
-                    <div class="admin-card">
-                        <h2 class="card-title">Dati Profilo</h2>
-
-                        <div class="form-group w-100 text-left">
-                            <label for="nome">Nome</label>
-                            <input type="text" id="nome" name="nome" class="form-control" required>
-                        </div>
-
-                        <div class="form-group w-100 text-left">
-                            <label for="cognome">Cognome</label>
-                            <input type="text" id="cognome" name="cognome" class="form-control" required>
-                        </div>
-
-                        <div class="form-group w-100 text-left">
-                            <label for="codiceFiscale">Codice Fiscale</label>
-                            <input type="text" id="codiceFiscale" name="codiceFiscale" class="form-control" required
-                                maxlength="16">
-                        </div>
-
-                        <div class="form-group w-100 text-left">
-                            <label for="email">Email (Login)</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                            <small>La password verrà generata automaticamente e inviata a questa email.</small>
-                        </div>
-
-                        <div class="form-group w-100 text-left">
-                            <label for="ruolo">Ruolo nel Sistema</label>
-
-                            <!-- select e option vanno messi sempre insieme perche indico che sto per avere delle opzioni con select e poi devo dichiarare quali opzioni ho -->
-                            <select id="ruolo" name="ruolo" class="form-control" required>
-                                <option value="Operatore">Operatore</option>
-                                <option value="Amministratore">Amministratore</option>
-                            </select>
-                        </div>
+        <div class="admin-card">
+            <form action="CreaUtenteServlet" method="POST">
+                
+                <h3 class="section-title">Dati Anagrafici</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Inserisci il nome">
                     </div>
-                </section>
-
-                <!-- COLONNA DESTRA: Competenze -->
-                <section class="missions-section">
-                    <div class="admin-card">
-                        <h2 class="card-title">Patenti e Abilitazioni</h2>
-                        <p>Spunta le competenze possedute dall'utente dal database esistente.</p>
-
-                        <!-- BLOCCO PATENTI CHECKBOX -->
-                        <div class="form-group w-100 text-left">
-                            <label>Patente di Guida</label>
-                            <div class="checkbox-list">
-                                <label class="checkbox-item"><input type="checkbox" name="patenti"
-                                        value="1"><!-- il value serve per fari riferimento alla patente nel db-ame uguale li sto raggruppando e con il value mi riferisco a cosa prendo di quel gruppo -->
-                                    <span>Patente B (Auto)</span></label>
-                                <label class="checkbox-item"><input type="checkbox" name="patenti" value="2">
-                                    <span>Patente C (Camion)</span></label>
-                                <label class="checkbox-item"><input type="checkbox" name="patenti" value="3">
-                                    <span>Patente C.R.I. Tipo 4 (Ambulanza)</span></label>
-                            </div>
-                        </div>
-
-                        <hr class="divider">
-
-                        <!-- BLOCCO ABILITAZIONI CHECKBOX -->
-                        <div class="form-group w-100 text-left">
-                            <label>Specializzazione</label>
-                            <div class="checkbox-list">
-                                <label class="checkbox-item"><input type="checkbox" name="abilitazioni" value="1">
-                                    <span>BLSD</span></label>
-                                <label class="checkbox-item"><input type="checkbox" name="abilitazioni" value="2">
-                                    <span>PTC</span></label>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-primary btn-block">Salva Nuovo Utente</button>
+                    
+                    <div class="form-group">
+                        <label for="cognome">Cognome</label>
+                        <input type="text" id="cognome" name="cognome" required placeholder="Inserisci il cognome">
                     </div>
-                </section>
 
-            </div>
-        </form>
+                    <div class="form-group">
+                        <label for="codiceFiscale">Codice Fiscale</label>
+                        <input type="text" id="codiceFiscale" name="codiceFiscale" required placeholder="Es. RSSMRA80A01H501U" maxlength="16" style="text-transform: uppercase;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Indirizzo Email</label>
+                        <input type="email" id="email" name="email" required placeholder="email@esempio.it">
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="ruolo">Ruolo di Sistema</label>
+                        <select id="ruolo" name="ruolo" required>
+                            <option value="" disabled selected>Seleziona un ruolo</option>
+                            <option value="Operatore">Operatore (Gestione missioni sul campo)</option>
+                            <option value="Amministratore">Amministratore (Gestione completa del sistema)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Patenti di Guida</h3>
+                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le patenti possedute dall'utente (opzionale)</p>
+                <div class="checkbox-group">
+                    <#if patenti_sistema??>
+                        <#list patenti_sistema as p>
+                            <label class="checkbox-item-new">
+                                <input type="checkbox" name="patenti" value="${p.key}">
+                                <span>${p.tipo}</span>
+                            </label>
+                        </#list>
+                    <#else>
+                        <p class="text-muted">Nessuna patente configurata a sistema.</p>
+                    </#if>
+                </div>
+
+                <h3 class="section-title">Abilitazioni e Competenze</h3>
+                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le specializzazioni dell'utente (opzionale)</p>
+                <div class="checkbox-group">
+                    <#if abilitazioni_sistema??>
+                        <#list abilitazioni_sistema as a>
+                            <label class="checkbox-item-new">
+                                <input type="checkbox" name="abilitazioni" value="${a.key}">
+                                <span>${a.descrizione}</span>
+                            </label>
+                        </#list>
+                    <#else>
+                        <p class="text-muted">Nessuna abilitazione configurata a sistema.</p>
+                    </#if>
+                </div>
+
+                <div style="margin-top: 3rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="reset" class="btn-outline">Svuota Campi</button>
+                    <button type="submit" class="btn-primary">Registra Utente</button>
+                </div>
+                
+            </form>
+        </div>
 
     </main>
-
 
 </body>
 

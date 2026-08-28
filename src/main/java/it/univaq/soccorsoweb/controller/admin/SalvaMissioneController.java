@@ -115,9 +115,9 @@ public class SalvaMissioneController extends SoccorsoWebBaseController {
                         }
                     }
 
-                    // 8. infine aggiorniamo lo stato della richiesta originaria su "in corso" dopo
+                    // 8. infine aggiorniamo lo stato della richiesta originaria su "in_corso" dopo
                     // che tutto è stato creato
-                    richiesta.setStato("in corso");
+                    richiesta.setStato("in_corso");
                     dl.getRichiestaSoccorsoDAO().storeRichiestaSoccorso(richiesta);
                 }
 

@@ -28,6 +28,7 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     private PreparedStatement selectMissioniChiuseByUtente;
     private PreparedStatement selectMissioniPartecipateByUtente;
     private PreparedStatement selectMissioniInCorso;
+    private PreparedStatement selectMissioniChiuse;
     private PreparedStatement insertImpiegaMateriale;
     private PreparedStatement insertImpiegaMezzo;
 
@@ -67,6 +68,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
             // seleziona le missioni in corso
             selectMissioniInCorso = connection.prepareStatement(
                     "SELECT * FROM Missione WHERE inizio <= NOW() AND fine IS NULL;");
+            selectMissioniChiuse = connection.prepareStatement(
+                    "SELECT * FROM Missione WHERE fine IS NOT NULL;");
 
             insertImpiegaMateriale = connection.prepareStatement(
                     "INSERT INTO Impiega_Materiale (fk_id_missione, fk_id_materiale) VALUES (?, ?);");
@@ -100,6 +103,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 selectMissioniPartecipateByUtente.close();
             if (selectMissioniInCorso != null)
                 selectMissioniInCorso.close();
+            if (selectMissioniChiuse != null)
+                selectMissioniChiuse.close();
             if (insertImpiegaMateriale != null)
                 insertImpiegaMateriale.close();
             if (insertImpiegaMezzo != null)
@@ -393,5 +398,28 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'assegnazione del mezzo alla missione", ex);
         }
+    }
+
+    @Override
+    public List<Missione> getMissioniChiuse() throws DataException {
+        List<Missione> result = new ArrayList<>();
+        try {
+            try (ResultSet rs = selectMissioniChiuse.executeQuery()) {
+                while (rs.next()) {
+                    int id_missione = rs.getInt("id_missione");
+                    Missione m = null;
+                    if (dataLayer.getCache().has(Missione.class, id_missione)) {
+                        m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
+                    } else {
+                        m = createMissione(rs);
+                        dataLayer.getCache().add(Missione.class, m);
+                    }
+                    result.add(m);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load missioni chiuse", ex);
+        }
+        return result;
     }
 }

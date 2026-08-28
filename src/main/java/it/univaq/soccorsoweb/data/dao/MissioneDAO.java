@@ -41,6 +41,9 @@ public interface MissioneDAO {
 
     // 9) Assegnazione materiali e mezzi a una missione
     void storeImpiegaMateriale(Missione missione, Materiale materiale) throws DataException;
-    
+
     void storeImpiegaMezzo(Missione missione, Mezzo mezzo) throws DataException;
+
+    // 10) Recupera tutte le missioni chiuse
+    List<Missione> getMissioniChiuse() throws DataException;
 }
