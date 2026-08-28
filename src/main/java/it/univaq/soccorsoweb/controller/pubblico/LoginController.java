@@ -73,8 +73,10 @@ public class LoginController extends SoccorsoWebBaseController {
                     }
                     return;
                 }
-            } catch (DataException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            } catch (DataException | NoSuchAlgorithmException | InvalidKeySpecException | IllegalArgumentException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                // Ignoriamo l'errore per fallire il login normalmente se l'hash nel DB non è
+                // valido
             }
         }
 
@@ -95,11 +97,11 @@ public class LoginController extends SoccorsoWebBaseController {
             // Primo arrivo sulla pagina di login
             // Verifichiamo se la connessione è sicura (HTTPS). Se non lo è, reindirizziamo
             // direttamente.
-            String https_redirect_url = SecurityHelpers.checkHttps(request);
-            if (https_redirect_url != null) {
-                response.sendRedirect(https_redirect_url);
-                return;
-            }
+            // String https_redirect_url = SecurityHelpers.checkHttps(request);
+            // if (https_redirect_url != null) {
+            // response.sendRedirect(https_redirect_url);
+            // return;
+            // }
             action_default(request, response);
         }
 
