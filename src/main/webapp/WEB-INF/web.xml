@@ -328,6 +328,10 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
     <!-- Definisce la durata massima della sessione in minuti. 
     Se un utente (anche loggato) non compie alcuna azione sul sito per questo 
