@@ -17,9 +17,9 @@
         </a>
         <div class="nav-links">
             <a href="home" class="active">Dashboard</a>
-            <a href="utenti.html">Utenti</a>
-            <a href="mezzi_database.html">Mezzi</a>
-            <a href="materiali_database.html">Materiali</a>
+            <a href="utenti">Utenti</a>
+            <a href="mezzi_database">Mezzi</a>
+            <a href="materiali_database">Materiali</a>
             <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
@@ -58,7 +58,8 @@
                         <div class="form-group">
                             <label><strong>Stato Missione:</strong></label>
                             <p class="detail-value">
-                                <span class="status-badge <#if missione.fine??>status-disponibile<#else>status-manutenzione</#if>">
+                                <span
+                                    class="status-badge <#if missione.fine??>status-disponibile<#else>status-manutenzione</#if>">
                                     <#if missione.fine??>Conclusa<#else>In Corso</#if>
                                 </span>
                             </p>
@@ -68,16 +69,16 @@
                             <label><strong>Caposquadra:</strong></label>
                             <p class="detail-value">
                                 <#if missione.squadra?? && missione.squadra.partecipazioni??>
-                                    <#assign trovato = false>
-                                    <#list missione.squadra.partecipazioni as partecipa>
-                                        <#if partecipa.ruolo == "caposquadra">
-                                            ${partecipa.utente.nome} ${partecipa.utente.cognome}
-                                            <#assign trovato = true>
-                                        </#if>
-                                    </#list>
-                                    <#if !trovato>N/D</#if>
-                                <#else>
-                                    N/D
+                                    <#assign trovato=false>
+                                        <#list missione.squadra.partecipazioni as partecipa>
+                                            <#if partecipa.ruolo=="caposquadra">
+                                                ${partecipa.utente.nome} ${partecipa.utente.cognome}
+                                                <#assign trovato=true>
+                                            </#if>
+                                        </#list>
+                                        <#if !trovato>N/D</#if>
+                                        <#else>
+                                            N/D
                                 </#if>
                             </p>
                         </div>
@@ -85,7 +86,10 @@
                         <div class="form-group">
                             <label><strong>Data e Ora Inizio:</strong></label>
                             <p class="detail-value">
-                                <#if missione.inizio??>${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c} ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}<#else>N/D</#if>
+                                <#if missione.inizio??>
+                                    ${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c}
+                                    ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}<#else>
+                                        N/D</#if>
                             </p>
                         </div>
 
@@ -93,9 +97,10 @@
                             <label><strong>Data e Ora Fine:</strong></label>
                             <p class="detail-value">
                                 <#if missione.fine??>
-                                    ${missione.fine.dayOfMonth?string("00")}/${missione.fine.monthValue?string("00")}/${missione.fine.year?c} ${missione.fine.hour?string("00")}:${missione.fine.minute?string("00")}
-                                <#else>
-                                    -- In corso --
+                                    ${missione.fine.dayOfMonth?string("00")}/${missione.fine.monthValue?string("00")}/${missione.fine.year?c}
+                                    ${missione.fine.hour?string("00")}:${missione.fine.minute?string("00")}
+                                    <#else>
+                                        -- In corso --
                                 </#if>
                             </p>
                         </div>
@@ -103,7 +108,7 @@
                         <div class="form-group grid-span-2">
                             <label><strong>Posizione Intervento:</strong></label>
                             <p class="detail-value-mono">
-                                ${missione.posizione!"N/D"} 
+                                ${missione.posizione!"N/D"}
                                 <#if missione.richiestaSoccorso?? && missione.richiestaSoccorso.coordinate??>
                                     (${missione.richiestaSoccorso.coordinate})
                                 </#if>
@@ -121,22 +126,24 @@
                         <div class="form-group grid-span-2">
                             <label><strong>Mezzi e Materiali Coinvolti:</strong></label>
                             <p class="detail-value" style="margin-top: 0.5rem; font-size: 0.95rem;">
-                                <strong>Mezzi:</strong> 
-                                <#if (missione.mezzi?? && missione.mezzi?size > 0)>
+                                <strong>Mezzi:</strong>
+                                <#if (missione.mezzi?? && missione.mezzi?size> 0)>
                                     <#list missione.mezzi as mezzo>
-                                        ${mezzo.nome}<#if mezzo.descrizione??> (${mezzo.descrizione})</#if><#if mezzo_has_next>, </#if>
+                                        ${mezzo.nome}<#if mezzo.descrizione??> (${mezzo.descrizione})</#if>
+                                        <#if mezzo_has_next>, </#if>
                                     </#list>
-                                <#else>
-                                    Nessun mezzo assegnato
+                                    <#else>
+                                        Nessun mezzo assegnato
                                 </#if>
                                 <br>
-                                <strong>Materiali:</strong> 
-                                <#if (missione.materiali?? && missione.materiali?size > 0)>
+                                <strong>Materiali:</strong>
+                                <#if (missione.materiali?? && missione.materiali?size> 0)>
                                     <#list missione.materiali as materiale>
-                                        ${materiale.nome}<#if materiale.descrizione??> (${materiale.descrizione})</#if><#if materiale_has_next>, </#if>
+                                        ${materiale.nome}<#if materiale.descrizione??> (${materiale.descrizione})</#if>
+                                        <#if materiale_has_next>, </#if>
                                     </#list>
-                                <#else>
-                                    Nessun materiale assegnato
+                                    <#else>
+                                        Nessun materiale assegnato
                                 </#if>
                             </p>
                         </div>
@@ -145,15 +152,15 @@
                         <#if missione.fine??>
                             <div class="form-group">
                                 <label><strong>Livello di Successo:</strong></label>
-                                <p class="detail-value">${missione.livelloSuccesso!"N/D"}/10</p>
+                                <p class="detail-value">${missione.livelloSuccesso!"N/D"}</p>
                             </div>
                             <div class="form-group">
                                 <label><strong>Chiusa da:</strong></label>
                                 <p class="detail-value">
                                     <#if missione.amministratore??>
                                         ${missione.amministratore.nome} ${missione.amministratore.cognome}
-                                    <#else>
-                                        N/D
+                                        <#else>
+                                            N/D
                                     </#if>
                                 </p>
                             </div>
@@ -173,18 +180,28 @@
                     <h2 class="card-title">Cronologia Aggiornamenti</h2>
 
                     <div class="update-list">
-                        <#if (missione.aggiornamenti?? && missione.aggiornamenti?size > 0)>
+                        <#if (missione.aggiornamenti?? && missione.aggiornamenti?size> 0)>
                             <#list missione.aggiornamenti as agg>
                                 <div class="update-item">
                                     <div class="update-header">
-                                        <strong><#if agg.utente??>${agg.utente.nome} ${agg.utente.cognome}<#else>Operatore N/D</#if></strong>
-                                        <small><#if agg.timestampAgg??>${agg.timestampAgg.dayOfMonth?string("00")}/${agg.timestampAgg.monthValue?string("00")}/${agg.timestampAgg.year?c} ${agg.timestampAgg.hour?string("00")}:${agg.timestampAgg.minute?string("00")}<#else>N/D</#if></small>
+                                        <strong>
+                                            <#if agg.utente??>${agg.utente.nome} ${agg.utente.cognome}<#else>Operatore
+                                                    N/D</#if>
+                                        </strong>
+                                        <small>
+                                            <#if agg.timestampAgg??>
+                                                ${agg.timestampAgg.dayOfMonth?string("00")}/${agg.timestampAgg.monthValue?string("00")}/${agg.timestampAgg.year?c}
+                                                ${agg.timestampAgg.hour?string("00")}:${agg.timestampAgg.minute?string("00")}
+                                                <#else>N/D
+                                            </#if>
+                                        </small>
                                     </div>
                                     <p class="update-text">${agg.testo!"N/D"}</p>
                                 </div>
                             </#list>
-                        <#else>
-                            <p class="text-muted" style="margin: 1rem 0;">Nessun aggiornamento inserito per questa missione.</p>
+                            <#else>
+                                <p class="text-muted" style="margin: 1rem 0;">Nessun aggiornamento inserito per questa
+                                    missione.</p>
                         </#if>
                     </div>
                 </div>

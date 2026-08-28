@@ -73,7 +73,7 @@ public class LoginController extends SoccorsoWebBaseController {
                     }
                     return;
                 }
-            } catch (DataException | NoSuchAlgorithmException | InvalidKeySpecException | IllegalArgumentException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 // Ignoriamo l'errore per fallire il login normalmente se l'hash nel DB non è
                 // valido

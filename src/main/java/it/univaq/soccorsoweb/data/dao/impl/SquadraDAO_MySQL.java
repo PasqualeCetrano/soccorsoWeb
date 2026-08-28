@@ -20,6 +20,7 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
     private PreparedStatement insertSquadra;
     private PreparedStatement updateSquadra;
     private PreparedStatement selectSquadraById;
+    private PreparedStatement selectSquadraByMissione;
 
     public SquadraDAO_MySQL(DataLayer d) {
         super(d);
@@ -39,6 +40,8 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
 
             selectSquadraById = connection.prepareStatement(
                     "SELECT * FROM Squadra WHERE id_squadra = ?");
+            selectSquadraByMissione = connection.prepareStatement(
+                    "SELECT * FROM Squadra WHERE fk_id_missione = ?");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing Squadra data layer", ex);
@@ -51,6 +54,7 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
             if (insertSquadra != null) insertSquadra.close();
             if (updateSquadra != null) updateSquadra.close();
             if (selectSquadraById != null) selectSquadraById.close();
+            if (selectSquadraByMissione != null) selectSquadraByMissione.close();
         } catch (SQLException ex) {
             // ignore
         }
@@ -146,6 +150,23 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load squadra by ID", ex);
+        }
+        return null;
+    }
+
+    @Override
+    public Squadra getSquadraByMissione(it.univaq.soccorsoweb.data.model.Missione missione) throws DataException {
+        try {
+            selectSquadraByMissione.setInt(1, missione.getKey());
+            try (ResultSet rs = selectSquadraByMissione.executeQuery()) {
+                if (rs.next()) {
+                    Squadra s = createSquadra(rs);
+                    dataLayer.getCache().add(Squadra.class, s);
+                    return s;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load squadra by Missione", ex);
         }
         return null;
     }

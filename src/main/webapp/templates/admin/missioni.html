@@ -17,9 +17,9 @@
         </a>
         <div class="nav-links">
             <a href="home" class="active">Dashboard</a>
-            <a href="utenti.html">Utenti</a>
-            <a href="mezzi_database.html">Mezzi</a>
-            <a href="materiali_database.html">Materiali</a>
+            <a href="utenti">Utenti</a>
+            <a href="mezzi_database">Mezzi</a>
+            <a href="materiali_database">Materiali</a>
             <a href="../Logout" class="btn-logout">Esci</a>
         </div>
     </nav>
@@ -50,26 +50,34 @@
             <section class="missions-section mb-0">
                 <h2>Missioni in Corso (Attive)</h2>
 
-                <#if missioni_in_corso?? && missioni_in_corso?size > 0>
+                <#if missioni_in_corso?? && (missioni_in_corso?size> 0)>
                     <#list missioni_in_corso as missione>
                         <div class="mission-card active">
                             <div class="mission-info">
-                                <h3>Missione #${missione.key} <#if missione.richiestaSoccorso??> - ${missione.richiestaSoccorso.descrizione!"N/D"}</#if></h3>
+                                <h3>Missione #${missione.key} <#if missione.richiestaSoccorso??> -
+                                        ${missione.richiestaSoccorso.descrizione!"N/D"}</#if>
+                                </h3>
                                 <div class="mission-details">
                                     <span><strong>Posizione:</strong> ${missione.posizione!"N/D"}</span>
-                                    <span><strong>Inizio:</strong> <#if missione.inizio??>${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c} ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}<#else>N/D</#if></span>
-                                    <span><strong>Caposquadra:</strong> 
+                                    <span><strong>Inizio:</strong>
+                                        <#if missione.inizio??>
+                                            ${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c}
+                                            ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}
+                                            <#else>N/D
+                                        </#if>
+                                    </span>
+                                    <span><strong>Caposquadra:</strong>
                                         <#if missione.squadra?? && missione.squadra.partecipazioni??>
-                                            <#assign trovato = false>
-                                            <#list missione.squadra.partecipazioni as partecipa>
-                                                <#if partecipa.ruolo == "caposquadra">
-                                                    ${partecipa.utente.nome} ${partecipa.utente.cognome}
-                                                    <#assign trovato = true>
-                                                </#if>
-                                            </#list>
-                                            <#if !trovato>N/D</#if>
-                                        <#else>
-                                            N/D
+                                            <#assign trovato=false>
+                                                <#list missione.squadra.partecipazioni as partecipa>
+                                                    <#if partecipa.ruolo=="caposquadra">
+                                                        ${partecipa.utente.nome} ${partecipa.utente.cognome}
+                                                        <#assign trovato=true>
+                                                    </#if>
+                                                </#list>
+                                                <#if !trovato>N/D</#if>
+                                                <#else>
+                                                    N/D
                                         </#if>
                                     </span>
                                 </div>
@@ -83,8 +91,8 @@
                             </div>
                         </div>
                     </#list>
-                <#else>
-                    <p class="text-muted">Nessuna missione in corso al momento.</p>
+                    <#else>
+                        <p class="text-muted">Nessuna missione in corso al momento.</p>
                 </#if>
             </section>
 
@@ -92,30 +100,40 @@
             <section class="missions-section mb-0">
                 <h2>Storico Missioni (Chiuse)</h2>
 
-                <#if missioni_chiuse?? && missioni_chiuse?size > 0>
+                <#if missioni_chiuse?? && (missioni_chiuse?size> 0)>
                     <#list missioni_chiuse as missione>
                         <div class="mission-card closed">
                             <div class="mission-info">
-                                <h3>Missione #${missione.key} <#if missione.richiestaSoccorso??> - ${missione.richiestaSoccorso.descrizione!"N/D"}</#if></h3>
+                                <h3>Missione #${missione.key} <#if missione.richiestaSoccorso??> -
+                                        ${missione.richiestaSoccorso.descrizione!"N/D"}</#if>
+                                </h3>
                                 <div class="mission-details">
                                     <span><strong>Posizione:</strong> ${missione.posizione!"N/D"}</span>
-                                    <span><strong>Durata:</strong> 
-                                        <#if missione.inizio??>${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c} ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}<#else>N/D</#if>
-                                        - 
-                                        <#if missione.fine??>${missione.fine.dayOfMonth?string("00")}/${missione.fine.monthValue?string("00")}/${missione.fine.year?c} ${missione.fine.hour?string("00")}:${missione.fine.minute?string("00")}<#else>N/D</#if>
+                                    <span><strong>Durata:</strong>
+                                        <#if missione.inizio??>
+                                            ${missione.inizio.dayOfMonth?string("00")}/${missione.inizio.monthValue?string("00")}/${missione.inizio.year?c}
+                                            ${missione.inizio.hour?string("00")}:${missione.inizio.minute?string("00")}
+                                            <#else>N/D
+                                        </#if>
+                                        -
+                                        <#if missione.fine??>
+                                            ${missione.fine.dayOfMonth?string("00")}/${missione.fine.monthValue?string("00")}/${missione.fine.year?c}
+                                            ${missione.fine.hour?string("00")}:${missione.fine.minute?string("00")}
+                                            <#else>N/D
+                                        </#if>
                                     </span>
-                                    <span><strong>Caposquadra:</strong> 
+                                    <span><strong>Caposquadra:</strong>
                                         <#if missione.squadra?? && missione.squadra.partecipazioni??>
-                                            <#assign trovato = false>
-                                            <#list missione.squadra.partecipazioni as partecipa>
-                                                <#if partecipa.ruolo == "caposquadra">
-                                                    ${partecipa.utente.nome} ${partecipa.utente.cognome}
-                                                    <#assign trovato = true>
-                                                </#if>
-                                            </#list>
-                                            <#if !trovato>N/D</#if>
-                                        <#else>
-                                            N/D
+                                            <#assign trovato=false>
+                                                <#list missione.squadra.partecipazioni as partecipa>
+                                                    <#if partecipa.ruolo=="caposquadra">
+                                                        ${partecipa.utente.nome} ${partecipa.utente.cognome}
+                                                        <#assign trovato=true>
+                                                    </#if>
+                                                </#list>
+                                                <#if !trovato>N/D</#if>
+                                                <#else>
+                                                    N/D
                                         </#if>
                                     </span>
                                 </div>
@@ -129,8 +147,8 @@
                             </div>
                         </div>
                     </#list>
-                <#else>
-                    <p class="text-muted">Nessuna missione conclusa nello storico.</p>
+                    <#else>
+                        <p class="text-muted">Nessuna missione conclusa nello storico.</p>
                 </#if>
             </section>
 

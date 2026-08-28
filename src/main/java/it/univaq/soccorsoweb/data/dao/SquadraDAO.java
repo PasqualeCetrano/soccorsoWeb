@@ -17,4 +17,7 @@ public interface SquadraDAO {
     // Metodo di utilità per recuperare una squadra
     Squadra getSquadra(int id_squadra) throws DataException;
 
+    // Recupero squadra per missione
+    Squadra getSquadraByMissione(it.univaq.soccorsoweb.data.model.Missione missione) throws DataException;
+
 }

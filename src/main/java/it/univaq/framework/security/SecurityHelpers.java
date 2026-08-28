@@ -118,7 +118,7 @@ public class SecurityHelpers {
         HttpSession s = request.getSession(true);
         s.setAttribute("username", u.getEmail());
         s.setAttribute("userid", u.getKey());
-        s.setAttribute("roles", u.getTipo());
+        s.setAttribute("roles", java.util.Collections.singletonList(u.getTipo())); // crea un lista di ruoli(tipo)
         //
         s.setAttribute("ip", request.getRemoteHost());
         //

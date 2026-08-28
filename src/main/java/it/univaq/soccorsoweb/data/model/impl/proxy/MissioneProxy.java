@@ -130,9 +130,9 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
 
     @Override
     public Squadra getSquadra() {
-        if (super.getSquadra() == null && squadra_key > 0) {
+        if (super.getSquadra() == null) {
             try {
-                super.setSquadra(((SquadraDAO) dataLayer.getDAO(Squadra.class)).getSquadra(squadra_key));
+                super.setSquadra(((SquadraDAO) dataLayer.getDAO(Squadra.class)).getSquadraByMissione(this));
             } catch (DataException ex) {
                 Logger.getLogger(MissioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
