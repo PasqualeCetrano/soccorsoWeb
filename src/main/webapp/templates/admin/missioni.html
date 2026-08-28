@@ -50,7 +50,7 @@
             <section class="missions-section mb-0">
                 <h2>Missioni in Corso (Attive)</h2>
 
-                <#if missioni_in_corso?? && missioni_in_corso?size > 0>
+                <#if missioni_in_corso?has_content>
                     <#list missioni_in_corso as missione>
                         <div class="mission-card active">
                             <div class="mission-info">
@@ -92,7 +92,7 @@
             <section class="missions-section mb-0">
                 <h2>Storico Missioni (Chiuse)</h2>
 
-                <#if missioni_chiuse?? && missioni_chiuse?size > 0>
+                <#if missioni_chiuse?has_content>
                     <#list missioni_chiuse as missione>
                         <div class="mission-card closed">
                             <div class="mission-info">
