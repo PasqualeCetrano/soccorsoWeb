@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
@@ -118,7 +120,15 @@ public class SecurityHelpers {
         HttpSession s = request.getSession(true);
         s.setAttribute("username", u.getEmail());
         s.setAttribute("userid", u.getKey());
+<<<<<<< HEAD
         s.setAttribute("roles", java.util.Collections.singletonList(u.getTipo())); // crea un lista di ruoli(tipo)
+=======
+        List<String> roles = new ArrayList<>();
+        if (u.getTipo() != null) {
+            roles.add(u.getTipo());
+        }
+        s.setAttribute("roles", roles);
+>>>>>>> 4bfd61d81a22955fffe269cb3397453437584b77
         //
         s.setAttribute("ip", request.getRemoteHost());
         //
