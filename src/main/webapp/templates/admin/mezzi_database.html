@@ -36,13 +36,14 @@
 
         <#if errore_mezzo_in_uso??>
             <div class="alert alert-danger" style="text-align: left; margin-bottom: 1.5rem;">
-                <strong>Impossibile eliminare il mezzo:</strong> questo mezzo è attualmente impiegato in una o più missioni e non può essere rimosso dal database.
+                <strong>Impossibile eliminare il mezzo:</strong> questo mezzo è attualmente impiegato in una o più
+                missioni e non può essere rimosso..
             </div>
         </#if>
 
         <#if successo_eliminazione??>
             <div class="alert alert-success" style="text-align: left; margin-bottom: 1.5rem;">
-                <strong>Operazione completata:</strong> mezzo rimosso con successo dal database.
+                <strong>Operazione completata:</strong> mezzo rimosso con successo.
             </div>
         </#if>
 
@@ -135,7 +136,7 @@
                     // Rimuove i parametri dall'URL per non mostrare di nuovo l'avviso in caso di ricaricamento (F5)
                     if (window.history.replaceState) {
                         const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                        window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+                        window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
                     }
                 }, 2000);
             }
