@@ -209,34 +209,36 @@
             </section>
 
             <!-- COLONNA DESTRA: Azioni Operative -->
-            <section class="missions-section">
-                <div class="admin-card">
-                    <h2 class="card-title">Azioni Disponibili</h2>
+            <#if !missione.fine??>
+                <section class="missions-section">
+                    <div class="admin-card">
+                        <h2 class="card-title">Azioni Disponibili</h2>
 
-                    <div class="button-stack">
+                        <div class="button-stack">
 
-                        <!-- PULSANTE AGGIUNGI AGGIORNAMENTO -->
-                        <form action="inserisci_aggiornamento" method="GET" class="m-0">
-                            <input type="hidden" name="id_missione" value="${missione.key}">
-                            <button type="submit" class="btn-primary btn-block btn-large mt-0">
-                                Aggiungi Aggiornamento
-                            </button>
-                            <p class="help-text">Consente di registrare un nuovo stato operativo.</p>
-                        </form>
+                            <!-- PULSANTE AGGIUNGI AGGIORNAMENTO -->
+                            <form action="inserisci_aggiornamento" method="GET" class="m-0">
+                                <input type="hidden" name="id_missione" value="${missione.key}">
+                                <button type="submit" class="btn-primary btn-block btn-large mt-0">
+                                    Aggiungi Aggiornamento
+                                </button>
+                                <p class="help-text">Consente di registrare un nuovo stato operativo.</p>
+                            </form>
 
-                        <!-- PULSANTE MARCA COME CONCLUSO (Solo se la missione è ancora attiva) -->
-                        <#if !missione.fine??>
+                            <!-- PULSANTE MARCA COME CONCLUSO (Solo se la missione è ancora attiva) -->
+
                             <form action="chiudi_missione" method="GET" class="m-0 mt-1-5">
                                 <input type="hidden" name="id_missione" value="${missione.key}">
                                 <button type="submit" class="btn-danger btn-block btn-large mt-0">
                                     Chiudi Missione
                                 </button>
                             </form>
-                        </#if>
 
+
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </#if>
 
         </div>
     </main>
