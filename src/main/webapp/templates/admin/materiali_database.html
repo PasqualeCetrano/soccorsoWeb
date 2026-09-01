@@ -34,6 +34,19 @@
             </div>
         </div>
 
+        <#if errore_materiale_in_uso??>
+            <div class="alert alert-danger" style="text-align: left; margin-bottom: 1.5rem;">
+                <strong>Impossibile eliminare il materiale:</strong> questo materiale è attualmente impiegato in una o
+                più missioni e non può essere rimosso dal database.
+            </div>
+        </#if>
+
+        <#if successo_eliminazione??>
+            <div class="alert alert-success" style="text-align: left; margin-bottom: 1.5rem;">
+                <strong>Operazione completata:</strong> materiale rimosso con successo dal database.
+            </div>
+        </#if>
+
         <div class="missions-layout">
 
             <!-- COLONNA SINISTRA: Form Aggiunta Materiale -->
@@ -75,27 +88,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <#if materiali?? && (materiali?size > 0)>
+                                <#if materiali?? && (materiali?size> 0)>
                                     <#list materiali as materiale>
                                         <tr>
                                             <td><strong>${materiale.nome!"N/D"}</strong></td>
                                             <td>${materiale.descrizione!"Nessuna descrizione."}</td>
                                             <td>
                                                 <div class="action-buttons">
-                                                    <form action="EliminaMaterialeServlet" method="POST" style="margin: 0;">
-                                                        <input type="hidden" name="id_materiale" value="${materiale.key}">
-                                                        <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                                    <form action="EliminaMaterialeServlet" method="POST"
+                                                        style="margin: 0;">
+                                                        <input type="hidden" name="id_materiale"
+                                                            value="${materiale.key}">
+                                                        <button type="submit"
+                                                            class="btn-danger btn-small">Elimina</button>
                                                     </form>
                                                 </div>
                                             </td>
                                         </tr>
                                     </#list>
-                                <#else>
-                                    <tr>
-                                        <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
-                                            Nessun materiale presente nel database.
-                                        </td>
-                                    </tr>
+                                    <#else>
+                                        <tr>
+                                            <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
+                                                Nessun materiale presente nel database.
+                                            </td>
+                                        </tr>
                                 </#if>
                             </tbody>
                         </table>
@@ -106,6 +122,30 @@
         </div>
     </main>
 
+    <script>  //serve per attendere il caricamento della pagina
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('.alert'); //questo selettore prende tutte le alert messages
+            //
+            if (alerts.length > 0) {
+                setTimeout(() => {
+                    alerts.forEach(alert => {
+                        alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 500);
+                    });
+                    // Rimuove i parametri dall'URL per non mostrare di nuovo l'avviso in caso di ricaricamento 
+                    if (window.history.replaceState) {
+                        const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+                    }
+                    //aspetta 2000 ms per far partire lo script
+                }, 2000);
+            }
+        });
+    </script>
 </body>
 
 </html>

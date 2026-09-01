@@ -13,13 +13,20 @@ import java.util.List;
 
 public class GestioneMaterialiController extends SoccorsoWebBaseController {
 
-    private void action_default(HttpServletRequest request, HttpServletResponse response) 
+    private void action_default(HttpServletRequest request, HttpServletResponse response)
             throws DataException, TemplateManagerException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
-        
+
         // 1. Recupero di tutti i materiali dal database
         List<Materiale> materiali = dl.getMaterialeDAO().getMateriali();
+
+        // Controllo eventuali messaggi di notifica (errore o successo)
+        if ("in_use".equals(request.getParameter("error"))) {
+            request.setAttribute("errore_materiale_in_uso", true);
+        } else if ("1".equals(request.getParameter("success"))) {
+            request.setAttribute("successo_eliminazione", true);
+        }
 
         // 2. Passaggio dati al request attribute per FreeMarker
         request.setAttribute("materiali", materiali);
@@ -30,9 +37,9 @@ public class GestioneMaterialiController extends SoccorsoWebBaseController {
         res.activate("admin/materiali_database.html", request, response);
     }
 
-    private void action_aggiungi(HttpServletRequest request, HttpServletResponse response) 
+    private void action_aggiungi(HttpServletRequest request, HttpServletResponse response)
             throws DataException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         String nome = request.getParameter("nome");
         String descrizione = request.getParameter("descrizione");
@@ -42,7 +49,7 @@ public class GestioneMaterialiController extends SoccorsoWebBaseController {
             Materiale materiale = dl.getMaterialeDAO().createMateriale();
             materiale.setNome(nome.trim());
             materiale.setDescrizione(descrizione != null ? descrizione.trim() : "");
-            
+
             // Salvataggio nel database
             dl.getMaterialeDAO().storeMateriale(materiale);
         }
@@ -51,25 +58,31 @@ public class GestioneMaterialiController extends SoccorsoWebBaseController {
         response.sendRedirect("materiali_database");
     }
 
-    private void action_elimina(HttpServletRequest request, HttpServletResponse response) 
-            throws DataException, IOException {
-        
+    private void action_elimina(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         String idMaterialeParam = request.getParameter("id_materiale");
 
         if (idMaterialeParam != null && !idMaterialeParam.isEmpty()) {
             try {
                 int idMateriale = Integer.parseInt(idMaterialeParam);
-                
+
                 // Carichiamo il materiale dal DB
                 Materiale materiale = dl.getMaterialeDAO().getMateriale(idMateriale);
-                
+
                 if (materiale != null) {
                     // Eliminazione del materiale
                     dl.getMaterialeDAO().deleteMateriale(materiale);
                 }
+                response.sendRedirect("materiali_database?success=1");
+                return;
             } catch (NumberFormatException ex) {
                 // ignore
+            } catch (DataException ex) {
+                // Se il materiale è impiegato in una missione, il DB solleva un vincolo di integrità
+                response.sendRedirect("materiali_database?error=in_use");
+                return;
             }
         }
 
@@ -80,7 +93,7 @@ public class GestioneMaterialiController extends SoccorsoWebBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getServletPath();
-        
+
         if ("POST".equalsIgnoreCase(request.getMethod())) {
             if (path.contains("AggiungiMaterialeServlet")) {
                 action_aggiungi(request, response);

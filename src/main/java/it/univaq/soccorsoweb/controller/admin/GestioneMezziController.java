@@ -13,13 +13,20 @@ import java.util.List;
 
 public class GestioneMezziController extends SoccorsoWebBaseController {
 
-    private void action_default(HttpServletRequest request, HttpServletResponse response) 
+    private void action_default(HttpServletRequest request, HttpServletResponse response)
             throws DataException, TemplateManagerException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
-        
+
         // 1. Recupero di tutti i mezzi dal database
         List<Mezzo> mezzi = dl.getMezzoDAO().getMezzi();
+
+        // Controllo eventuali messaggi di notifica (errore o successo)
+        if ("in_use".equals(request.getParameter("error"))) {
+            request.setAttribute("errore_mezzo_in_uso", true);
+        } else if ("1".equals(request.getParameter("success"))) {
+            request.setAttribute("successo_eliminazione", true);
+        }
 
         // 2. Passaggio dati al request attribute per FreeMarker
         request.setAttribute("mezzi", mezzi);
@@ -30,9 +37,9 @@ public class GestioneMezziController extends SoccorsoWebBaseController {
         res.activate("admin/mezzi_database.html", request, response);
     }
 
-    private void action_aggiungi(HttpServletRequest request, HttpServletResponse response) 
+    private void action_aggiungi(HttpServletRequest request, HttpServletResponse response)
             throws DataException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         String nome = request.getParameter("nome");
         String descrizione = request.getParameter("descrizione");
@@ -42,7 +49,7 @@ public class GestioneMezziController extends SoccorsoWebBaseController {
             Mezzo mezzo = dl.getMezzoDAO().createMezzo();
             mezzo.setNome(nome.trim());
             mezzo.setDescrizione(descrizione != null ? descrizione.trim() : "");
-            
+
             // Salvataggio nel database
             dl.getMezzoDAO().storeMezzo(mezzo);
         }
@@ -51,25 +58,32 @@ public class GestioneMezziController extends SoccorsoWebBaseController {
         response.sendRedirect("mezzi_database");
     }
 
-    private void action_elimina(HttpServletRequest request, HttpServletResponse response) 
-            throws DataException, IOException {
-        
+    private void action_elimina(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         String idMezzoParam = request.getParameter("id_mezzo");
 
         if (idMezzoParam != null && !idMezzoParam.isEmpty()) {
             try {
                 int idMezzo = Integer.parseInt(idMezzoParam);
-                
+
                 // Carichiamo il mezzo dal DB
                 Mezzo mezzo = dl.getMezzoDAO().getMezzo(idMezzo);
-                
+
                 if (mezzo != null) {
                     // Eliminazione del mezzo
                     dl.getMezzoDAO().deleteMezzo(mezzo);
                 }
+                response.sendRedirect("mezzi_database?success=1");
+                return;
             } catch (NumberFormatException ex) {
                 // ignore
+            } catch (DataException ex) {
+                // Se il mezzo è impiegato in una missione, il DB solleva un vincolo di
+                // integrità
+                response.sendRedirect("mezzi_database?error=in_use");
+                return;
             }
         }
 
@@ -80,7 +94,7 @@ public class GestioneMezziController extends SoccorsoWebBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getServletPath();
-        
+
         if ("POST".equalsIgnoreCase(request.getMethod())) {
             if (path.contains("AggiungiMezzoServlet")) {
                 action_aggiungi(request, response);

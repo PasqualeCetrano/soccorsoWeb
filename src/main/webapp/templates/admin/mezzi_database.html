@@ -34,6 +34,18 @@
             </div>
         </div>
 
+        <#if errore_mezzo_in_uso??>
+            <div class="alert alert-danger" style="text-align: left; margin-bottom: 1.5rem;">
+                <strong>Impossibile eliminare il mezzo:</strong> questo mezzo è attualmente impiegato in una o più missioni e non può essere rimosso dal database.
+            </div>
+        </#if>
+
+        <#if successo_eliminazione??>
+            <div class="alert alert-success" style="text-align: left; margin-bottom: 1.5rem;">
+                <strong>Operazione completata:</strong> mezzo rimosso con successo dal database.
+            </div>
+        </#if>
+
         <div class="missions-layout">
 
             <!-- COLONNA SINISTRA: Form Aggiunta Mezzo -->
@@ -75,7 +87,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <#if mezzi?? && (mezzi?size > 0)>
+                                <#if mezzi?? && (mezzi?size> 0)>
                                     <#list mezzi as mezzo>
                                         <tr>
                                             <td><strong>${mezzo.nome!"N/D"}</strong></td>
@@ -84,18 +96,19 @@
                                                 <div class="action-buttons">
                                                     <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
                                                         <input type="hidden" name="id_mezzo" value="${mezzo.key}">
-                                                        <button type="submit" class="btn-danger btn-small">Elimina</button>
+                                                        <button type="submit"
+                                                            class="btn-danger btn-small">Elimina</button>
                                                     </form>
                                                 </div>
                                             </td>
                                         </tr>
                                     </#list>
-                                <#else>
-                                    <tr>
-                                        <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
-                                            Nessun mezzo presente nel database.
-                                        </td>
-                                    </tr>
+                                    <#else>
+                                        <tr>
+                                            <td colspan="3" class="text-muted text-center" style="padding: 2rem;">
+                                                Nessun mezzo presente nel database.
+                                            </td>
+                                        </tr>
                                 </#if>
                             </tbody>
                         </table>
@@ -106,6 +119,28 @@
         </div>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('.alert');
+            if (alerts.length > 0) {
+                setTimeout(() => {
+                    alerts.forEach(alert => {
+                        alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 500);
+                    });
+                    // Rimuove i parametri dall'URL per non mostrare di nuovo l'avviso in caso di ricaricamento (F5)
+                    if (window.history.replaceState) {
+                        const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+                    }
+                }, 2000);
+            }
+        });
+    </script>
 </body>
 
 </html>
