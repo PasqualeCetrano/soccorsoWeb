@@ -88,9 +88,11 @@
                                 <label><strong>Foto Allegata dal Segnalante:</strong></label>
                                 <div class="detail-photo-box" style="text-align: center;">
                                     <#if foto_base64??>
-                                        <img src="data:image/jpeg;base64,${foto_base64}" alt="Foto Allegata" class="img-fluid rounded" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                                    <#else>
-                                        <p>Nessuna foto allegata alla segnalazione.</p>
+                                        <img src="data:image/jpeg;base64,${foto_base64}" alt="Foto Allegata"
+                                            class="img-fluid rounded"
+                                            style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                        <#else>
+                                            <p>Nessuna foto allegata alla segnalazione.</p>
                                     </#if>
                                 </div>
                             </div>
@@ -128,7 +130,7 @@
                         </#if>
                     </div>
                 </div>
-            </section>on>
+            </section>
 
         </div>
     </main>
