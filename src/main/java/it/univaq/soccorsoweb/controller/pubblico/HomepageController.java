@@ -23,7 +23,10 @@ public class HomepageController extends SoccorsoWebBaseController {
             request.setAttribute("page_title", "SoccorsoWeb - Invia Segnalazione");
 
             // Controllo del parametro success per far apparire un messaggio di conferma!
+            // success è solo una stringa di testo nell'URL di cui ne andiamo a prendere
+            // il valore tramite getParameter
             if ("1".equals(request.getParameter("success"))) {
+                // richiesta_inviata è una variabile java
                 request.setAttribute("richiesta_inviata", true);
                 if (request.getParameter("token") != null) {
                     request.setAttribute("token_convalida", request.getParameter("token"));

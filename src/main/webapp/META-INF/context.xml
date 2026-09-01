@@ -9,7 +9,7 @@
       maxIdle="5" 
       maxWait="10000" 
       name="jdbc/soccorso" 
-      password="098711" 
+      password="UnivaqEolo2025!" 
       type="javax.sql.DataSource" 
       url="jdbc:mysql://localhost:3306/soccorso?connectionTimeZone=LOCAL&amp;forceConnectionTimeZoneToSession=false" 
       username="root" />

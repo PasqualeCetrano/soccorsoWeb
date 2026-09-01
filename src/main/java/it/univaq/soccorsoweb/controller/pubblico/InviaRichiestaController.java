@@ -39,8 +39,12 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             // Inizio controllo richieste multiple
             ServletContext context = getServletContext();
             @SuppressWarnings("unchecked")
+            // come chiave l'indirizzo IP mentre come valore l'orario dell'invio
             Map<String, Long> inviiRecenti = (Map<String, Long>) context.getAttribute("invii_recenti");
+            // all'avvio dell'applicazione la variabile inviiRecenti è null e quindi viene
+            // creata
             if (inviiRecenti == null) {
+                // ConcurrentHashMap mappa apposta per gestire più utenti contemporaneamente
                 inviiRecenti = new ConcurrentHashMap<>();
                 context.setAttribute("invii_recenti", inviiRecenti);
             }
