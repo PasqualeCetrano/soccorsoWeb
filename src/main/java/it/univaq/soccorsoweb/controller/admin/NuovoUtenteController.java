@@ -52,6 +52,10 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
         String email = request.getParameter("email");
         String ruolo = request.getParameter("ruolo");
 
+        String dataNascita = request.getParameter("dataNascita");
+        String telefono = request.getParameter("telefono");
+        String indirizzo = request.getParameter("indirizzo");
+
         String[] patentiSelezionate = request.getParameterValues("patenti");
         String[] abilitazioniSelezionate = request.getParameterValues("abilitazioni");
 
@@ -76,10 +80,26 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
                 nuovoUtente.setTipo(ruolo.equalsIgnoreCase("Amministratore") ? "amministratore" : "operatore");
                 nuovoUtente.setAmministratoreCreatore(admin);
 
-                // Mettiamo alcuni dati placeholder opzionali
-                nuovoUtente.setIndirizzo("Non specificato");
-                nuovoUtente.setDataNascita(LocalDate.of(1990, 1, 1));
-                nuovoUtente.setTelefono("TMP-" + UUID.randomUUID().toString().substring(0, 5)); // Deve essere univoco
+                // Impostazione data di nascita
+                if (dataNascita != null && !dataNascita.isBlank()) {
+                    nuovoUtente.setDataNascita(LocalDate.parse(dataNascita));
+                } else {
+                    nuovoUtente.setDataNascita(LocalDate.of(1990, 1, 1));
+                }
+
+                // Impostazione numero di telefono
+                if (telefono != null && !telefono.isBlank()) {
+                    nuovoUtente.setTelefono(telefono.trim()); // trim ripulisce il numero dagli spazi inizio-fine
+                } else {
+                    nuovoUtente.setTelefono("0000000000"); // metto di default se non inserito
+                }
+
+                // Impostazione indirizzo
+                if (indirizzo != null && !indirizzo.isBlank()) {
+                    nuovoUtente.setIndirizzo(indirizzo.trim());
+                } else {
+                    nuovoUtente.setIndirizzo("Non specificato");
+                }
 
                 // 1. Salvataggio Utente nel Database (viene generata e assegnata la chiave
                 // primaria)

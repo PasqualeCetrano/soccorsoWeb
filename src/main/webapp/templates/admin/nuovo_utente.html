@@ -37,21 +37,22 @@
                 <a href="utenti" class="btn-outline">Torna alla Lista</a>
             </div>
         </div>
-        
+
         <div class="alert-info">
-            <strong>Nota sulle credenziali:</strong> La password per il nuovo utente verrà generata automaticamente dal sistema. Un'email contenente le istruzioni di accesso verrà inviata all'indirizzo specificato.
+            <strong>Nota sulle credenziali:</strong> La password per il nuovo utente verrà generata automaticamente dal
+            sistema. Un'email contenente le istruzioni di accesso verrà inviata all'indirizzo specificato.
         </div>
 
         <div class="admin-card">
             <form action="CreaUtenteServlet" method="POST">
-                
+
                 <h3 class="section-title">Dati Anagrafici</h3>
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="nome">Nome</label>
                         <input type="text" id="nome" name="nome" required placeholder="Inserisci il nome">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="cognome">Cognome</label>
                         <input type="text" id="cognome" name="cognome" required placeholder="Inserisci il cognome">
@@ -59,12 +60,30 @@
 
                     <div class="form-group">
                         <label for="codiceFiscale">Codice Fiscale</label>
-                        <input type="text" id="codiceFiscale" name="codiceFiscale" required placeholder="Es. RSSMRA80A01H501U" maxlength="16" style="text-transform: uppercase;">
+                        <input type="text" id="codiceFiscale" name="codiceFiscale" required
+                            placeholder="Es. RSSMRA80A01H501U" maxlength="16" style="text-transform: uppercase;">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Indirizzo Email</label>
                         <input type="email" id="email" name="email" required placeholder="email@esempio.it">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataNascita">Data di Nascita</label>
+                        <input type="date" id="dataNascita" name="dataNascita" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Numero di Telefono</label>
+                        <input type="tel" id="telefono" name="telefono" required maxlength="10" minlength="10"
+                            pattern="[0-9]{10}" title="Inserisci esattamente 10 cifre numeriche (es. 3331234567)"
+                            placeholder="Es. 3331234567">
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="indirizzo">Indirizzo di Residenza</label>
+                        <input type="text" id="indirizzo" name="indirizzo" placeholder="Es. Via Roma 10, L'Aquila">
                     </div>
 
                     <div class="form-group" style="grid-column: 1 / -1;">
@@ -78,7 +97,8 @@
                 </div>
 
                 <h3 class="section-title">Patenti di Guida</h3>
-                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le patenti possedute dall'utente (opzionale)</p>
+                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le patenti possedute dall'utente
+                    (opzionale)</p>
                 <div class="checkbox-group">
                     <#if patenti_sistema??>
                         <#list patenti_sistema as p>
@@ -87,13 +107,14 @@
                                 <span>${p.tipo}</span>
                             </label>
                         </#list>
-                    <#else>
-                        <p class="text-muted">Nessuna patente configurata a sistema.</p>
+                        <#else>
+                            <p class="text-muted">Nessuna patente configurata a sistema.</p>
                     </#if>
                 </div>
 
                 <h3 class="section-title">Abilitazioni e Competenze</h3>
-                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le specializzazioni dell'utente (opzionale)</p>
+                <p class="text-muted" style="margin-bottom: 1rem;">Seleziona le specializzazioni dell'utente (opzionale)
+                </p>
                 <div class="checkbox-group">
                     <#if abilitazioni_sistema??>
                         <#list abilitazioni_sistema as a>
@@ -102,8 +123,8 @@
                                 <span>${a.descrizione}</span>
                             </label>
                         </#list>
-                    <#else>
-                        <p class="text-muted">Nessuna abilitazione configurata a sistema.</p>
+                        <#else>
+                            <p class="text-muted">Nessuna abilitazione configurata a sistema.</p>
                     </#if>
                 </div>
 
@@ -111,7 +132,7 @@
                     <button type="reset" class="btn-outline">Svuota Campi</button>
                     <button type="submit" class="btn-primary">Registra Utente</button>
                 </div>
-                
+
             </form>
         </div>
 
