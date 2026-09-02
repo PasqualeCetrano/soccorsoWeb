@@ -19,7 +19,6 @@ it\univaq\soccorsoweb\controller\pubblico\HomepageController.class
 it\univaq\soccorsoweb\data\model\impl\SquadraImpl.class
 it\univaq\framework\view\DataModelFiller.class
 it\univaq\soccorsoweb\data\model\Patente.class
-it\univaq\soccorsoweb\utils\UtenteHelpers.class
 it\univaq\framework\data\DataItem.class
 it\univaq\soccorsoweb\controller\pubblico\LoginController.class
 it\univaq\soccorsoweb\controller\pubblico\LogoutController.class

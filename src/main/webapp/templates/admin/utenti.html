@@ -55,11 +55,10 @@
                         <th>Cognome</th>
                         <th>Email</th>
                         <th>Ruolo</th>
-                        <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <#if utenti?? && (utenti?size > 0)>
+                    <#if utenti?? && (utenti?size> 0)>
                         <#list utenti as utente>
                             <tr>
                                 <td>${utente.key}</td>
@@ -67,24 +66,20 @@
                                 <td>${utente.cognome!"N/D"}</td>
                                 <td>${utente.email!"N/D"}</td>
                                 <td>
-                                    <#if utente.tipo == "amministratore" || utente.tipo == "admin">
+                                    <#if utente.tipo=="amministratore" || utente.tipo=="admin">
                                         <span class="status-badge admin">Amministratore</span>
-                                    <#else>
-                                        <span class="status-badge operator">Operatore</span>
+                                        <#else>
+                                            <span class="status-badge operator">Operatore</span>
                                     </#if>
-                                </td>
-                                <td>
-                                    <!-- Il tasto modifica potrebbe puntare a una servlet futura. Lo lasciamo disattivato o visivo. -->
-                                    <a href="#" class="btn-outline btn-sm" style="opacity: 0.5; pointer-events: none;" title="Modifica non ancora implementata">Modifica</a>
                                 </td>
                             </tr>
                         </#list>
-                    <#else>
-                        <tr>
-                            <td colspan="6" class="text-muted text-center" style="padding: 2rem;">
-                                Nessun utente registrato nel sistema.
-                            </td>
-                        </tr>
+                        <#else>
+                            <tr>
+                                <td colspan="5" class="text-muted text-center" style="padding: 2rem;">
+                                    Nessun utente registrato nel sistema.
+                                </td>
+                            </tr>
                     </#if>
                 </tbody>
             </table>
