@@ -6,7 +6,7 @@ definire proprio nei file html*/
 /* stile_pubblico.css */
 :root {
     --primary: #0293f4;
-    /* Rosso emergenza */
+    /*blu colore primario */
     --primary-hover: #075ee9;
     --dark: #263238;
     --light: #f5f7fa;
@@ -72,15 +72,39 @@ prenderne lo stile*/
     color: var(--primary);
 }
 
+.nav-links a.active {
+    color: var(--primary);
+    font-weight: bold;
+}
+
 .btn-login {
     border: 2px solid var(--primary);
     padding: 0.5rem 1.2rem;
     border-radius: 5px;
     color: var(--primary) !important;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
 }
 
 .btn-login:hover {
     background-color: var(--primary);
+    color: var(--white) !important;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background: var(--primary);
     color: var(--white) !important;
 }
 
@@ -175,29 +199,36 @@ prenderne lo stile*/
 
 .form-group {
     margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.4rem;
     font-weight: 600;
     font-size: 0.9rem;
+    color: var(--dark);
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-control {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #cfd8dc;
     border-radius: 6px;
     font-size: 1rem;
+    font-family: inherit;
     transition: border-color 0.3s;
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-control:focus {
     outline: none;
     border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(2, 147, 244, 0.3);
 }
 
 .form-group textarea {
@@ -303,6 +334,14 @@ footer {
     margin-bottom: 2rem;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 1rem;
+}
+
+.dashboard-header h1 {
+    color: var(--dark);
+}
+
+.dashboard-header p {
+    color: var(--gray);
 }
 
 .dashboard-grid {
@@ -519,49 +558,33 @@ footer {
     border-color: var(--primary-hover);
 }
 
+/* --- STATUS BADGES --- */
 .status-badge {
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
     display: inline-block;
-    margin-bottom: 0.5rem;
 }
 
 .status-badge.active {
     background-color: var(--primary);
+    color: white;
 }
 
 .status-badge.closed {
     background-color: #4CAF50;
+    color: white;
 }
 
-/* --- STILI PER I FORM E INPUT --- */
-.form-group {
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.status-badge.admin {
+    background-color: var(--dark);
+    color: white;
 }
 
-.form-group label {
-    font-weight: bold;
-    color: var(--dark);
-}
-
-.form-control {
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: inherit;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 5px rgba(229, 57, 53, 0.3);
+.status-badge.operator {
+    background-color: var(--primary);
+    color: white;
 }
 
 .card-title {
@@ -577,7 +600,7 @@ footer {
 /* --- GRIGLIA DASHBOARD ADMIN --- */
 .admin-grid {
     display: grid;
-    /* La magia di auto-fit: crea colonne da minimo 250px finché c'è spazio, altrimenti va a capo da solo! */
+    /* auto-fit: crea colonne da minimo 250px finché c'è spazio, altrimenti va a capo da solo */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-bottom: 4rem;
@@ -617,11 +640,6 @@ footer {
     /* Spinge il bottone in fondo alla card in modo ordinato */
 }
 
-/* --- PULIZIA STILI GLOBALI HOME ADMIN --- */
-body {
-    background-color: var(--light);
-}
-
 .logo-badge {
     font-size: 0.8rem;
     color: var(--primary);
@@ -629,45 +647,19 @@ body {
     margin-left: 10px;
 }
 
-.nav-links a.active {
-    color: var(--primary);
-    font-weight: bold;
-}
-
-.btn-logout {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.btn-logout:hover {
-    background: var(--primary);
-    color: var(--white) !important;
-}
-
-.dashboard-header h1 {
-    color: var(--dark);
-}
-
-.dashboard-header p {
-    color: var(--gray);
-}
-
 .admin-card .btn-outline {
     width: 100%;
     text-align: center;
 }
 
-/* --- TABELLE DATI --- */
+/* --- TABELLE E CONTENITORI DATI --- */
+.table-container,
 .data-table-container {
     background: var(--white);
     border-radius: 8px;
     box-shadow: var(--shadow);
     overflow-x: auto;
+    width: 100%;
     margin-bottom: 2rem;
 }
 
@@ -675,23 +667,24 @@ body {
     width: 100%;
     border-collapse: collapse;
     min-width: 600px;
+    text-align: left;
 }
 
 .data-table th,
 .data-table td {
-    padding: 1rem;
+    padding: 1rem 0.8rem;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
 
 .data-table th {
-    background-color: var(--primary);
-    color: var(--white);
-    font-weight: bold;
+    background-color: var(--light);
+    color: var(--dark);
+    font-weight: 600;
 }
 
 .data-table tr:hover {
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
 }
 
 /* --- AZIONI HEADER --- */
@@ -713,20 +706,12 @@ body {
 
 .data-table .status-badge {
     margin: 0;
-    /* Rimuove il margine inferiore predefinito quando dentro una tabella */
 }
 
-.status-badge.admin {
-    background-color: var(--dark);
-}
-
-.status-badge.operator {
-    background-color: var(--primary);
-}
-
-.btn-sm {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+.btn-sm,
+.btn-small {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
 }
 
 .d-none {
@@ -814,50 +799,7 @@ body {
     /* Lo ingrandisce leggermente per renderlo più comodo da cliccare */
 }
 
-/* =========================================
-   STILI TABELLE (Database)
-   ========================================= */
-.table-container {
-    overflow-x: auto;
-    width: 100%;
-}
-
-.data-table {
-    width: 100%;
-    /*  la tabella si allarga e occupa tutto lo sapzio disponibile */
-    border-collapse: collapse;
-    /* unisce i bordi delle celle adiacenti o con i bordi della tabella stessa */
-    margin-top: 1rem;
-    /*  aggiunge un po di spazio tra il titolo e la prima riga della tabella */
-    text-align: left;
-    /*  testo allineato a sinistra */
-}
-
-.data-table th,
-.data-table td {
-    padding: 1rem 0.8rem;
-    border-bottom: 1px solid #eee;
-}
-
-.data-table th {
-    background-color: var(--light);
-    color: var(--dark);
-    font-weight: 600;
-}
-
-.data-table tr:hover {
-    background-color: #fcfcfc;
-}
-
-/* Badges di stato */
-.status-badge {
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    display: inline-block;
-}
-
+/* Badges di stato operativi (Mezzi / Materiali / Missioni) */
 .status-disponibile {
     background: #e8f5e9;
     color: #2e7d32;
@@ -878,11 +820,6 @@ body {
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end;
-}
-
-.btn-small {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.85rem;
 }
 
 /* =========================================
@@ -1142,7 +1079,7 @@ body {
     border-radius: 8px;
     margin-bottom: 25px;
     text-align: left;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .email-simulation h3 {
@@ -1247,4 +1184,43 @@ body {
     border-radius: 5px;
     margin-bottom: 1.5rem;
     color: #0d47a1;
+}
+
+/* =========================================
+   SEGNALE DI NOTIFICA RICHIESTE ATTIVE
+   ========================================= */
+.card-relative {
+    position: relative;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 14px;
+    height: 14px;
+    background-color: #dc3545;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--white);
+    display: inline-block;
+    z-index: 10;
+}
+
+
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0;
+    }
 }

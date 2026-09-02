@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${page_title}</title>
-    <link rel="stylesheet" href="../style/stile_pubblico.css">
+    <link rel="stylesheet" href="../style/stile_pubblico.css?v=2">
 </head>
 
 <body>
@@ -80,7 +80,12 @@
             </div>
 
             <!-- 4. Dashboard Richieste -->
-            <div class="admin-card">
+            <div class="admin-card card-relative">
+                <#if (richieste_da_gestire?? && richieste_da_gestire> 0)>
+                    <span class="notification-dot" title="${richieste_da_gestire} richieste da gestire">
+
+                    </span>
+                </#if>
                 <!-- Icona Richieste/Alert -->
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
                     <path
