@@ -1,6 +1,7 @@
 package it.univaq.soccorsoweb.controller.admin;
 
 import it.univaq.framework.data.DataException;
+import it.univaq.framework.security.SecurityHelpers;
 import it.univaq.framework.view.TemplateManagerException;
 import it.univaq.framework.view.TemplateResult;
 import it.univaq.soccorsoweb.application.SoccorsoWebDataLayer;
@@ -20,11 +21,11 @@ import java.util.logging.Logger;
 
 public class NuovoUtenteController extends SoccorsoWebBaseController {
 
-    private void action_default(HttpServletRequest request, HttpServletResponse response) 
+    private void action_default(HttpServletRequest request, HttpServletResponse response)
             throws DataException, TemplateManagerException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
-        
+
         // 1. Recupero di tutte le patenti e abilitazioni disponibili a sistema
         List<Patente> patenti = dl.getPatenteDAO().getPatenti();
         List<Abilita> abilitazioni = dl.getAbilitaDAO().getAbilita();
@@ -39,9 +40,9 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
         res.activate("admin/nuovo_utente.html", request, response);
     }
 
-    private void action_crea(HttpServletRequest request, HttpServletResponse response) 
+    private void action_crea(HttpServletRequest request, HttpServletResponse response)
             throws DataException, IOException {
-        
+
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         HttpSession session = request.getSession(false);
 
@@ -50,11 +51,12 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
         String codiceFiscale = request.getParameter("codiceFiscale");
         String email = request.getParameter("email");
         String ruolo = request.getParameter("ruolo");
-        
+
         String[] patentiSelezionate = request.getParameterValues("patenti");
         String[] abilitazioniSelezionate = request.getParameterValues("abilitazioni");
 
-        if (nome != null && cognome != null && codiceFiscale != null && email != null && ruolo != null && session != null) {
+        if (nome != null && cognome != null && codiceFiscale != null && email != null && ruolo != null
+                && session != null) {
             try {
                 // Recupero l'amministratore che sta creando questo utente
                 int idAdmin = (Integer) session.getAttribute("userid");
@@ -69,16 +71,18 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
                 nuovoUtente.setCognome(cognome.trim());
                 nuovoUtente.setCodiceFiscale(codiceFiscale.trim().toUpperCase());
                 nuovoUtente.setEmail(email.trim().toLowerCase());
-                nuovoUtente.setPassword(passwordGenerata); // In un'app reale la password andrebbe hashata
+                // Nel database salviamo l'hash calcolato con PBKDF2
+                nuovoUtente.setPassword(SecurityHelpers.getPasswordHashPBKDF2(passwordGenerata));
                 nuovoUtente.setTipo(ruolo.equalsIgnoreCase("Amministratore") ? "amministratore" : "operatore");
                 nuovoUtente.setAmministratoreCreatore(admin);
-                
+
                 // Mettiamo alcuni dati placeholder opzionali
                 nuovoUtente.setIndirizzo("Non specificato");
                 nuovoUtente.setDataNascita(LocalDate.of(1990, 1, 1));
                 nuovoUtente.setTelefono("TMP-" + UUID.randomUUID().toString().substring(0, 5)); // Deve essere univoco
-                
-                // 1. Salvataggio Utente nel Database (viene generata e assegnata la chiave primaria)
+
+                // 1. Salvataggio Utente nel Database (viene generata e assegnata la chiave
+                // primaria)
                 dl.getUtenteDAO().storeUtente(nuovoUtente);
 
                 // 2. Associazione Patenti (se presenti)
@@ -124,7 +128,8 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
                 System.out.println("=================================================");
 
             } catch (Exception ex) {
-                Logger.getLogger(NuovoUtenteController.class.getName()).log(Level.SEVERE, "Errore durante la creazione dell'utente", ex);
+                Logger.getLogger(NuovoUtenteController.class.getName()).log(Level.SEVERE,
+                        "Errore durante la creazione dell'utente", ex);
             }
         }
 
@@ -135,7 +140,7 @@ public class NuovoUtenteController extends SoccorsoWebBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getServletPath();
-        
+
         if ("POST".equalsIgnoreCase(request.getMethod()) && path.contains("CreaUtenteServlet")) {
             action_crea(request, response);
         } else {
