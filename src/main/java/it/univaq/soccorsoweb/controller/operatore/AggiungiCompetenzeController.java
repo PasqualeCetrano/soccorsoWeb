@@ -49,6 +49,12 @@ public class AggiungiCompetenzeController extends SoccorsoWebBaseController {
         request.setAttribute("elenco_patenti", elencoPatenti);
         request.setAttribute("elenco_abilita", elencoAbilita);
         request.setAttribute("page_title", "Aggiungi Competenze - SoccorsoWeb");
+        
+        // Aggiungiamo il parametro per capire quale sezione mostrare (patente o specializzazione)
+        String sezioneScelta = request.getParameter("tipo");
+        if (sezioneScelta != null) {
+            request.setAttribute("sezione_scelta", sezioneScelta);
+        }
 
         TemplateResult res = new TemplateResult(getServletContext());
         res.activate("operatore/utente_aggiungi_patente_abilita.html", request, response);

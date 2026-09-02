@@ -36,6 +36,7 @@
         <div class="missions-layout">
 
             <!-- COLONNA SINISTRA: PATENTI -->
+            <#if !sezione_scelta?? || sezione_scelta == "patente">
             <section class="missions-section">
                 <!-- Usiamo lo stile delle card per contenere il form -->
                 <div class="mission-card d-block">
@@ -71,8 +72,10 @@
                     </form>
                 </div>
             </section>
+            </#if>
 
             <!-- COLONNA DESTRA: SPECIALIZZAZIONI -->
+            <#if !sezione_scelta?? || sezione_scelta == "specializzazione">
             <section class="missions-section">
                 <div class="mission-card d-block">
                     <h2 class="card-title">
@@ -104,6 +107,7 @@
                     </form>
                 </div>
             </section>
+            </#if>
 
         </div>
 

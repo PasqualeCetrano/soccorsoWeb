@@ -297,7 +297,7 @@
     <!-- 8. AggiungiCompetenzeController (Gestione Competenze) -->
     <servlet>
         <servlet-name>AggiungiCompetenzeServlet</servlet-name>
-        <servlet-class>it.univaq.soccorsoweb.controller.operatore.AggiungiCompetenzeController</servlet-class>
+        <servlet-class>it.univaq.soccorsoweb.controller.operatorggie.AungiCompetenzeController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AggiungiCompetenzeServlet</servlet-name>
