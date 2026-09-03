@@ -74,7 +74,9 @@ public class ApplicationInitializer implements ServletContextListener {
 
         // init data source
         try {
-            InitialContext ctx = new InitialContext();
+            InitialContext ctx = new InitialContext(); // data. source serve per raggiungere l oggeto che rappresenta i
+                                                       // paramteri del databse creato in automatico da tomcat grazie a
+                                                       // context.xml
             ds = (DataSource) ctx.lookup("java:comp/env/" + event.getServletContext().getInitParameter("data.source"));
         } catch (NamingException ex) {
             Logger.getLogger(ApplicationInitializer.class.getName()).log(Level.SEVERE, null, ex);

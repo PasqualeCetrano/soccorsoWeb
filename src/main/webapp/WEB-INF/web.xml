@@ -7,15 +7,10 @@
         <param-name>view.encoding</param-name>
         <param-value>UTF-8</param-value>
     </context-param>
-    <!--Tutti i file HTML (i template di FreeMarker) di questo progetto sono salvati dentro la cartella chiamata templates-->
+    <!--Tutti i file HTML di questo progetto sono salvati dentro la cartella chiamata templates-->
     <context-param>
         <param-name>view.template_directory</param-name>
         <param-value>templates</param-value>
-    </context-param>
-    <!--variabile globale per definire la pagina HTML da mostrare quando si verifica un errore-->
-    <context-param>
-        <param-name>view.error_template</param-name>
-        <param-value>error.html</param-value>
     </context-param>
     <!-- Se impostato a true, mostra gli errori dettagliati di FreeMarker a schermo e disabilita la cache. 
     Da mettere a false quando il sito va online, in maniera tale che se lo sviluppatore
@@ -54,9 +49,9 @@
         <listener-class>it.univaq.framework.application.ApplicationInitializer</listener-class>
     </listener>
 
-    <!-- ============================================== -->
-    <!-- MAPPATURE DELLE SERVLET DELLA PARTE PUBBLICA   -->
-    <!-- ============================================== -->
+  
+    <!-- MAPPATURE DELLE SERVLET PUBLIC  -->
+   
 
     <!-- 1. HomepageController -->
     <servlet>
@@ -67,22 +62,12 @@
         <servlet-name>HomepageServlet</servlet-name>
         <url-pattern>/homepage</url-pattern>
     </servlet-mapping>
-    <!-- è un modo alternativo in cui l'utente può digitare nel campo search bar del browser per accedere alla homepage -->
-    <servlet-mapping>
-        <servlet-name>HomepageServlet</servlet-name>
-        <url-pattern>/index.html</url-pattern>
-    </servlet-mapping>
-    <!-- è un altro modo alternativo in cui l'utente può digitare nel campo search bar del browser per accedere alla homepage -->
-    <servlet-mapping>
-        <servlet-name>HomepageServlet</servlet-name>
-        <url-pattern>/Home</url-pattern>
-    </servlet-mapping>
 
     <!-- 2. InviaRichiestaController -->
     <servlet>
         <servlet-name>InviaRichiestaServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.pubblico.InviaRichiestaController</servlet-class>
-        <!-- Impostazione vitale per permettere il caricamento delle foto (multipart) -->
+        <!-- Impostazione per permettere il caricamento delle foto -->
         <multipart-config>
             <max-file-size>10485760</max-file-size> <!-- 10MB -->
             <max-request-size>20971520</max-request-size> <!-- 20MB -->
@@ -328,39 +313,34 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
-    <!-- Definisce la durata massima della sessione in minuti. 
-    Se un utente (anche loggato) non compie alcuna azione sul sito per questo 
-    intervallo di tempo (es. 30 minuti), la sua sessione scade e verrà 
-    disconnesso automaticamente dal sistema per questioni di sicurezza. -->
+    <!-- Definisce la durata massima della sessione in minuti,implementato di default su tomcat -->
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
 
-    <!--Se un utente digita solo l'indirizzo principale del sito senza specificare 
-    nessuna pagina, tu fingi che abbia digitato la parola homepage-->
+    <!--usato se un utente digita solo l'indirizzo principale del sito senza specificare 
+    nessuna pagina, implementato di default su tomcat-->
     <welcome-file-list>
         <welcome-file>homepage</welcome-file>
     </welcome-file-list>
-    <!-- Dichiara che questa applicazione ha bisogno di connettersi a un Database.
-    Nota: le credenziali vere (username e password) non si scrivono qui per sicurezza, 
-    ma andranno inserite nel file separato "context.xml" gestito dal server. -->
+    <!-- Dichiara che questa applicazione ha bisogno di connettersi a un Database.-->
     <resource-ref>
-        <!-- Il nome identificativo della connessione. Il codice Java (es. l'ApplicationInitializer) 
-        cercherà esattamente questo nome per collegarsi al DB. -->
+        <!-- Nome con cui l'applicazione cerca nel contesto il database configurato in context.xml  -->
         <res-ref-name>jdbc/soccorso</res-ref-name>
-        
-        <!-- Specifica la tipologia di risorsa: in questo caso un Database relazionale (SQL). -->
+        <!-- Specifica che il Database SQL. -->
         <res-type>javax.sql.DataSource</res-type>
-        
-        <!-- Delega l'autenticazione (accesso con password) direttamente al "Contenitore",
-        ovvero al server Tomcat. -->
+        <!-- l'autenticazione viene fatta da tomcat. -->
         <res-auth>Container</res-auth>
         
         <!-- Permette di condividere la connessione tra più richieste degli utenti 
-        in contemporanea, ottimizzando la velocità del sito. -->
+        in contemporanea. -->
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
 
