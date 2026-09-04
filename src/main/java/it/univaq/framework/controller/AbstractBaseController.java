@@ -46,7 +46,7 @@ public abstract class AbstractBaseController extends HttpServlet {
             throws UnsupportedEncodingException, IOException {
         String completeRequestURL = request.getRequestURL()
                 + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-        response.sendRedirect("login?referrer=" + URLEncoder.encode(completeRequestURL, "UTF-8"));
+        response.sendRedirect(request.getContextPath() + "/login?referrer=" + URLEncoder.encode(completeRequestURL, "UTF-8"));
     }
 
     protected void accessCheckRolesFailed(HttpServletRequest request, HttpServletResponse response)
