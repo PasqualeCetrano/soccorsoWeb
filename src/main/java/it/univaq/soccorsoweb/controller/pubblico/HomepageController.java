@@ -22,7 +22,7 @@ public class HomepageController extends SoccorsoWebBaseController {
             // passiamo il titolo della pagina al template
             request.setAttribute("page_title", "SoccorsoWeb - Invia Segnalazione");
 
-            // Controllo del parametro success per far apparire un messaggio di conferma!
+            // Controllo del parametro success per far apparire un messaggio di conferma
             // success è solo una stringa di testo nell'URL di cui ne andiamo a prendere
             // il valore tramite getParameter
             if ("1".equals(request.getParameter("success"))) {
@@ -33,7 +33,9 @@ public class HomepageController extends SoccorsoWebBaseController {
                 }
             }
 
-            // Controllo del parametro validated per il successo finale
+            // Controllo del parametro validated per far apparire il messaggio di
+            // inserimento completato
+            // viene impostato a 1 da convalidarichiestacontroller
             if ("1".equals(request.getParameter("validated"))) {
                 request.setAttribute("richiesta_validata", true);
             }

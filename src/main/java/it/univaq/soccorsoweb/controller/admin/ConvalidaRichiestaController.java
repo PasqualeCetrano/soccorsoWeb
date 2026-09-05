@@ -14,23 +14,28 @@ import java.util.logging.Logger;
 
 public class ConvalidaRichiestaController extends SoccorsoWebBaseController {
 
-    private void action_convalida(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void action_convalida(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         SoccorsoWebDataLayer dl = (SoccorsoWebDataLayer) request.getAttribute("datalayer");
         String token = request.getParameter("token");
-        
+
         try {
-            // SICUREZZA E CONVALIDA: 
-            // Usiamo la stringa segreta (il Token) letta dall'URL per ritrovare la richiesta esatta nel Database.
-            // Non usiamo l'ID numerico (es. id=5) perché un malintenzionato potrebbe indovinarlo e attivare 
-            // false richieste (es. provando id=6, id=7). Il token invece è lunghissimo, unico, e lo conosce 
-            // solo chi ha fisicamente ricevuto la finta email!
+            // SICUREZZA E CONVALIDA:
+            // Usiamo la stringa segreta (il Token) letta dall'URL per ritrovare la
+            // richiesta esatta nel Database.
+            // Non usiamo l'ID numerico (es. id=5) perché un malintenzionato potrebbe
+            // indovinarlo e attivare
+            // false richieste (es. provando id=6, id=7). Il token invece è lunghissimo,
+            // unico, e lo conosce
+            // solo chi ha fisicamente ricevuto la finta email
             RichiestaSoccorso richiesta = dl.getRichiestaSoccorsoDAO().getRichiestaByStringaConvalida(token);
-            
+            // controllo che la richiesta con il token ricevuto esiste ed è effettivamente
+            // da convalidare
             if (richiesta != null && "da convalidare".equals(richiesta.getStato())) {
-                // Trovata! La attiviamo ufficialmente
+                // se la trova la imposto come attiva perchè è stata appena convalidata
                 richiesta.setStato("attiva");
                 dl.getRichiestaSoccorsoDAO().storeRichiestaSoccorso(richiesta);
-                
+
                 // Rimandiamo l'utente alla home con il flag di successo
                 response.sendRedirect("homepage?validated=1");
             } else {
@@ -38,7 +43,8 @@ public class ConvalidaRichiestaController extends SoccorsoWebBaseController {
                 response.sendRedirect("homepage?error=1");
             }
         } catch (DataException ex) {
-            Logger.getLogger(ConvalidaRichiestaController.class.getName()).log(Level.SEVERE, "Errore nella convalida della richiesta", ex);
+            Logger.getLogger(ConvalidaRichiestaController.class.getName()).log(Level.SEVERE,
+                    "Errore nella convalida della richiesta", ex);
             response.sendRedirect("homepage?error=1");
         }
     }

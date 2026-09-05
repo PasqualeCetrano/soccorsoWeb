@@ -7,15 +7,10 @@
         <param-name>view.encoding</param-name>
         <param-value>UTF-8</param-value>
     </context-param>
-    <!--Tutti i file HTML (i template di FreeMarker) di questo progetto sono salvati dentro la cartella chiamata templates-->
+    <!--Tutti i file HTML di questo progetto sono salvati dentro la cartella chiamata templates-->
     <context-param>
         <param-name>view.template_directory</param-name>
         <param-value>templates</param-value>
-    </context-param>
-    <!--variabile globale per definire la pagina HTML da mostrare quando si verifica un errore-->
-    <context-param>
-        <param-name>view.error_template</param-name>
-        <param-value>error.html</param-value>
     </context-param>
     <!-- Se impostato a true, mostra gli errori dettagliati di FreeMarker a schermo e disabilita la cache. 
     Da mettere a false quando il sito va online, in maniera tale che se lo sviluppatore
@@ -65,7 +60,7 @@
     <!-- MAPPATURE DELLE SERVLET DELLA PARTE PUBBLICA   -->
     <!-- ============================================== -->
 
-    <!-- 1. HomepageController -->
+    <!-- HomepageController -->
     <servlet>
         <servlet-name>HomepageServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.pubblico.HomepageController</servlet-class>
@@ -74,22 +69,12 @@
         <servlet-name>HomepageServlet</servlet-name>
         <url-pattern>/homepage</url-pattern>
     </servlet-mapping>
-    <!-- è un modo alternativo in cui l'utente può digitare nel campo search bar del browser per accedere alla homepage -->
-    <servlet-mapping>
-        <servlet-name>HomepageServlet</servlet-name>
-        <url-pattern>/index.html</url-pattern>
-    </servlet-mapping>
-    <!-- è un altro modo alternativo in cui l'utente può digitare nel campo search bar del browser per accedere alla homepage -->
-    <servlet-mapping>
-        <servlet-name>HomepageServlet</servlet-name>
-        <url-pattern>/Home</url-pattern>
-    </servlet-mapping>
 
-    <!-- 2. InviaRichiestaController -->
+    <!-- InviaRichiestaController -->
     <servlet>
         <servlet-name>InviaRichiestaServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.pubblico.InviaRichiestaController</servlet-class>
-        <!-- Impostazione vitale per permettere il caricamento delle foto (multipart) -->
+        <!-- Impostazione per permettere il caricamento delle foto -->
         <multipart-config>
             <max-file-size>10485760</max-file-size> <!-- 10MB -->
             <max-request-size>20971520</max-request-size> <!-- 20MB -->
@@ -101,7 +86,7 @@
         <url-pattern>/InviaRichiestaServlet</url-pattern>
     </servlet-mapping>
 
-    <!-- 3. ConvalidaRichiestaController -->
+    <!-- ConvalidaRichiestaController -->
     <servlet>
         <servlet-name>ConvalidaRichiestaServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.ConvalidaRichiestaController</servlet-class>
@@ -111,7 +96,7 @@
         <url-pattern>/ConvalidaRichiestaServlet</url-pattern>
     </servlet-mapping>
     
-    <!-- 4. HomeAdminController (Hub Centrale) -->
+    <!-- HomeAdminController -->
     <servlet>
         <servlet-name>HomeAdminServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.HomeAdminController</servlet-class>
@@ -121,7 +106,7 @@
         <url-pattern>/admin/home</url-pattern>
     </servlet-mapping>
 
-    <!-- 5. GestioneRichiesteController (Tabella Emergenze) -->
+    <!-- GestioneRichiesteController -->
     <servlet>
         <servlet-name>GestioneRichiesteServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneRichiesteController</servlet-class>
@@ -131,7 +116,7 @@
         <url-pattern>/admin/richieste</url-pattern>
     </servlet-mapping>
 
-    <!-- 5b. GestioneRichiestaAttivaController (Dettagli Emergenza Singola) -->
+    <!--GestioneRichiestaAttivaController -->
     <servlet>
         <servlet-name>GestioneRichiestaAttivaServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneRichiestaAttivaController</servlet-class>
@@ -141,7 +126,7 @@
         <url-pattern>/admin/gestione_richiesta_attiva</url-pattern>
     </servlet-mapping>
 
-    <!-- 5c. AnnullaRichiestaController (Annulla e Archivia Emergenza) -->
+    <!-- AnnullaRichiestaController -->
     <servlet>
         <servlet-name>AnnullaRichiestaServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.AnnullaRichiestaController</servlet-class>
@@ -151,7 +136,7 @@
         <url-pattern>/admin/AnnullaRichiestaServlet</url-pattern>
     </servlet-mapping>
 
-    <!-- 5d. CreaMissioneController (Inizializza Missione) -->
+    <!-- CreaMissioneController -->
     <servlet>
         <servlet-name>CreaMissioneServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.CreaMissioneController</servlet-class>
@@ -161,7 +146,7 @@
         <url-pattern>/admin/crea_missione</url-pattern>
     </servlet-mapping>
 
-    <!-- 5e. CreaSquadraController (Configurazione Squadra e Risorse) -->
+    <!-- CreaSquadraController -->
     <servlet>
         <servlet-name>CreaSquadraServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.CreaSquadraController</servlet-class>
@@ -171,7 +156,7 @@
         <url-pattern>/admin/crea_squadra</url-pattern>
     </servlet-mapping>
 
-    <!-- 5f. SalvaMissioneController (Salvataggio Missione) -->
+    <!-- SalvaMissioneController -->
     <servlet>
         <servlet-name>SalvaMissioneServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.SalvaMissioneController</servlet-class>
@@ -181,7 +166,7 @@
         <url-pattern>/admin/salva_missione</url-pattern>
     </servlet-mapping>
 
-    <!-- 5g. GestioneMissioniController (Dashboard Missioni) -->
+    <!-- GestioneMissioniController -->
     <servlet>
         <servlet-name>GestioneMissioniServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMissioniController</servlet-class>
@@ -191,7 +176,7 @@
         <url-pattern>/admin/missioni</url-pattern>
     </servlet-mapping>
 
-    <!-- 5h. InfoMissioneController (Dettagli Missione) -->
+    <!-- InfoMissioneController -->
     <servlet>
         <servlet-name>InfoMissioneServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.InfoMissioneController</servlet-class>
@@ -201,7 +186,7 @@
         <url-pattern>/admin/info_missione</url-pattern>
     </servlet-mapping>
 
-    <!-- 5i. ChiudiMissioneController (Chiusura Missione) -->
+    <!-- ChiudiMissioneController -->
     <servlet>
         <servlet-name>ChiudiMissioneServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.ChiudiMissioneController</servlet-class>
@@ -211,7 +196,7 @@
         <url-pattern>/admin/chiudi_missione</url-pattern>
     </servlet-mapping>
 
-    <!-- 5j. InserisciAggiornamentoController (Inserisci Aggiornamento) -->
+    <!-- InserisciAggiornamentoController -->
     <servlet>
         <servlet-name>InserisciAggiornamentoServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.InserisciAggiornamentoController</servlet-class>
@@ -221,7 +206,7 @@
         <url-pattern>/admin/inserisci_aggiornamento</url-pattern>
     </servlet-mapping>
 
-    <!-- 5k. GestioneMaterialiController (Database Materiali) -->
+    <!-- GestioneMaterialiController -->
     <servlet>
         <servlet-name>GestioneMaterialiServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMaterialiController</servlet-class>
@@ -239,7 +224,7 @@
         <url-pattern>/admin/EliminaMaterialeServlet</url-pattern>
     </servlet-mapping>
 
-    <!-- 5l. GestioneMezziController (Database Mezzi) -->
+    <!-- GestioneMezziController -->
     <servlet>
         <servlet-name>GestioneMezziServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneMezziController</servlet-class>
@@ -257,7 +242,7 @@
         <url-pattern>/admin/EliminaMezzoServlet</url-pattern>
     </servlet-mapping>
 
-    <!-- 5m. GestioneUtentiController (Lista Utenti) -->
+    <!-- GestioneUtentiController -->
     <servlet>
         <servlet-name>GestioneUtentiServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.GestioneUtentiController</servlet-class>
@@ -267,7 +252,7 @@
         <url-pattern>/admin/utenti</url-pattern>
     </servlet-mapping>
 
-    <!-- 5n. NuovoUtenteController (Aggiungi Nuovo Utente) -->
+    <!-- NuovoUtenteController -->
     <servlet>
         <servlet-name>NuovoUtenteServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.admin.NuovoUtenteController</servlet-class>
@@ -281,7 +266,7 @@
         <url-pattern>/admin/CreaUtenteServlet</url-pattern>
     </servlet-mapping>
     
-    <!-- 6. HomeOperatoreController (Pannello Operatore) -->
+    <!-- HomeOperatoreController -->
     <servlet>
         <servlet-name>HomeOperatoreServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.operatore.HomeOperatoreController</servlet-class>
@@ -291,7 +276,7 @@
         <url-pattern>/operatore/dashboard</url-pattern>
     </servlet-mapping>
 
-    <!-- 7. MissioniOperatoreController (Le Mie Missioni) -->
+    <!-- MissioniOperatoreController -->
     <servlet>
         <servlet-name>MissioniOperatoreServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.operatore.MissioniOperatoreController</servlet-class>
@@ -301,7 +286,7 @@
         <url-pattern>/operatore/missioni</url-pattern>
     </servlet-mapping>
 
-    <!-- 8. AggiungiCompetenzeController (Gestione Competenze) -->
+    <!-- AggiungiCompetenzeController -->
     <servlet>
         <servlet-name>AggiungiCompetenzeServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.operatore.AggiungiCompetenzeController</servlet-class>
@@ -311,16 +296,11 @@
         <url-pattern>/operatore/competenze</url-pattern>
     </servlet-mapping>
 
-    <!-- Registra la classe Java 'LoginController' nel server assegnandole il soprannome 'LoginServlet' 
-    (che verrà poi collegato a un URL specifico più in basso, nella sezione servlet-mapping) -->
+    <!-- LoginServlet -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>it.univaq.soccorsoweb.controller.pubblico.LoginController</servlet-class>
     </servlet>
-    <!-- Questo blocco è il "ponte" tra l'utente e il codice Java.
-    Dice al server: "Quando un utente digita '/login' nella barra degli indirizzi 
-    del browser (url-pattern), avvia immediatamente la classe Java che 
-    abbiamo registrato con il soprannome 'LoginServlet' (servlet-name)" -->
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -335,39 +315,34 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
-    <!-- Definisce la durata massima della sessione in minuti. 
-    Se un utente (anche loggato) non compie alcuna azione sul sito per questo 
-    intervallo di tempo (es. 30 minuti), la sua sessione scade e verrà 
-    disconnesso automaticamente dal sistema per questioni di sicurezza. -->
+    <!-- Definisce la durata massima della sessione in minuti,implementato di default su tomcat -->
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
 
-    <!--Se un utente digita solo l'indirizzo principale del sito senza specificare 
-    nessuna pagina, tu fingi che abbia digitato la parola homepage-->
+    <!--usato se un utente digita solo l'indirizzo principale del sito senza specificare 
+    nessuna pagina, implementato di default su tomcat-->
     <welcome-file-list>
         <welcome-file>homepage</welcome-file>
     </welcome-file-list>
-    <!-- Dichiara che questa applicazione ha bisogno di connettersi a un Database.
-    Nota: le credenziali vere (username e password) non si scrivono qui per sicurezza, 
-    ma andranno inserite nel file separato "context.xml" gestito dal server. -->
+    <!-- Dichiara che questa applicazione ha bisogno di connettersi a un Database.-->
     <resource-ref>
-        <!-- Il nome identificativo della connessione. Il codice Java (es. l'ApplicationInitializer) 
-        cercherà esattamente questo nome per collegarsi al DB. -->
+        <!-- Nome con cui l'applicazione cerca nel contesto il database configurato in context.xml  -->
         <res-ref-name>jdbc/soccorso</res-ref-name>
-        
-        <!-- Specifica la tipologia di risorsa: in questo caso un Database relazionale (SQL). -->
+        <!-- Specifica che il Database SQL. -->
         <res-type>javax.sql.DataSource</res-type>
-        
-        <!-- Delega l'autenticazione (accesso con password) direttamente al "Contenitore",
-        ovvero al server Tomcat. -->
+        <!-- l'autenticazione viene fatta da tomcat. -->
         <res-auth>Container</res-auth>
         
         <!-- Permette di condividere la connessione tra più richieste degli utenti 
-        in contemporanea, ottimizzando la velocità del sito. -->
+        in contemporanea. -->
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
 

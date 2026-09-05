@@ -14,8 +14,11 @@ SEZIONE ADMIN
 
 
 USO JAVASCRIPT :
-    - per il messaggio di errore o successo nel caso di eliminazione o inserimento di un mezzo o materiale
+    - per il messaggio di errore o successo nel caso di eliminazione o inserimento di un mezzo o materiale ---inserito nella documentazione
 
 
 DA CORREGGERE: 
     -nella sezione utenti posso aggiungere piu volte la stessa patente o abilità
+
+CONTROLLARE SE FUNZIONA LA FOTO ALLEGATA NELLLA RICHIESTA
+AGGIUSTARE GRAFICA INFO MISSIONE PER RENDERE PIU VISIBILI LE SCRITTE
