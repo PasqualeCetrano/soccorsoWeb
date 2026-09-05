@@ -95,6 +95,8 @@
                                             <td>${mezzo.descrizione!"Nessuna descrizione."}</td>
                                             <td>
                                                 <div class="action-buttons">
+                                                    <a href="missioni?id_mezzo=${mezzo.key}"
+                                                        class="btn-outline btn-small">Missioni</a>
                                                     <form action="EliminaMezzoServlet" method="POST" style="margin: 0;">
                                                         <input type="hidden" name="id_mezzo" value="${mezzo.key}">
                                                         <button type="submit"

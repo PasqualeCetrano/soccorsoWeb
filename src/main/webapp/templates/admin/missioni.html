@@ -29,18 +29,40 @@
 
         <div class="header-actions">
             <div>
-                <h1>Monitoraggio Missioni</h1>
-                <p>Visualizza e gestisci le missioni di soccorso attive sul territorio e consulta lo storico di quelle
-                    completate.</p>
+                <h1>
+                    <#if filtro_tipo?? && filtro_nome??>
+                        Missioni per il ${filtro_tipo}: <span style="color: var(--primary);">${filtro_nome}</span>
+                    <#else>
+                        Monitoraggio Missioni
+                    </#if>
+                </h1>
+                <p>
+                    <#if filtro_tipo?? && filtro_nome??>
+                        Visualizzazione delle missioni (in corso e concluse) in cui è impiegato questo elemento.
+                    <#else>
+                        Visualizza e gestisci le missioni di soccorso attive sul territorio e consulta lo storico di quelle
+                        completate.
+                    </#if>
+                </p>
             </div>
             <div>
-                <a href="home" class="btn-outline btn-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    Torna alla Dashboard
-                </a>
+                <#if filtro_tipo??>
+                    <a href="<#if filtro_tipo=='Mezzo'>mezzi_database<#else>materiali_database</#if>" class="btn-outline btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Torna a <#if filtro_tipo=='Mezzo'>Mezzi<#else>Materiali</#if>
+                    </a>
+                <#else>
+                    <a href="home" class="btn-outline btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Torna alla Dashboard
+                    </a>
+                </#if>
             </div>
         </div>
 

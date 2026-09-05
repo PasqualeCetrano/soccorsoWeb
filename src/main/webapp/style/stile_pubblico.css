@@ -819,6 +819,16 @@ footer {
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end;
+    align-items: center;
+}
+
+.action-buttons .btn-outline,
+.action-buttons .btn-danger,
+.action-buttons .btn-small {
+    width: auto !important;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.2;
 }
 
 /* =========================================
