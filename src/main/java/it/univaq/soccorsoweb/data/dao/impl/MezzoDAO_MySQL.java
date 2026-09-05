@@ -25,6 +25,8 @@ public class MezzoDAO_MySQL extends DAO implements MezzoDAO {
     private PreparedStatement deleteMezzo;
     private PreparedStatement selectAllMezzi;
     private PreparedStatement selectMezziByMissione;
+    private PreparedStatement checkMezzoInUso;
+    private PreparedStatement deleteImpiegaMezzo;
 
     public MezzoDAO_MySQL(DataLayer d) {
         super(d);
@@ -45,10 +47,31 @@ public class MezzoDAO_MySQL extends DAO implements MezzoDAO {
             selectAllMezzi = connection.prepareStatement("SELECT * FROM Mezzo");
             selectMezziByMissione = connection.prepareStatement(
                     "SELECT * FROM Mezzo WHERE id_mezzo IN (SELECT im.fk_id_mezzo FROM Impiega_Mezzo im WHERE im.fk_id_missione = ?)");
+            checkMezzoInUso = connection.prepareStatement(
+                    "SELECT COUNT(*) FROM Impiega_Mezzo im JOIN Missione mi ON im.fk_id_missione = mi.id_missione WHERE im.fk_id_mezzo = ? AND mi.fine IS NULL");
+            deleteImpiegaMezzo = connection.prepareStatement("DELETE FROM Impiega_Mezzo WHERE fk_id_mezzo = ?");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing mezzo data layer", ex);
         }
+    }
+
+    @Override
+    public void destroy() throws DataException {
+        try {
+            selectMezziDisponibili.close();
+            selectMezzoById.close();
+            insertMezzo.close();
+            updateMezzo.close();
+            deleteMezzo.close();
+            selectAllMezzi.close();
+            selectMezziByMissione.close();
+            checkMezzoInUso.close();
+            deleteImpiegaMezzo.close();
+        } catch (SQLException ex) {
+            // ignore
+        }
+        super.destroy();
     }
 
     @Override
@@ -146,8 +169,28 @@ public class MezzoDAO_MySQL extends DAO implements MezzoDAO {
             if (mezzo.getKey() == null) {
                 throw new DataException("Impossibile eliminare un mezzo senza ID");
             }
+            // 1. Verifichiamo se il mezzo è impiegato in una missione attiva
+            checkMezzoInUso.setInt(1, mezzo.getKey());
+            try (ResultSet rs = checkMezzoInUso.executeQuery()) {
+                // sposto il cursore e valuto se il numero restituito (indica in quante missione
+                // attive o in corso
+                // è impegnato un mezzo )è maggiore di 0 e quindi impegnato in almeno una
+                // missione
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new DataException("Impossibile eliminare: il mezzo è impiegato in una missione attiva");
+                }
+            }
+
+            // 2. Rimuoviamo i riferimenti dalle missioni storiche concluse
+            deleteImpiegaMezzo.setInt(1, mezzo.getKey());
+            deleteImpiegaMezzo.executeUpdate();
+
+            // 3. Eliminiamo il mezzo
             deleteMezzo.setInt(1, mezzo.getKey());
             deleteMezzo.executeUpdate();
+
+            // Rimuoviamo dalla cache
+            dataLayer.getCache().delete(Mezzo.class, mezzo.getKey());
         } catch (SQLException ex) {
             throw new DataException("Unable to delete Mezzo", ex);
         }

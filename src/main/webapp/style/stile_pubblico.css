@@ -6,19 +6,22 @@ definire proprio nei file html*/
 /* stile_pubblico.css */
 :root {
     --primary: #0293f4;
-    /*blu colore primario */
+    /*colore primario */
     --primary-hover: #075ee9;
     --dark: #263238;
     --light: #f5f7fa;
     --white: #ffffff;
     --gray: #90a4ae;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    /* serve per definire l'effetto ombra */
 }
 
+/* questo blocco definisce le proprietà di base per tutti gli elementi*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* considera la dimensione finale del */
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -26,6 +29,7 @@ body {
     background-color: var(--light);
     color: var(--dark);
     line-height: 1.6;
+    /* definiscie lo spazio tra le righe del testo nella pagina*/
 }
 
 /* Navbar */
@@ -34,57 +38,74 @@ body {
     justify-content: space-between;
     /* allontana gli elementi tra di loro */
     align-items: center;
+    /* centra gli elementi verticalmente */
     padding: 1.2rem 5%;
+    /* Sopra/Sotto: 3%  |  Destra/Sinistra: 5% */
     background-color: var(--white);
     box-shadow: var(--shadow);
     position: sticky;
+    /* blocca la barra di navigazione */
     top: 0px;
+    /* la nav bar si trova in cima a tutto lo schermo */
     z-index: 1000;
+    /* posizione di sovrapposizione*/
 }
 
-/*come se avessimo definito una classe logo che poi verrà richiamata dall' html per 
-prenderne lo stile*/
+
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--dark);
     text-decoration: none;
+    /* toglie il sottolineato poiche il logo è cliccabile */
 }
 
+/*Applica questo stile solo ed esclusivamente ai tag <span> che si trovano all'interno di un elemento con classe .logo */
 .logo span {
     color: var(--primary);
 }
 
 .nav-links {
     display: flex;
+                    /* definisce la distanza tra gli elementi */
     gap: 1.5rem;
     align-items: center;
 }
 
 .nav-links a {
-    text-decoration: none;
+    text-decoration: none; /* toglie il sottolineato poiche il logo è cliccabile */
     color: var(--dark);
-    font-weight: 500;
-    transition: color 0.3s;
+    font-weight: 500;   /* spessore carattere */
 }
-
-.nav-links a:hover {
-    color: var(--primary);
-}
-
 .nav-links a.active {
     color: var(--primary);
-    font-weight: bold;
+    font-weight: bold;  /* grassetto */
+}
+
+/* --- REGOLE BASE PER I BOTTONI --- */
+.btn-login,
+.btn-logout,
+.btn-secondary,
+.btn-submit,
+.btn-action,
+.btn-outline,
+.btn-primary,
+.btn-danger,
+.btn-simulation,
+.btn-form-submit {
+    text-decoration: none;  /* toglie il sottolienato */
+    transition: all 0.3s;
+    cursor: pointer;
+    border-radius: 5px;  /* arrotonda angoli */
+    display: inline-block; 
+    text-align: center;  /* centra il testo all interno del bottone */ 
 }
 
 .btn-login {
     border: 2px solid var(--primary);
     padding: 0.5rem 1.2rem;
-    border-radius: 5px;
     color: var(--primary) !important;
-    text-decoration: none;
     font-weight: 500;
-    transition: all 0.3s;
 }
 
 .btn-login:hover {
@@ -97,10 +118,7 @@ prenderne lo stile*/
     border: 2px solid var(--primary);
     color: var(--primary);
     padding: 0.5rem 1rem;
-    border-radius: 5px;
     font-weight: bold;
-    text-decoration: none;
-    transition: all 0.3s;
 }
 
 .btn-logout:hover {
@@ -164,10 +182,7 @@ prenderne lo stile*/
     background: var(--dark);
     color: var(--white);
     padding: 0.7rem 1.5rem;
-    border-radius: 5px;
-    text-decoration: none;
     font-weight: 600;
-    transition: background 0.3s;
 }
 
 .btn-secondary:hover {
@@ -263,16 +278,7 @@ footer {
     margin-top: 3rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .main-container {
-        flex-direction: column;
-    }
 
-    .info-section h1 {
-        font-size: 2.2rem;
-    }
-}
 
 /* --- STILI SPECIFICI PER LA PAGINA DI LOGIN --- */
 .login-page-wrapper {
@@ -449,12 +455,7 @@ footer {
     margin-bottom: 4rem;
 }
 
-/* --- sotto a 768px impila in verticale --- */
-@media (max-width: 768px) {
-    .missions-layout {
-        flex-direction: column;
-    }
-}
+
 
 .missions-section h2 {
     color: var(--dark);
@@ -524,16 +525,15 @@ footer {
     gap: 1rem;
 }
 
+
+
 .btn-outline {
     background: transparent;
     border: 2px solid var(--dark);
     color: var(--dark);
     padding: 0.5rem 1rem;
-    border-radius: 5px;
-    text-decoration: none;
     font-weight: bold;
     font-size: 0.9rem;
-    transition: all 0.3s;
 }
 
 .btn-outline:hover {
@@ -546,11 +546,8 @@ footer {
     border: 2px solid var(--primary);
     color: var(--white);
     padding: 0.5rem 1rem;
-    border-radius: 5px;
-    text-decoration: none;
     font-weight: bold;
     font-size: 0.9rem;
-    transition: all 0.3s;
 }
 
 .btn-primary:hover {
@@ -696,6 +693,8 @@ footer {
     gap: 1rem;
     margin-bottom: 2rem;
 }
+
+
 
 /* --- CLASSI DI UTILITÀ PER PAGINA UTENTI --- */
 .btn-icon {
@@ -1222,5 +1221,60 @@ footer {
     100% {
         transform: scale(0.95);
         opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES GLOBALI (Responsive)
+   Tutte le ottimizzazioni per dispositivi mobili raccolte in un unico blocco
+   ========================================================================== */
+@media (max-width: 768px) {
+
+    /* Navbar */
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Layout Pubblico Principale */
+    .main-container {
+        flex-direction: column;
+    }
+
+    .info-section h1 {
+        font-size: 2.2rem;
+    }
+
+    /* Layout Missioni */
+    .missions-layout {
+        flex-direction: column;
+    }
+
+    .mission-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .mission-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .mission-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    /* Azioni Header */
+    .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

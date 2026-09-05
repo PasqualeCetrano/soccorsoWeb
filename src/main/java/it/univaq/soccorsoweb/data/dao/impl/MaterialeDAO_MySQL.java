@@ -25,6 +25,8 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
     private PreparedStatement updateMateriale;
     private PreparedStatement selectAllMateriali;
     private PreparedStatement selectMaterialiByMissione;
+    private PreparedStatement checkMaterialeInUso;
+    private PreparedStatement deleteImpiegaMateriale;
 
     public MaterialeDAO_MySQL(DataLayer d) {
         super(d);
@@ -46,6 +48,9 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
             selectAllMateriali = connection.prepareStatement("SELECT * FROM Materiale");
             selectMaterialiByMissione = connection.prepareStatement(
                     "SELECT m.* FROM Materiale m JOIN Impiega_Materiale im ON m.id_materiale = im.fk_id_materiale WHERE im.fk_id_missione = ?");
+            checkMaterialeInUso = connection.prepareStatement(
+                    "SELECT COUNT(*) FROM Impiega_Materiale im JOIN Missione mi ON im.fk_id_missione = mi.id_missione WHERE im.fk_id_materiale = ? AND mi.fine IS NULL");
+            deleteImpiegaMateriale = connection.prepareStatement("DELETE FROM Impiega_Materiale WHERE fk_id_materiale = ?");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing materiale data layer", ex);
@@ -62,6 +67,8 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
             deleteMateriale.close();
             selectAllMateriali.close();
             selectMaterialiByMissione.close();
+            checkMaterialeInUso.close();
+            deleteImpiegaMateriale.close();
         } catch (SQLException ex) {
 
         }
@@ -159,8 +166,28 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
     @Override
     public void deleteMateriale(Materiale materiale) throws DataException {
         try {
+            if (materiale.getKey() == null) {
+                throw new DataException("Impossibile eliminare un materiale senza ID");
+            }
+            // 1. Verifichiamo se il materiale è impiegato in una missione attiva
+            checkMaterialeInUso.setInt(1, materiale.getKey());
+            try (ResultSet rs = checkMaterialeInUso.executeQuery()) {
+                // sposto il cursore e valuto se il numero restituito (indica in quante missioni
+                // attive o in corso è impegnato un materiale) è maggiore di 0 e quindi impegnato in almeno una missione
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new DataException("Impossibile eliminare: il materiale è impiegato in una missione attiva");
+                }
+            }
+
+            // 2. Rimuoviamo i riferimenti dalle missioni storiche concluse
+            deleteImpiegaMateriale.setInt(1, materiale.getKey());
+            deleteImpiegaMateriale.executeUpdate();
+
+            // 3. Eliminiamo il materiale
             deleteMateriale.setInt(1, materiale.getKey());
             deleteMateriale.executeUpdate();
+
+            // Rimuoviamo dalla cache
             dataLayer.getCache().delete(Materiale.class, materiale.getKey());
         } catch (SQLException ex) {
             throw new DataException("Unable to delete materiale", ex);
