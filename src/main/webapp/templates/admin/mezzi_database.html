@@ -121,21 +121,34 @@
     </main>
 
     <script>
+        // Aspetta che l'intera pagina HTML sia stata caricata dal browser prima di eseguire lo script
         document.addEventListener('DOMContentLoaded', () => {
+            // Cerca e seleziona tutti i banner di notifica (quelli con classe CSS "alert")
             const alerts = document.querySelectorAll('.alert');
+            // Se è presente almeno un banner nella pagina...
             if (alerts.length > 0) {
+                // Imposta un'attesa iniziale di 2 secondi (2000 millisecondi)
                 setTimeout(() => {
+                    // Applica l'animazione di scomparsa a ciascun banner trovato
                     alerts.forEach(alert => {
+                        // Imposta un'animazione CSS fluida della durata di mezzo secondo
                         alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        // Rende il banner completamente trasparente
                         alert.style.opacity = '0';
+                        // Fa scivolare il banner verso l'alto di 10 pixel
                         alert.style.transform = 'translateY(-10px)';
+                        // Attende la fine dell'animazione (mezzo secondo) prima di distruggere l'elemento
                         setTimeout(() => {
                             alert.remove();
                         }, 500);
                     });
                     // Rimuove i parametri dall'URL per non mostrare di nuovo l'avviso in caso di ricaricamento (F5)
                     if (window.history.replaceState) {
+                        //ricrea un nuovo URL sulla base di quello vecchio andando a togliere tutto ciò 
+                        //che si trova dopo il ?, ovvero contiene il percorso per arrivare alla pagina in 
+                        //cui l'utente si trova attualmente
                         const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        //sostituisce l'Url attuale con quello che ha ricreato
                         window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
                     }
                 }, 2000);

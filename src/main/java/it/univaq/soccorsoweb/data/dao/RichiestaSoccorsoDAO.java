@@ -31,4 +31,7 @@ public interface RichiestaSoccorsoDAO {
     // ottenere tutte le info di una richiesta
     RichiestaSoccorso getRichiestaSoccorso(int id_richiesta) throws DataException;
 
+    //cancella le richieste non convalidate più vecchie di X ore
+    void cancellaRichiesteScadute(int ore) throws DataException;
+
 }

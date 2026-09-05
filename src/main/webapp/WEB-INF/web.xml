@@ -55,6 +55,13 @@
     </listener>
 
     <!-- ============================================== -->
+    <!-- LISTENER PER I TASK IN BACKGROUND (PULIZIA DB) -->
+    <!-- ============================================== -->
+    <listener>
+        <listener-class>it.univaq.soccorsoweb.application.SoccorsoWebTasksListener</listener-class>
+    </listener>
+
+    <!-- ============================================== -->
     <!-- MAPPATURE DELLE SERVLET DELLA PARTE PUBBLICA   -->
     <!-- ============================================== -->
 

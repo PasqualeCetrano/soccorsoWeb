@@ -21,6 +21,7 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
     private PreparedStatement selectRichiesteByStato;
     private PreparedStatement selectTutteRichieste;
     private PreparedStatement selectRichiestaById;
+    private PreparedStatement cancellaRichiesteScadute;
 
     public RichiestaSoccorsoDAO_MySQL(DataLayer d) {
         super(d);
@@ -47,6 +48,8 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
                     .prepareStatement("SELECT * FROM Richiesta_Soccorso ORDER BY ora_invio DESC");
             selectRichiestaById = connection
                     .prepareStatement("SELECT * FROM Richiesta_Soccorso WHERE id_richiesta_soccorso = ?");
+            cancellaRichiesteScadute = connection
+                    .prepareStatement("DELETE FROM Richiesta_Soccorso WHERE stato = 'da convalidare' AND ora_invio < (NOW() - INTERVAL ? HOUR)");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing richiesta soccorso data layer", ex);
@@ -249,9 +252,23 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
             if (selectRichiestaById != null) {
                 selectRichiestaById.close();
             }
+            if (cancellaRichiesteScadute != null) {
+                cancellaRichiesteScadute.close();
+            }
         } catch (SQLException ex) {
             throw new DataException("Errore durante la chiusura delle query nel data layer RichiestaSoccorso", ex);
         }
         super.destroy();
+    }
+
+    @Override
+    public void cancellaRichiesteScadute(int ore) throws DataException {
+        try {
+            cancellaRichiesteScadute.setInt(1, ore);
+            int cancellate = cancellaRichiesteScadute.executeUpdate();
+            System.out.println("[PULIZIA DB] Eliminate " + cancellate + " richieste scadute.");
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile eliminare le richieste scadute", ex);
+        }
     }
 }
