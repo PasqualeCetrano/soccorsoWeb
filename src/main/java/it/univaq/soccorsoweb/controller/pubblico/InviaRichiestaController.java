@@ -38,7 +38,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
 
             // Inizio controllo richieste multiple
             ServletContext context = getServletContext();
-            @SuppressWarnings("unchecked")
+
             // come chiave l'indirizzo IP mentre come valore l'orario dell'invio
             Map<String, Long> inviiRecenti = (Map<String, Long>) context.getAttribute("invii_recenti");
             // all'avvio dell'applicazione la variabile inviiRecenti è null e quindi viene
@@ -72,7 +72,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             // Fine controllo richieste multiple, il controllo avviene tramite la
             // memorizzazione dell email e ip del segnalante associati
             // all ultima ora di invio, in modo tale da controllare quanto tempo è passato e
-            // poter bloccare la richiesta il caso di flood!
+            // poter bloccare la richiesta il caso di flood
 
             // 3. Creazione del modello RichiestaSoccorso tramite il DAO
             RichiestaSoccorso richiesta = dl.getRichiestaSoccorsoDAO().createRichiestaSoccorso();
@@ -84,7 +84,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
 
             // SICUREZZA: Generiamo un token univoco di convalida (una stringa casuale
             // lunghissima).
-            // Questo token viene generato e salvato nel DB ora, per poi essere inserito nel
+            // Questo token viene generato e salvato nel DB, per poi essere inserito nel
             // link della Finta Email.
             // Permetterà alla "ConvalidaRichiestaController" di ritrovare questa specifica
             // richiesta in modo sicuro.

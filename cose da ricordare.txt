@@ -14,7 +14,7 @@ SEZIONE ADMIN
 
 
 USO JAVASCRIPT :
-    - per il messaggio di errore o successo nel caso di eliminazione o inserimento di un mezzo o materiale
+    - per il messaggio di errore o successo nel caso di eliminazione o inserimento di un mezzo o materiale ---inserito nella documentazione
 
 
 DA CORREGGERE: 
