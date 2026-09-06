@@ -71,6 +71,14 @@ public class SalvaMissioneController extends SoccorsoWebBaseController {
                     caposquadraP.setUtente(capoU); // associo la partecipazione al caposquadra
                     caposquadraP.setRuolo("caposquadra"); // imposto il ruolo del caposquadra
                     dl.getPartecipaDAO().storePartecipa(caposquadraP); // salvo la partecipazione
+                    
+                    // SIMULAZIONE INVIO EMAIL (Opzione A)
+                    System.out.println("=====================================================");
+                    System.out.println("[SISTEMA NOTIFICHE] Invio Email a: " + capoU.getEmail());
+                    System.out.println("Oggetto: NUOVA MISSIONE ASSEGNATA - Ruolo: Caposquadra");
+                    System.out.println("Dettagli: Recarsi presso " + missione.getPosizione());
+                    System.out.println("Obiettivo: " + missione.getObiettivo());
+                    System.out.println("=====================================================");
 
                     // 5. Assegnazione degli altri Operatori alla Squadra (tabella Partecipa)
                     if (operatoriParams != null) {
@@ -87,6 +95,14 @@ public class SalvaMissioneController extends SoccorsoWebBaseController {
                                 operatoreP.setUtente(opU); // associo la partecipazione all'operatore
                                 operatoreP.setRuolo("operatore"); // imposto il ruolo dell'operatore
                                 dl.getPartecipaDAO().storePartecipa(operatoreP); // salvo la partecipazione
+                                
+                                // SIMULAZIONE INVIO EMAIL (Opzione A)
+                                System.out.println("=====================================================");
+                                System.out.println("[SISTEMA NOTIFICHE] Invio Email a: " + opU.getEmail());
+                                System.out.println("Oggetto: NUOVA MISSIONE ASSEGNATA - Ruolo: Operatore");
+                                System.out.println("Dettagli: Recarsi presso " + missione.getPosizione());
+                                System.out.println("Obiettivo: " + missione.getObiettivo());
+                                System.out.println("=====================================================");
                             }
                         }
                     }
