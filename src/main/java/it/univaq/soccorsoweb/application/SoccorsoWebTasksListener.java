@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SoccorsoWebTasksListener implements ServletContextListener {
 
+    //rappresenta la dichiarazione di un gestore di azioni programmate nel tempo
     private ScheduledExecutorService scheduler;
 
     @Override
