@@ -91,7 +91,7 @@ public abstract class AbstractBaseController extends HttpServlet {
             datalayer.init(); // inizializza il datalayer caricando tutti i e i dao
             initRequest(request, datalayer);
             // si occupa di verificare se la pagina richiesta dall'utente è protetta o meno
-            if (hasLoggedAccess(request, response)) {
+            if (hasLoggedAccess(request, response)) { // controlla se la pagina a cui vogliamo accedere è protetta
                 if (s != null) { // controlla se l'utente ha fatto il login
                     if (!checkAccessRoles(request, response)) { // controlla se l'utente ha i ruoli per accedere alla
                                                                 // pagina
