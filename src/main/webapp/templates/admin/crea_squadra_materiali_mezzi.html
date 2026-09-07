@@ -77,7 +77,7 @@
                         <!-- Scelta Altri Membri (Checkboxes) -->
                         <div class="form-group w-100 text-left mt-1-5">
                             <label>Altri Operatori della Squadra</label>
-                            <div class="checkbox-list max-h-450">
+                            <div class="checkbox-list">
                                 <#if operatori??>
                                     <#list operatori as operatore>
                                         <label class="checkbox-item">
@@ -85,6 +85,8 @@
                                             <span>${operatore.nome} ${operatore.cognome}</span>
                                         </label>
                                     </#list>
+                                    <#else>
+                                        <p class="text-muted">Nessun operatore disponibile al momento.</p>
                                 </#if>
                             </div>
                         </div>
@@ -106,8 +108,8 @@
                                         <span>${mezzo.nome} <#if mezzo.descrizione??>(${mezzo.descrizione})</#if></span>
                                     </label>
                                 </#list>
-                            <#else>
-                                <p class="text-muted">Nessun mezzo disponibile al momento.</p>
+                                <#else>
+                                    <p class="text-muted">Nessun mezzo disponibile al momento.</p>
                             </#if>
                         </div>
                     </div>
@@ -121,11 +123,12 @@
                                 <#list materiali as materiale>
                                     <label class="checkbox-item">
                                         <input type="checkbox" name="materiali" value="${materiale.key}">
-                                        <span>${materiale.nome} <#if materiale.descrizione??>(${materiale.descrizione})</#if></span>
+                                        <span>${materiale.nome} <#if materiale.descrizione??>(${materiale.descrizione})
+                                            </#if></span>
                                     </label>
                                 </#list>
-                            <#else>
-                                <p class="text-muted">Nessun materiale disponibile al momento.</p>
+                                <#else>
+                                    <p class="text-muted">Nessun materiale disponibile al momento.</p>
                             </#if>
                         </div>
                     </div>

@@ -671,7 +671,7 @@ footer {
 
 /* --- CLASSI DI UTILITÀ PER PAGINA UTENTI --- */
 .btn-icon {
-    display: inline-flex;
+    display: inline-flex; /* permette di usare flexbox su un elemento inline */
     align-items: center;
     gap: 0.5rem;
 }
@@ -714,9 +714,8 @@ footer {
     padding: 0.8rem;
     border-radius: 4px;
     max-height: 200px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    /* Nasconde la scrollbar orizzontale */
+    overflow-y: auto; /* aggiunge una barra di scorrimento verticale se il contenuto supera l'altezza massima definita */
+    overflow-x: hidden; /* nasconde la barra di scorrimento orizzontale */
 }
 
 .checkbox-item {
@@ -724,8 +723,6 @@ footer {
     align-items: center;
     justify-content: space-between;
     /* Spinge un elemento a sinistra e uno a destra */
-    flex-direction: row-reverse;
-    /* Inverte l'ordine: testo a sinistra, quadratino a destra */
     gap: 0.5rem;
     font-weight: normal;
     cursor: pointer;
@@ -734,7 +731,8 @@ footer {
     border: 1px solid #ddd;
     padding: 0.5rem 0.8rem;
     border-radius: 5px;
-    transition: all 0.2s ease-in-out;
+    user-select: none;
+    transition: all 0.2s ease-in-out; /* all=tutte le proprietà | 0.2s=tempo di transizione | ease-in-out=curva di accelerazione */
 }
 
 /* Effetto quando si passa sopra col mouse */
@@ -743,10 +741,21 @@ footer {
     border-color: var(--primary);
 }
 
-/* Ingrandisce il quadratino fisico */
+/* Le parentesi quadre [...] in CSS rappresentano un Selettore di Attributo (Attribute Selector)
+Servono a dire al browser "Prendi questo elemento solo se ha questo specifico attributo". */
 .checkbox-item input[type="checkbox"] {
-    transform: scale(1.2);
-    /* Lo ingrandisce leggermente per renderlo più comodo da cliccare */
+    width: auto !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;    
+    outline: none !important;
+    
+}
+
+.checkbox-item input[type="checkbox"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 /* Badges di stato operativi (Mezzi / Materiali / Missioni) */
@@ -767,9 +776,9 @@ footer {
     line-height: 1.2;
 }
 
-/* =========================================
+/* 
    UTILITY CLASSES (Per rimuovere CSS inline)
-   ========================================= */
+  */
 .mb-2 {
     margin-bottom: 2rem;
 }
@@ -790,16 +799,16 @@ footer {
     color: #388e3c !important;
 }
 
-/* =========================================
+/* 
    STILI DETTAGLI RICHIESTA ATTIVA
-   ========================================= */
+   */
 .flex-2 {
     flex: 2;
 }
 
 .details-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;   /* due colonne di uguale larghezza */
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
@@ -920,9 +929,9 @@ footer {
     margin-bottom: 0 !important;
 }
 
-/* =========================================
+/* 
    STILI CRONOLOGIA AGGIORNAMENTI (Timeline)
-   ========================================= */
+   */
 .update-list {
     display: flex;
     flex-direction: column;
@@ -957,9 +966,9 @@ footer {
     margin: 0;
 }
 
-/* =========================================
+/* 
    STILI PER ALERTER E SIMULAZIONE EMAIL
-   ========================================= */
+  */
 .alert {
     padding: 15px;
     border-radius: 5px;
@@ -997,14 +1006,14 @@ footer {
 }
 
 .btn-simulation {
-    background-color: #dc3545;
-    color: white !important;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    display: inline-block;
-    transition: background-color 0.3s;
+    background-color: #dc3545; /* colore di sfondo */
+    color: white !important; /* fa riferimento al colore del testo */
+    padding: 12px 24px; /* Sopra/Sotto: 12px  |  Destra/Sinistra: 24px */
+    text-decoration: none; /* toglie il sottolineato */
+    border-radius: 5px; /* arrotonda angoli */
+    font-weight: bold; /* grassetto equivale a 700 */
+    display: inline-block; /* permette al link di comportarsi come un blocco/pulsante */
+    transition: background-color 0.3s; /* usato da hover */
 }
 
 .btn-simulation:hover {
@@ -1040,9 +1049,9 @@ footer {
     padding: 0.8rem;
 }
 
-/* =========================================
+/*
    STILI PER NUOVO UTENTE E FORM GRID
-   ========================================= */
+  */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1051,6 +1060,8 @@ footer {
 
 .checkbox-group {
     display: grid;
+    /* Crea tante colonne quante ce ne stanno nello schermo (auto-fill), 
+    ciascuna larga almeno 200px, e falle espandere in parti uguali (1fr ) per riempire la larghezza totale */
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
     margin-top: 0.5rem;
@@ -1092,7 +1103,7 @@ footer {
    SEGNALE DI NOTIFICA RICHIESTE ATTIVE
    ========================================= */
 .card-relative {
-    position: relative;
+    position: relative;  /* serve per absolute sotto */ 
 }
 
 .notification-dot {
@@ -1105,32 +1116,14 @@ footer {
     border-radius: 50%;
     box-shadow: 0 0 0 2px var(--white);
     display: inline-block;
-    z-index: 10;
+    z-index: 10;  /* per posizionare in primo piano */
 }
 
 
-
-@keyframes pulse-ring {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.8;
-    }
-
-    50% {
-        transform: scale(1.8);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(0.95);
-        opacity: 0;
-    }
-}
-
-/* ==========================================================================
+/* 
    MEDIA QUERIES GLOBALI (Responsive)
-   Tutte le ottimizzazioni per dispositivi mobili raccolte in un unico blocco
-   ========================================================================== */
+
+  */
 @media (max-width: 768px) {
 
     /* Navbar */
