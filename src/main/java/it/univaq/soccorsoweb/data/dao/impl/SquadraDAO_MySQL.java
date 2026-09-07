@@ -17,12 +17,18 @@ import java.sql.Statement;
 
 public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su Squadra, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement insertSquadra;
     private PreparedStatement updateSquadra;
     private PreparedStatement selectSquadraById;
     private PreparedStatement selectSquadraByMissione;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public SquadraDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del DataLayer, 
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i metodi
         super(d);
     }
 
@@ -31,6 +37,9 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
         try {
             super.init();
 
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate in 
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
+            // connection rappresenta la connessione al db tramite la quale viene eseguita la query 
             insertSquadra = connection.prepareStatement(
                     "INSERT INTO Squadra (codice, fk_id_missione) VALUES (?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -50,6 +59,8 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
 
     @Override
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             if (insertSquadra != null) insertSquadra.close();
             if (updateSquadra != null) updateSquadra.close();
@@ -58,14 +69,20 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
         } catch (SQLException ex) {
             // ignore
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 
     @Override
     public Squadra createSquadra() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene 
+        // la query per restituire le informazioni che gli servono
         return new SquadraProxy(getDataLayer());
     }
 
+    // metodo per creare un Squadra partendo da un risultato del database
+    // viene usato dal DAO internamente ogni volta che dobbiamo leggere ed esporre squadre già esistenti nel database
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel record
     private SquadraProxy createSquadra(ResultSet rs) throws DataException {
         SquadraProxy s = (SquadraProxy) createSquadra();
         try {
@@ -103,12 +120,20 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
                     throw new DataException("Squadra must be associated with a Missione");
                 }
 
+                // rappresenta il numero di righe inserite o modificate all'interno del db
                 if (insertSquadra.executeUpdate() == 1) {
+                    // per leggere la chiave generata dal database per il record appena inserito, 
+                    // usiamo il metodo getGeneratedKeys sullo statement.
                     try (ResultSet keys = insertSquadra.getGeneratedKeys()) {
+                        // il valore restituito è un ResultSet (tabella di risultati) con un record
+                        // per ciascuna chiave generata
                         if (keys.next()) {
+                            // i campi del record sono le componenti della chiave
+                            // va a leggere il nuovo ID generato dal db
                             int key = keys.getInt(1);
+                            // aggiorniamo la chiave in caso di inserimento
                             squadra.setKey(key);
-                            // Add to cache
+                            // inseriamo il nuovo oggetto nella cache
                             dataLayer.getCache().add(Squadra.class, squadra);
                         }
                     }
@@ -129,6 +154,7 @@ public class SquadraDAO_MySQL extends DAO implements SquadraDAO {
                 }
             }
 
+            // se abbiamo un proxy, resettiamo il suo attributo dirty
             if (squadra instanceof DataItemProxy) {
                 ((DataItemProxy) squadra).setModified(false);
             }

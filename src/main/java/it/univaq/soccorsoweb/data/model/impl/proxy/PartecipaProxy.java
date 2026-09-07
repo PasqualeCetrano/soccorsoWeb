@@ -11,11 +11,30 @@ import it.univaq.framework.data.DataLayer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * quindi in questa classe del proxy, abbiamo effettuato l'Override dei metodi contenuti in 
+ * PartecipaImpl e per modificare i valori degli attributi dell'oggetto Partecipa salvato in RAM,
+ * ci basiamo sul richiamare i metodi presenti in PartecipaImpl all'interno dei metodi 
+ * ridefiniti nel proxy.
+ *
+ * richiamiamo i metodi in PartecipaImpl perchè poichè quegli attributi sono dichiarati private,
+ * possono essere modificati solamente dai metodi di quella classe
+ *
+ * @author Antigravity
+ */
 public class PartecipaProxy extends PartecipaImpl implements DataItemProxy {
 
+    // I FILE PROXY FORNISCONO IL TRACCIAMENTO DELLE MODIFICHE E PERMETTONO IL LAZY LOADING
+
+    // Indica se l'oggetto in memoria contiene delle modifiche non ancora salvate sul database.
     protected boolean modified;
     protected int squadra_key;
     protected int utente_key;
+    // Riferimento al DataLayer, necessario per caricare i dati dal database
+    // dataLayer è il punto di accesso (connessioni) che permette al Proxy di
+    // recuperare i DAO e mantenere la connessione attiva al DB
+    // permette di mantenere gli oggetti caricati in memoria
+    // necessari per caricare autonomamente i propri dati correlati (Lazy Loading).
     protected DataLayer dataLayer;
 
     public PartecipaProxy(DataLayer d) {
@@ -40,6 +59,7 @@ public class PartecipaProxy extends PartecipaImpl implements DataItemProxy {
 
     @Override
     public Squadra getSquadra() {
+        // notare come la Squadra in relazione venga caricata solo su richiesta
         if (super.getSquadra() == null && squadra_key > 0) {
             try {
                 super.setSquadra(((SquadraDAO) dataLayer.getDAO(Squadra.class)).getSquadra(squadra_key));
@@ -63,6 +83,7 @@ public class PartecipaProxy extends PartecipaImpl implements DataItemProxy {
 
     @Override
     public Utente getUtente() {
+        // notare come l'Utente in relazione venga caricato solo su richiesta
         if (super.getUtente() == null && utente_key > 0) {
             try {
                 super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(utente_key));
@@ -84,11 +105,15 @@ public class PartecipaProxy extends PartecipaImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // METODI DEL PROXY
+    // dopo che l'oggetto viene salvato nel DB tramite il DAO, la modifica per 
+    // questo oggetto viene reimpostata a false
     @Override
     public void setModified(boolean dirty) {
         this.modified = dirty;
     }
 
+    // Chiesto dal DAO per sapere: "C'è qualcosa da salvare su DB?"
     @Override
     public boolean isModified() {
         return modified;

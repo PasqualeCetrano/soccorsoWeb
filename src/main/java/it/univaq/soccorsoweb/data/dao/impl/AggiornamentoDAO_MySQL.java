@@ -18,11 +18,17 @@ import java.util.List;
 
 public class AggiornamentoDAO_MySQL extends DAO implements AggiornamentoDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su Aggiornamento, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement insertAggiornamento;
     private PreparedStatement selectAggiornamentiByMissione;
     private PreparedStatement selectAggiornamentiByUtente;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public AggiornamentoDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del DataLayer, 
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i metodi
         super(d);
     }
 
@@ -31,6 +37,9 @@ public class AggiornamentoDAO_MySQL extends DAO implements AggiornamentoDAO {
         try {
             super.init();
 
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate in 
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
+            // connection rappresenta la connessione al db tramite la quale viene eseguita la query 
             insertAggiornamento = connection.prepareStatement(
                     "INSERT INTO Aggiornamento (timestamp_agg, testo, fk_id_missione, fk_id_utente) VALUES (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -48,6 +57,8 @@ public class AggiornamentoDAO_MySQL extends DAO implements AggiornamentoDAO {
 
     @Override
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             if (insertAggiornamento != null)
                 insertAggiornamento.close();
@@ -58,14 +69,20 @@ public class AggiornamentoDAO_MySQL extends DAO implements AggiornamentoDAO {
         } catch (SQLException ex) {
             // ignore
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 
     @Override
     public Aggiornamento createAggiornamento() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene 
+        // la query per restituire le informazioni che gli servono
         return new AggiornamentoProxy(getDataLayer());
     }
 
+    // metodo per creare un Aggiornamento partendo da un risultato del database
+    // viene usato dal DAO internamente ogni volta che dobbiamo leggere ed esporre aggiornamenti già esistenti nel database
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel record
     private AggiornamentoProxy createAggiornamento(ResultSet rs) throws DataException {
         AggiornamentoProxy a = (AggiornamentoProxy) createAggiornamento();
         try {
@@ -94,16 +111,27 @@ public class AggiornamentoDAO_MySQL extends DAO implements AggiornamentoDAO {
             insertAggiornamento.setInt(3, aggiornamento.getMissione().getKey());
             insertAggiornamento.setInt(4, aggiornamento.getUtente().getKey());
 
+            // rappresenta il numero di righe inserite o modificate all'interno del db,
+            // poichè stiamo inserendo un solo oggetto, ci aspettiamo che il numero di
+            // righe modificate o inserite sia = 1
             if (insertAggiornamento.executeUpdate() == 1) {
+                // per leggere la chiave generata dal database per il record appena inserito, 
+                // usiamo il metodo getGeneratedKeys sullo statement.
                 try (ResultSet keys = insertAggiornamento.getGeneratedKeys()) {
+                    // il valore restituito è un ResultSet (tabella di risultati) con un record
+                    // per ciascuna chiave generata (uno solo nel nostro caso)
                     if (keys.next()) {
+                        // i campi del record sono le componenti della chiave
+                        // va a leggere il nuovo ID generato dal db
                         aggiornamento.setKey(keys.getInt(1));
                         // Aggiorniamo anche il timestamp sull'oggetto in memoria
                         aggiornamento.setTimestampAgg(now.toLocalDateTime());
+                        // inseriamo il nuovo oggetto nella cache
                         dataLayer.getCache().add(Aggiornamento.class, aggiornamento);
                     }
                 }
             }
+            // se abbiamo un proxy, resettiamo il suo attributo dirty
             if (aggiornamento instanceof AggiornamentoProxy) {
                 ((AggiornamentoProxy) aggiornamento).setModified(false);
             }

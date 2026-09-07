@@ -18,6 +18,9 @@ import java.util.List;
 
 public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su Materiale, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement selectMaterialiDisponibili;
     private PreparedStatement selectMaterialeById;
     private PreparedStatement insertMateriale;
@@ -28,7 +31,10 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
     private PreparedStatement checkMaterialeInUso;
     private PreparedStatement deleteImpiegaMateriale;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public MaterialeDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del DataLayer, 
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i metodi
         super(d);
     }
 
@@ -37,6 +43,9 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
         try {
             super.init();
 
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate in 
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
+            // connection rappresenta la connessione al db tramite la quale viene eseguita la query 
             selectMaterialiDisponibili = connection.prepareStatement(
                     "SELECT m.* FROM Materiale m WHERE m.id_materiale NOT IN (SELECT im.fk_id_materiale FROM Impiega_Materiale im JOIN Missione mi ON im.fk_id_missione = mi.id_missione WHERE mi.fine IS NULL)");
             selectMaterialeById = connection.prepareStatement("SELECT * FROM Materiale WHERE id_materiale = ?");
@@ -59,6 +68,8 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
 
     @Override
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             selectMaterialiDisponibili.close();
             selectMaterialeById.close();
@@ -72,6 +83,7 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
         } catch (SQLException ex) {
 
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 
@@ -79,9 +91,14 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
     // creiamo il file DAO_MySQL
     @Override
     public Materiale createMateriale() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene 
+        // la query per restituire le informazioni che gli servono
         return new MaterialeProxy(getDataLayer());
     }
 
+    // metodo per creare un Materiale partendo da un risultato del database
+    // viene usato dal DAO internamente ogni volta che dobbiamo leggere ed esporre materiali già esistenti nel database
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel record
     private MaterialeProxy createMateriale(ResultSet rs) throws DataException {
         MaterialeProxy m = (MaterialeProxy) createMateriale();
         try {
@@ -99,7 +116,9 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
         List<Materiale> result = new ArrayList<>();
         try (ResultSet rs = selectMaterialiDisponibili.executeQuery()) {
             while (rs.next()) {
+                // altrimenti va a prenderlo dal db (qui non abbiamo il check in cache ma lo inseriamo)
                 Materiale m = createMateriale(rs);
+                // non dimentichiamo anche qui la cache!
                 dataLayer.getCache().add(Materiale.class, m);
                 result.add(m);
             }
@@ -111,6 +130,7 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
 
     @Override
     public Materiale getMateriale(int id_materiale) throws DataException {
+        // Controlla se il materiale è già nella cache del DataLayer
         if (dataLayer.getCache().has(Materiale.class, id_materiale)) {
             return dataLayer.getCache().get(Materiale.class, id_materiale);
         }
@@ -145,16 +165,26 @@ public class MaterialeDAO_MySQL extends DAO implements MaterialeDAO {
                 // INSERT
                 insertMateriale.setString(1, materiale.getNome());
                 insertMateriale.setString(2, materiale.getDescrizione());
-                if (insertMateriale.executeUpdate() == 1) {
-                    try (ResultSet keys = insertMateriale.getGeneratedKeys()) {
-                        if (keys.next()) {
+            // rappresenta il numero di righe inserite o modificate all'interno del db
+            if (insertMateriale.executeUpdate() == 1) {
+                // per leggere la chiave generata dal database per il record appena inserito, 
+                // usiamo il metodo getGeneratedKeys sullo statement.
+                try (ResultSet keys = insertMateriale.getGeneratedKeys()) {
+                    // il valore restituito è un ResultSet (tabella di risultati) con un record
+                    // per ciascuna chiave generata
+                    if (keys.next()) {
+                            // i campi del record sono le componenti della chiave
+                            // va a leggere il nuovo ID generato dal db
                             int key = keys.getInt(1);
+                            // aggiorniamo la chiave in caso di inserimento
                             materiale.setKey(key);
+                            // inseriamo il nuovo oggetto nella cache
                             dataLayer.getCache().add(Materiale.class, materiale);
                         }
                     }
                 }
             }
+            // se abbiamo un proxy, resettiamo il suo attributo dirty
             if (materiale instanceof DataItemProxy) {
                 ((DataItemProxy) materiale).setModified(false);
             }

@@ -23,17 +23,41 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * quindi in questa classe del proxy, abbiamo effettuato l'Override dei metodi
+ * contenuti in
+ * UtenteImpl e per modificare i valori degli attributi dell'oggetto Utente
+ * salvato in RAM,
+ * ci basiamo sul richiamare i metodi presenti in UtenteImpl all'interno dei
+ * metodi
+ * ridefiniti nel proxy.
+ *
+ * richiamiamo i metodi in UtenteImpl perchè poichè quegli attributi sono
+ * dichiarati private,
+ * possono essere modificati solamente dai metodi di quella classe
  *
  * @author Antigravity
  */
 public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
+    // I FILE PROXY FORNISCONO IL TRACCIAMENTO DELLE MODIFICHE E PERMETTONO IL LAZY
+    // LOADING
+
+    // Indica se l'oggetto in memoria contiene delle modifiche non ancora salvate
+    // sul database.
     protected boolean modified;
+    // variabili per chiavi esterne nella tabella, che favoriscono il Lazy Loading
     protected int amministratore_key;
+
+    // Riferimento al DataLayer, necessario per caricare i dati dal database
+    // dataLayer è il punto di accesso (connessioni) che permette al Proxy di
+    // recuperare i DAO e mantenere la connessione attiva al DB
+    // permette di mantenere gli oggetti caricati in memoria
+    // necessari per caricare autonomamente i propri dati correlati (Lazy Loading).
     protected DataLayer dataLayer;
 
     public UtenteProxy(DataLayer d) {
         super();
+        // dependency injection
         this.dataLayer = d;
         this.modified = false;
         this.amministratore_key = 0;
@@ -95,14 +119,36 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
     @Override
     public Utente getAmministratoreCreatore() {
+        // notare come l'amministratore creatore in relazione venga caricato solo su
+        // richiesta
         if (super.getAmministratoreCreatore() == null && amministratore_key > 0) {
             try {
+                // viene effettuata la chiamata al DAO (dopo aver preso l'istanza dal dataLayer)
+                // per recuperare l'amministratore tramite la sua chiave esterna
+                // da ricordare che è come se avessimo un Dao generico che contiene tutti gli
+                // altri
+                // Dao definiti per ogni file dell'interfaccia che abbiamo creato, da quello
+                // generico
+                // andiamo a trovare il Dao che ci serve e poi lo castiamo al tipo di File Dao
+                // definito nel nostro progetto.
+                // se non effettuassimo il cast è come se potessimo accedere solamente ai metodi
+                // definiti
+                // in DAO.java, mentre facendo il cast accediamo anche ai metodi definiti nel
+                // DAO
+                // specifico che ci serve e poi da questo file andiamo a chiamare il metodo
+                // che ci permette di ottenere tutte le info per completare l'oggetto e poi
+                // modifichiamo la variabile null
                 super.setAmministratoreCreatore(
                         ((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(amministratore_key));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        // va a chiamare sull'oggetto preso in considerazione l'implementazione del
+        // metodo
+        // getAmministratoreCreatore()presente in UtenteImpl e non l'implementazione
+        // presente
+        // in UtenteProxy
         return super.getAmministratoreCreatore();
     }
 
@@ -210,7 +256,6 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         this.modified = true;
     }
 
-
     @Override
     public List<Missione> getMissioniChiuse() {
         if (super.getMissioniChiuse() == null && getKey() != null && getKey() > 0) {
@@ -241,10 +286,16 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // una volta caricata una lista dal DB, successivamente non verranno fatte
+    // query per restituire la lista, ma verrà restituita direttamente
+    // la lista memorizzata in RAM
     @Override
     public List<Missione> getMissioniPartecipate() {
         if (super.getMissioniPartecipate() == null && getKey() != null && getKey() > 0) {
             try {
+                // ci facciamo restituire il Dao dal dataLayer, in modo tale
+                // da avere accesso alla tabella nel DB e prendere la lista in riferimento
+                // all'utente
                 super.setMissioniPartecipate(
                         ((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissioniPartecipateByUtente(this));
             } catch (DataException ex) {
@@ -272,11 +323,15 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // METODI DEL PROXY
+    // dopo che l'oggetto viene salvato nel DB tramite il DAO, la modifica per
+    // questo oggetto viene reimpostata a false
     @Override
     public void setModified(boolean dirty) {
         this.modified = dirty;
     }
 
+    // Chiesto dal DAO per sapere: "C'è qualcosa da salvare su DB?"
     @Override
     public boolean isModified() {
         return modified;
@@ -284,6 +339,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
     public void setAmministratoreKey(int amministratore_key) {
         this.amministratore_key = amministratore_key;
+        // resettiamo la cache dell'amministratore
+        // reset amministratore cache
         super.setAmministratoreCreatore(null);
     }
 }

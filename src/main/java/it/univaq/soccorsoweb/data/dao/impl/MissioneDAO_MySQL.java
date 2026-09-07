@@ -20,6 +20,9 @@ import java.util.List;
 
 public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su Missione, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement insertMissione;
     private PreparedStatement updateMissione;
     private PreparedStatement selectMissioneById;
@@ -32,7 +35,10 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     private PreparedStatement insertImpiegaMateriale;
     private PreparedStatement insertImpiegaMezzo;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public MissioneDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del DataLayer, 
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i metodi
         super(d);
     }
 
@@ -41,6 +47,9 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     public void init() throws DataException {
         try {
             super.init();
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate in 
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
+            // connection rappresenta la connessione al db tramite la quale viene eseguita la query 
             // query per aprire la missione dalla richiesta di soccorso prende in automatico
             // fk_id_richiesta
             insertMissione = connection.prepareStatement(
@@ -86,6 +95,8 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     // servono più, liberando memoria
     @Override
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             if (insertMissione != null)
                 insertMissione.close();
@@ -112,17 +123,21 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
         } catch (SQLException ex) {
             // ignore
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 
     @Override
     public Missione createMissione() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene 
+        // la query per restituire le informazioni che gli servono
         return new MissioneProxy(getDataLayer());
     }
 
     // metodo private usato solo all'interno di questa classe, ogni volta che viene
     // eseguita una query per ottenere una missione, viene usato questo metodo per
     // trasformare il risultato della query in un oggetto Missione in java
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel record
     private MissioneProxy createMissione(ResultSet rs) throws DataException {
         MissioneProxy m = (MissioneProxy) createMissione();
         try {
@@ -181,11 +196,19 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 insertMissione.setTimestamp(3, now); // inizio automatico
                 insertMissione.setInt(4, missione.getRichiestaSoccorso().getKey());
 
+                // rappresenta il numero di righe inserite o modificate all'interno del db
                 if (insertMissione.executeUpdate() == 1) {
+                    // per leggere la chiave generata dal database per il record appena inserito, 
+                    // usiamo il metodo getGeneratedKeys sullo statement.
                     try (ResultSet keys = insertMissione.getGeneratedKeys()) {
+                        // il valore restituito è un ResultSet (tabella di risultati) con un record
+                        // per ciascuna chiave generata
                         if (keys.next()) {
+                            // i campi del record sono le componenti della chiave
+                            // va a leggere il nuovo ID generato dal db
                             missione.setKey(keys.getInt(1));
                             missione.setInizio(now.toLocalDateTime()); // aggiorna oggetto in memoria
+                            // inseriamo il nuovo oggetto nella cache
                             dataLayer.getCache().add(Missione.class, missione);
                         }
                     }
@@ -247,10 +270,14 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
                 while (rs.next()) {
                     int id_missione = rs.getInt("id_missione");
                     Missione m = null;
+                    // controllo se ha già in memoria un oggetto di tipo Missione con quello specifico 
+                    // id, se lo ha prende quell'oggetto e ne fa il cast
                     if (dataLayer.getCache().has(Missione.class, id_missione)) {
                         m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
                     } else {
+                        // altrimenti va a prenderlo dal db (evitando l'N+1 query problem)
                         m = createMissione(rs);
+                        // non dimentichiamo anche qui la cache!
                         dataLayer.getCache().add(Missione.class, m);
                     }
                     result.add(m);
@@ -337,6 +364,7 @@ public class MissioneDAO_MySQL extends DAO implements MissioneDAO {
     @Override
     public Missione getMissione(int id_missione) throws DataException {
         Missione m = null;
+        // Controlla se la missione è già nella cache del DataLayer
         if (dataLayer.getCache().has(Missione.class, id_missione)) {
             m = (Missione) dataLayer.getCache().get(Missione.class, id_missione);
         } else {

@@ -79,6 +79,7 @@ it\univaq\framework\view\TemplateResult.class
 it\univaq\soccorsoweb\controller\admin\InfoMissioneController.class
 it\univaq\soccorsoweb\data\dao\PatenteDAO.class
 it\univaq\soccorsoweb\data\dao\impl\MezzoDAO_MySQL.class
+it\univaq\soccorsoweb\application\SoccorsoWebTasksListener.class
 it\univaq\soccorsoweb\data\model\Partecipa.class
 it\univaq\soccorsoweb\data\model\impl\proxy\PatenteProxy.class
 it\univaq\framework\data\DataCache.class

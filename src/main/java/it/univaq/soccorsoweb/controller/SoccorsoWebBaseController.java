@@ -8,9 +8,11 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 public abstract class SoccorsoWebBaseController extends AbstractBaseController {
+    // rappresenta l'implementazione del metodo astratto createDataLayer in
+    // AbstractBaseController
     // prende il DataSource da AbstractBaseController che lo prende dal contesto
-    // attuale
-    // dell'applicazione grazie ad ApplicationInitializer che lo legge dal web.xml
+    // attuale dell'applicazione grazie ad ApplicationInitializer che lo legge dal
+    // web.xml
     @Override
     protected DataLayer createDataLayer(DataSource ds) throws ServletException {
         try {

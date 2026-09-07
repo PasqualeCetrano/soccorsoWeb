@@ -13,12 +13,22 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//nei Proxy facciamo l'Override di tutti i metodi set(in questo caso di AggiornamentoImpl
-//e DataItemProxy), mentre effettuiamo l'Override dei metodi get solo degli attributi +
-//impegnativi, ovvero gli oggetti
-
+/**
+ * quindi in questa classe del proxy, abbiamo effettuato l'Override dei metodi contenuti in 
+ * AggiornamentoImpl e per modificare i valori degli attributi dell'oggetto Aggiornamento salvato in RAM,
+ * ci basiamo sul richiamare i metodi presenti in AggiornamentoImpl all'interno dei metodi 
+ * ridefiniti nel proxy.
+ *
+ * richiamiamo i metodi in AggiornamentoImpl perchè poichè quegli attributi sono dichiarati private,
+ * possono essere modificati solamente dai metodi di quella classe
+ *
+ * @author Antigravity
+ */
 public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemProxy {
 
+    // I FILE PROXY FORNISCONO IL TRACCIAMENTO DELLE MODIFICHE E PERMETTONO IL LAZY LOADING
+
+    // Indica se l'oggetto in memoria contiene delle modifiche non ancora salvate sul database.
     protected boolean modified;
     // in AggiornamentoImpl, noi abbiamo l'attributo missione che rappresenta
     // l'intero
@@ -31,6 +41,11 @@ public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemPro
     // di risalire all'intero oggetto missione (permette il lazy_loading)
     protected int missione_key;
     protected int utente_key;
+    // Riferimento al DataLayer, necessario per caricare i dati dal database
+    // dataLayer è il punto di accesso (connessioni) che permette al Proxy di
+    // recuperare i DAO e mantenere la connessione attiva al DB
+    // permette di mantenere gli oggetti caricati in memoria
+    // necessari per caricare autonomamente i propri dati correlati (Lazy Loading).
     protected DataLayer dataLayer;
 
     public AggiornamentoProxy(DataLayer d) {
@@ -61,6 +76,7 @@ public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemPro
 
     @Override
     public Missione getMissione() {
+        // notare come la Missione in relazione venga caricata solo su richiesta
         if (super.getMissione() == null && missione_key > 0) {
             try {
                 super.setMissione(((MissioneDAO) dataLayer.getDAO(Missione.class)).getMissione(missione_key));
@@ -84,6 +100,7 @@ public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemPro
 
     @Override
     public Utente getUtente() {
+        // notare come l'Utente in relazione venga caricato solo su richiesta
         if (super.getUtente() == null && utente_key > 0) {
             try {
                 super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(utente_key));
@@ -105,11 +122,15 @@ public class AggiornamentoProxy extends AggiornamentoImpl implements DataItemPro
         this.modified = true;
     }
 
+    // METODI DEL PROXY
+    // dopo che l'oggetto viene salvato nel DB tramite il DAO, la modifica per 
+    // questo oggetto viene reimpostata a false
     @Override
     public void setModified(boolean dirty) {
         this.modified = dirty;
     }
 
+    // Chiesto dal DAO per sapere: "C'è qualcosa da salvare su DB?"
     @Override
     public boolean isModified() {
         return modified;

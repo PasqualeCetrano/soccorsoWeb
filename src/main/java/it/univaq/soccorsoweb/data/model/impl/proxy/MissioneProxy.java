@@ -22,12 +22,31 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * quindi in questa classe del proxy, abbiamo effettuato l'Override dei metodi contenuti in 
+ * MissioneImpl e per modificare i valori degli attributi dell'oggetto Missione salvato in RAM,
+ * ci basiamo sul richiamare i metodi presenti in MissioneImpl all'interno dei metodi 
+ * ridefiniti nel proxy.
+ *
+ * richiamiamo i metodi in MissioneImpl perchè poichè quegli attributi sono dichiarati private,
+ * possono essere modificati solamente dai metodi di quella classe
+ *
+ * @author Antigravity
+ */
 public class MissioneProxy extends MissioneImpl implements DataItemProxy {
 
+    // I FILE PROXY FORNISCONO IL TRACCIAMENTO DELLE MODIFICHE E PERMETTONO IL LAZY LOADING
+
+    // Indica se l'oggetto in memoria contiene delle modifiche non ancora salvate sul database.
     protected boolean modified;
     protected int richiesta_key;
     protected int amministratore_key;
     protected int squadra_key;
+    // Riferimento al DataLayer, necessario per caricare i dati dal database
+    // dataLayer è il punto di accesso (connessioni) che permette al Proxy di
+    // recuperare i DAO e mantenere la connessione attiva al DB
+    // permette di mantenere gli oggetti caricati in memoria
+    // necessari per caricare autonomamente i propri dati correlati (Lazy Loading).
     protected DataLayer dataLayer;
 
     public MissioneProxy(DataLayer d) {
@@ -83,6 +102,7 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
 
     @Override
     public RichiestaSoccorso getRichiestaSoccorso() {
+        // notare come la RichiestaSoccorso in relazione venga caricata solo su richiesta
         if (super.getRichiestaSoccorso() == null && richiesta_key > 0) {
             try {
                 super.setRichiestaSoccorso(((RichiestaSoccorsoDAO) dataLayer.getDAO(RichiestaSoccorso.class))
@@ -107,6 +127,7 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
 
     @Override
     public Utente getAmministratore() {
+        // notare come l'Amministratore in relazione venga caricato solo su richiesta
         if (super.getAmministratore() == null && amministratore_key > 0) {
             try {
                 super.setAmministratore(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(amministratore_key));
@@ -151,8 +172,12 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // una volta caricata una lista dal DB, successivamente non verranno fatte
+    // query per restituire la lista, ma verrà restituita direttamente
+    // la lista memorizzata in RAM
     @Override
     public List<Mezzo> getMezzi() {
+        // notare come i Mezzi in relazione vengano caricati solo su richiesta
         if (super.getMezzi() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setMezzi(((MezzoDAO) dataLayer.getDAO(Mezzo.class)).getMezziByMissione(this));
@@ -179,8 +204,12 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // una volta caricata una lista dal DB, successivamente non verranno fatte
+    // query per restituire la lista, ma verrà restituita direttamente
+    // la lista memorizzata in RAM
     @Override
     public List<Materiale> getMateriali() {
+        // notare come i Materiali in relazione vengano caricati solo su richiesta
         if (super.getMateriali() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setMateriali(((MaterialeDAO) dataLayer.getDAO(Materiale.class)).getMaterialiByMissione(this));
@@ -207,8 +236,12 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // una volta caricata una lista dal DB, successivamente non verranno fatte
+    // query per restituire la lista, ma verrà restituita direttamente
+    // la lista memorizzata in RAM
     @Override
     public List<Aggiornamento> getAggiornamenti() {
+        // notare come gli Aggiornamenti in relazione vengano caricati solo su richiesta
         if (super.getAggiornamenti() == null && getKey() != null && getKey() > 0) {
             try {
                 super.setAggiornamenti(
@@ -237,11 +270,15 @@ public class MissioneProxy extends MissioneImpl implements DataItemProxy {
         this.modified = true;
     }
 
+    // METODI DEL PROXY
+    // dopo che l'oggetto viene salvato nel DB tramite il DAO, la modifica per 
+    // questo oggetto viene reimpostata a false
     @Override
     public void setModified(boolean dirty) {
         this.modified = dirty;
     }
 
+    // Chiesto dal DAO per sapere: "C'è qualcosa da salvare su DB?"
     @Override
     public boolean isModified() {
         return modified;

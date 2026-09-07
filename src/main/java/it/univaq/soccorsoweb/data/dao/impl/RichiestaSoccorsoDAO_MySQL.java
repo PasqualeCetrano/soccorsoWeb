@@ -15,6 +15,9 @@ import java.util.List;
 
 public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorsoDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su RichiestaSoccorso, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement insertRichiestaSoccorso; // da parte di un untente sulla home
     private PreparedStatement updateRichiestaSoccorso; // da parte di amministratore, cambia stato richiesta
     private PreparedStatement selectRichiestaByStringaConvalida;
@@ -23,7 +26,10 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
     private PreparedStatement selectRichiestaById;
     private PreparedStatement cancellaRichiesteScadute;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public RichiestaSoccorsoDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del DataLayer, 
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i metodi
         super(d);
     }
 
@@ -31,6 +37,9 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
     public void init() throws DataException {
         try {
             super.init();
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate in 
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
+            // connection rappresenta la connessione al db tramite la quale viene eseguita la query 
             // da parte di un untente sulla home, deve avere lo stato di default da
             // convalidare
             insertRichiestaSoccorso = connection.prepareStatement(
@@ -58,9 +67,14 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
 
     @Override
     public RichiestaSoccorso createRichiestaSoccorso() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene 
+        // la query per restituire le informazioni che gli servono
         return new RichiestaSoccorsoProxy(getDataLayer());
     }
 
+    // metodo per creare un RichiestaSoccorso partendo da un risultato del database
+    // viene usato dal DAO internamente ogni volta che dobbiamo leggere ed esporre richieste già esistenti nel database
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel record
     private RichiestaSoccorsoProxy createRichiestaSoccorso(ResultSet rs) throws DataException {
         RichiestaSoccorsoProxy r = (RichiestaSoccorsoProxy) createRichiestaSoccorso();
         try {
@@ -99,6 +113,7 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
                 updateRichiestaSoccorso.setInt(2, richiesta.getKey());
 
                 if (updateRichiestaSoccorso.executeUpdate() == 1) {
+                    // se abbiamo un proxy, resettiamo il suo attributo dirty
                     if (richiesta instanceof RichiestaSoccorsoProxy) {
                         ((RichiestaSoccorsoProxy) richiesta).setModified(false);
                     }
@@ -123,14 +138,24 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
                 insertRichiestaSoccorso.setString(8, richiesta.getEmail_segnalante());
                 insertRichiestaSoccorso.setString(9, richiesta.getSegnalante());
 
+                // rappresenta il numero di righe inserite o modificate all'interno del db
                 if (insertRichiestaSoccorso.executeUpdate() == 1) {
+                    // per leggere la chiave generata dal database per il record appena inserito, 
+                    // usiamo il metodo getGeneratedKeys sullo statement.
                     try (ResultSet keys = insertRichiestaSoccorso.getGeneratedKeys()) {
+                        // il valore restituito è un ResultSet (tabella di risultati) con un record
+                        // per ciascuna chiave generata
                         if (keys.next()) {
+                            // i campi del record sono le componenti della chiave
+                            // va a leggere il nuovo ID generato dal db
                             int key = keys.getInt(1);
+                            // aggiorniamo la chiave in caso di inserimento
                             richiesta.setKey(key);
+                            // inseriamo il nuovo oggetto nella cache
                             dataLayer.getCache().add(RichiestaSoccorso.class, richiesta);
                         }
                     }
+                    // se abbiamo un proxy, resettiamo il suo attributo dirty
                     if (richiesta instanceof RichiestaSoccorsoProxy) {
                         ((RichiestaSoccorsoProxy) richiesta).setModified(false);
                     }
@@ -148,11 +173,14 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
             try (ResultSet rs = selectRichiestaByStringaConvalida.executeQuery()) {
                 if (rs.next()) {
                     int id_richiesta_soccorso = rs.getInt("id_richiesta_soccorso");
+                    // controllo se ha già in memoria un oggetto di tipo RichiestaSoccorso
                     if (dataLayer.getCache().has(RichiestaSoccorso.class, id_richiesta_soccorso)) {
                         return (RichiestaSoccorso) dataLayer.getCache().get(RichiestaSoccorso.class,
                                 id_richiesta_soccorso);
                     } else {
+                        // altrimenti va a prenderlo dal db (evitando l'N+1 query problem)
                         RichiestaSoccorso r = createRichiestaSoccorso(rs);
+                        // non dimentichiamo anche qui la cache!
                         dataLayer.getCache().add(RichiestaSoccorso.class, r);
                         return r;
                     }
@@ -233,6 +261,8 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
 
     @Override
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             if (insertRichiestaSoccorso != null) {
                 insertRichiestaSoccorso.close();
@@ -258,6 +288,7 @@ public class RichiestaSoccorsoDAO_MySQL extends DAO implements RichiestaSoccorso
         } catch (SQLException ex) {
             throw new DataException("Errore durante la chiusura delle query nel data layer RichiestaSoccorso", ex);
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 

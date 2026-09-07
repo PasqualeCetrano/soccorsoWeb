@@ -16,6 +16,11 @@ import java.util.List;
 
 public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
+    // andiamo a definire una variabile per ogni query che vogliamo eseguire su
+    // Utente, così che
+    // la query viene compilata una sola volta all'avvio del DataLayer e poi
+    // riutilizzata tutte le volte che vogliamo
+    // questo permette di migliorare le prestazioni
     private PreparedStatement selectOperatoriDisponibili;
     private PreparedStatement selectUtenteById;
     private PreparedStatement selectUtenteByEmail;
@@ -23,7 +28,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private PreparedStatement selectOperatori;
     private PreparedStatement selectUtenti;
 
+    // costruttore della classe: riceve in input l'istanza del DataLayer
     public UtenteDAO_MySQL(DataLayer d) {
+        // chiama il costruttore della superclasse (DAO) passandogli l'istanza del
+        // DataLayer,
+        // in modo che il padre possa memorizzarla e renderla disponibile a tutti i
+        // metodi
         super(d);
     }
 
@@ -32,11 +42,20 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         try {
             super.init();
 
+            // precompiliamo tutte le query utilizzate nella classe così da tenerle salvate
+            // in
+            // memoria e poi andiamo a sostituire i ? con i valori che gli passeremo
             selectOperatoriDisponibili = connection.prepareStatement(
                     "SELECT u.* FROM Utente u WHERE u.tipo = 'operatore'   AND u.id_utente NOT IN (SELECT p.fk_id_utente FROM Partecipa p JOIN Squadra s ON p.fk_id_squadra = s.id_squadra JOIN Missione m ON s.fk_id_missione = m.id_missione WHERE m.fine IS NULL)");
+            // connection rappresenta la connessione al db tramite la quale viene eseguita
+            // la query
             selectUtenteById = connection.prepareStatement("SELECT * FROM Utente WHERE id_utente = ?");
             selectUtenteByEmail = connection.prepareStatement("SELECT * FROM Utente WHERE email = ?");
             // usata solo da amministratore
+            // notare l'ultimo parametro extra di questa chiamata a
+            // prepareStatement: lo usiamo per assicurarci che il JDBC
+            // restituisca la chiave generata automaticamente per il
+            // record inserito
             insertUtente = connection.prepareStatement(
                     "INSERT INTO Utente (indirizzo, tipo, nascita, email, telefono, nome, cognome, codicefiscale, password, id_utente_amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -50,10 +69,16 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override
     public Utente createUtente() {
+        // tramite il datalayer il proxy ottiene il dao giusto che contiene
+        // la query per restituire le informazioni che gli servono,
         return new UtenteProxy(getDataLayer());
     }
 
     // metodo per creare un utente partendo da un risultato del database
+    // viene usato dal DAO internamente ogni volta che dobbiamo leggere ed esporre
+    // utenti già esistenti nel database
+    // riceve la riga dal db (result set) e restituisce l'oggetto Proxy di quel
+    // record
     private UtenteProxy createUtente(ResultSet rs) throws DataException {
         UtenteProxy u = (UtenteProxy) createUtente();
         try {
@@ -94,11 +119,14 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             while (rs.next()) {
                 int id_utente = rs.getInt("id_utente");
                 Utente u = null;
-                // controllo se ho gia l'utente nella cache
+                // controllo se ha già in memoria un oggetto di tipo Utente con quello specifico
+                // id, se lo ha prende quell'oggetto e ne fa il cast
                 if (dataLayer.getCache().has(Utente.class, id_utente)) {
                     u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
                 } else {
+                    // altrimenti va a prenderlo dal db
                     u = createUtente(rs);
+                    // non dimentichiamo anche qui la cache!
                     dataLayer.getCache().add(Utente.class, u);
                 }
 
@@ -117,6 +145,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             return (Utente) dataLayer.getCache().get(Utente.class, id_utente);
         }
         try {
+            // 1 serve ad indicare la posizione del ? a cui vogliamo sostituire il valore
+            // perché potrebbero essercene piú di uno
             selectUtenteById.setInt(1, id_utente);
             try (ResultSet rs = selectUtenteById.executeQuery()) {
                 if (rs.next()) {
@@ -139,6 +169,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 if (rs.next()) {
                     Utente u = createUtente(rs);
                     // Aggiungiamo alla cache con il suo ID appena estratto
+                    // e lo mettiamo anche nella cache
                     dataLayer.getCache().add(Utente.class, u);
                     return u;
                 }
@@ -183,14 +214,30 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                         "Impossibile inserire l'utente: è obbligatorio specificare l'amministratore creatore.");
             }
 
+            // rappresenta il numero di righe inserite o modificate all'interno del db,
+            // poichè stiamo inserendo un solo oggetto, ci aspettiamo che il numero di
+            // righe modificate o inserite sia = 1
             if (insertUtente.executeUpdate() == 1) {
+                // per leggere la chiave generata dal database
+                // per il record appena inserito, usiamo il metodo
+                // getGeneratedKeys sullo statement.
                 try (ResultSet keys = insertUtente.getGeneratedKeys()) {
+                    // il valore restituito è un ResultSet (tabella di risultati) con un record
+                    // per ciascuna chiave generata (uno solo nel nostro caso)
                     if (keys.next()) {
+                        // i campi del record sono le componenti della chiave
+                        // (nel nostro caso, un solo intero)
+                        // va a leggere il nuovo ID generato dal db
                         int key = keys.getInt(1);
+                        // aggiorniamo la chiave in caso di inserimento
+                        // facciamo passare l'ID dell'oggetto in memoria da null al valore generato dal
+                        // db
                         utente.setKey(key);
+                        // inseriamo il nuovo oggetto nella cache
                         dataLayer.getCache().add(Utente.class, utente);
                     }
                 }
+                // se abbiamo un proxy, resettiamo il suo attributo dirty
                 if (utente instanceof UtenteProxy) { // setto modified a false perche l ho appena iserito e quindi l
                                                      // oggetto corrisponde con il record del database
                     ((UtenteProxy) utente).setModified(false);
@@ -212,7 +259,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 if (dataLayer.getCache().has(Utente.class, id_utente)) {
                     u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
                 } else {
+                    // evitiamo l'N+1 query problem!
                     u = createUtente(rs);
+                    // non dimentichiamo anche qui la cache!
                     dataLayer.getCache().add(Utente.class, u);
                 }
 
@@ -235,7 +284,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 if (dataLayer.getCache().has(Utente.class, id_utente)) {
                     u = (Utente) dataLayer.getCache().get(Utente.class, id_utente);
                 } else {
+                    // evitiamo l'N+1 query problem!
                     u = createUtente(rs);
+                    // non dimentichiamo anche qui la cache!
                     dataLayer.getCache().add(Utente.class, u);
                 }
 
@@ -249,6 +300,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override // serve per chiudere le query
     public void destroy() throws DataException {
+        // nel momento in cui chiudiamo il DB o l'applicazione, viene liberata tutta la
+        // memoria allocata per le variabili contenenti le query precompilate
         try {
             if (selectOperatoriDisponibili != null) {
                 selectOperatoriDisponibili.close();
@@ -271,6 +324,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         } catch (SQLException ex) {
             throw new DataException("Errore durante la chiusura delle query nel data layer Utente", ex);
         }
+        // va a riprendere l'implementazione del metodo destroy in DAO e la esegue
         super.destroy();
     }
 }
