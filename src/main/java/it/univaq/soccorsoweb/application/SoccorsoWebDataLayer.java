@@ -18,6 +18,8 @@ public class SoccorsoWebDataLayer extends DataLayer {
     @Override
     public void init() throws DataException {
         // Registriamo tutti i DAO del nostro dominio
+        // come parametro al costruttore passiamo 'this', cioè l'istanza di
+        // SoccorsoWebDataLayer, poichè è di tipo DataLayer
         registerDAO(Utente.class, new UtenteDAO_MySQL(this));
         registerDAO(Missione.class, new MissioneDAO_MySQL(this));
         registerDAO(Mezzo.class, new MezzoDAO_MySQL(this));
@@ -31,14 +33,43 @@ public class SoccorsoWebDataLayer extends DataLayer {
     }
 
     // Helpers
-    public UtenteDAO getUtenteDAO() { return (UtenteDAO) getDAO(Utente.class); }
-    public MissioneDAO getMissioneDAO() { return (MissioneDAO) getDAO(Missione.class); }
-    public MezzoDAO getMezzoDAO() { return (MezzoDAO) getDAO(Mezzo.class); }
-    public MaterialeDAO getMaterialeDAO() { return (MaterialeDAO) getDAO(Materiale.class); }
-    public SquadraDAO getSquadraDAO() { return (SquadraDAO) getDAO(Squadra.class); }
-    public RichiestaSoccorsoDAO getRichiestaSoccorsoDAO() { return (RichiestaSoccorsoDAO) getDAO(RichiestaSoccorso.class); }
-    public AbilitaDAO getAbilitaDAO() { return (AbilitaDAO) getDAO(Abilita.class); }
-    public AggiornamentoDAO getAggiornamentoDAO() { return (AggiornamentoDAO) getDAO(Aggiornamento.class); }
-    public PartecipaDAO getPartecipaDAO() { return (PartecipaDAO) getDAO(Partecipa.class); }
-    public PatenteDAO getPatenteDAO() { return (PatenteDAO) getDAO(Patente.class); }
+    public UtenteDAO getUtenteDAO() {
+        return (UtenteDAO) getDAO(Utente.class);
+    }
+
+    public MissioneDAO getMissioneDAO() {
+        return (MissioneDAO) getDAO(Missione.class);
+    }
+
+    public MezzoDAO getMezzoDAO() {
+        return (MezzoDAO) getDAO(Mezzo.class);
+    }
+
+    public MaterialeDAO getMaterialeDAO() {
+        return (MaterialeDAO) getDAO(Materiale.class);
+    }
+
+    public SquadraDAO getSquadraDAO() {
+        return (SquadraDAO) getDAO(Squadra.class);
+    }
+
+    public RichiestaSoccorsoDAO getRichiestaSoccorsoDAO() {
+        return (RichiestaSoccorsoDAO) getDAO(RichiestaSoccorso.class);
+    }
+
+    public AbilitaDAO getAbilitaDAO() {
+        return (AbilitaDAO) getDAO(Abilita.class);
+    }
+
+    public AggiornamentoDAO getAggiornamentoDAO() {
+        return (AggiornamentoDAO) getDAO(Aggiornamento.class);
+    }
+
+    public PartecipaDAO getPartecipaDAO() {
+        return (PartecipaDAO) getDAO(Partecipa.class);
+    }
+
+    public PatenteDAO getPatenteDAO() {
+        return (PatenteDAO) getDAO(Patente.class);
+    }
 }

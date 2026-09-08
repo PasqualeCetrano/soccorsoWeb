@@ -27,7 +27,10 @@ public class SoccorsoWebTasksListener implements ServletContextListener {
             try (SoccorsoWebDataLayer dl = new SoccorsoWebDataLayer(ds)) {
                 dl.init(); // Inizializza i DAO
 
-                // Ecco la chiamata al metodo che hai scritto al Passo 1! (Impostiamo 24 ore)
+                // Passando 24, diciamo al DAO di eliminare SOLO le richieste che si
+                // trovano nello stato "da convalidare" da PIÙ di 24 ore.
+                // Le richieste più recenti (es. create 5 o 15 ore fa) verranno perdonate e
+                // mantenute.
                 dl.getRichiestaSoccorsoDAO().cancellaRichiesteScadute(24);
                 System.out.println("[BACKGROUND TASK] Pulizia richieste 'da convalidare' eseguita.");
 
@@ -36,9 +39,9 @@ public class SoccorsoWebTasksListener implements ServletContextListener {
             }
         };
 
-        // Avviamo il timer!
-        // si aspettano 10 minuti dall'avvio del server, poi si ripete l'operazione ogni
-        // 12 ore"
+        // quando viene effettuata la cancellazione
+        // 10 = Attendi 10 minuti all'avvio del server prima di fare il primo giro.
+        // 12 * 60 = Ripeti questo giro di pulizia ogni 12 ore (720 minuti).
         scheduler.scheduleAtFixedRate(puliziaTask, 10, 12 * 60, TimeUnit.MINUTES);
         System.out.println("[BACKGROUND TASK] Timer di pulizia programmato con successo.");
     }

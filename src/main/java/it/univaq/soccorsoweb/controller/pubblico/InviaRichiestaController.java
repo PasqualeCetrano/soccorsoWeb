@@ -37,6 +37,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             String ip = request.getRemoteAddr();
 
             // Inizio controllo richieste multiple
+            // contesto dell'applicazione con variabili a livello globale
             ServletContext context = getServletContext();
 
             // come chiave l'indirizzo IP mentre come valore l'orario dell'invio
@@ -90,7 +91,7 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
             // richiesta in modo sicuro.
             richiesta.setTokenConvalida(UUID.randomUUID().toString());
 
-            // 4. Gestione della Foto (Opzionale)
+            // Gestione della Foto (Opzionale)
             Part fotoPart = request.getPart("foto");
             if (fotoPart != null && fotoPart.getSize() > 0) {
                 try (InputStream is = fotoPart.getInputStream()) {
@@ -99,11 +100,11 @@ public class InviaRichiestaController extends SoccorsoWebBaseController {
                 }
             }
 
-            // 5. Salvataggio nel database! (Il DAO imposterà lo stato di default su "da
+            // Salvataggio nel database! (Il DAO imposterà lo stato di default su "da
             // convalidare" e la data attuale)
             dl.getRichiestaSoccorsoDAO().storeRichiestaSoccorso(richiesta);
 
-            // 6. una volta che l'utente ha inviato la richiesta, viene reindirizzato alla
+            // una volta che l'utente ha inviato la richiesta, viene reindirizzato alla
             // homePage pubblica e grazie al + richiesta ecc dopo aver ricaricato la pagina
             // gli comparirà un pop-up per la convalidazione della richiesta (il pop-up
 
